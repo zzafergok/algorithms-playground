@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AlgoViz - Algoritma Görselleştirme Platformu
 
-## Getting Started
+AlgoViz, algoritmaları interaktif bir şekilde öğrenmenizi sağlayan kapsamlı bir eğitim platformudur. Bu uygulama, algoritmaların çalışma prensiplerini görsel olarak anlama, adım adım takip etme ve kendi verilerinizle test etme imkanı sunar.
 
-First, run the development server:
+![AlgoViz Screenshot](https://via.placeholder.com/800x400)
+
+## Özellikler
+
+- **İnteraktif Görselleştirmeler**: Algoritmaların çalışma mantığını adım adım görselleştirme
+- **Kapsamlı Algoritma Kütüphanesi**: Sıralama, arama, graf, dinamik programlama ve daha fazlası
+- **Kod Örnekleri**: Her algoritma için farklı programlama dillerinde (JavaScript, Python, Java) örnekler
+- **Canlı Demo**: Kendi verilerinizle algoritmaları test etme imkanı
+- **Detaylı Açıklamalar**: Her algoritmanın zaman/alan karmaşıklığı, avantajları ve dezavantajları
+- **Karanlık/Açık Tema**: Kullanıcı tercihine göre arayüz renk teması
+
+## Proje Kategorileri
+
+- 🔄 **Sıralama Algoritmaları**: Bubble Sort, Quick Sort, Merge Sort vb.
+- 🔍 **Arama Algoritmaları**: Binary Search, Linear Search vb.
+- 📊 **Graf Algoritmaları**: BFS, DFS, Dijkstra, Bellman-Ford vb.
+- 📋 **Veri Yapıları**: Linked List, Stack, Queue, Binary Search Tree, Hash Table vb.
+- 🧮 **Dinamik Programlama**: Fibonacci, Knapsack, Longest Common Subsequence vb.
+- ↩️ **Geri İzleme**: N-Queens, Subset Sum vb.
+- 🌐 **Kümeleme Algoritmaları**: K-Means, Hierarchical Clustering vb.
+- ⚙️ **Optimizasyon Algoritmaları**: Simulated Annealing, Genetic Algorithms vb.
+- 📝 **Metin İşleme Algoritmaları**: Rabin-Karp, KMP vb.
+
+## Teknoloji Yığını
+
+- [Next.js](https://nextjs.org/) - React framework (App Router)
+- [TypeScript](https://www.typescriptlang.org/) - Tip güvenliği
+- [Tailwind CSS](https://tailwindcss.com/) - Stil ve arayüz
+- [shadcn/ui](https://ui.shadcn.com/) - UI bileşenleri
+- [Recharts](https://recharts.org/) - Veri görselleştirme grafikleri
+- [Lucide React](https://lucide.dev/) - İkonlar
+- [next-themes](https://github.com/pacocoursey/next-themes) - Tema desteği
+
+## Kurulum
+
+Projeyi yerel makinenizde çalıştırmak için şu adımları izleyin:
 
 ```bash
+# Projeyi klonlayın
+git clone https://github.com/yourusername/algoviz.git
+cd algoviz
+
+# Bağımlılıkları yükleyin
+npm install
+# veya
+yarn install
+# veya
+pnpm install
+# veya
+bun install
+
+# Geliştirme sunucusunu başlatın
 npm run dev
-# or
+# veya
 yarn dev
-# or
+# veya
 pnpm dev
-# or
+# veya
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Tarayıcınızda [http://localhost:3000](http://localhost:3000) adresini açarak uygulamayı görüntüleyebilirsiniz.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Proje Yapısı
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+algorithms-playground/
+├── public/          # Statik dosyalar
+├── src/
+│   ├── app/         # Sayfa bileşenleri (Next.js App Router)
+│   │   ├── algorithms/  # Algoritma sayfaları
+│   │   ├── page.tsx     # Ana sayfa
+│   ├── components/  # UI bileşenleri
+│   │   ├── algorithms/  # Algoritma görselleştirme bileşenleri
+│   │   ├── common/      # Ortak bileşenler
+│   │   ├── layout/      # Düzen bileşenleri
+│   │   ├── theme/       # Tema bileşenleri
+│   │   ├── ui/          # Temel UI bileşenleri (shadcn)
+│   ├── context/     # React context tanımlamaları
+│   ├── hooks/       # Özel React hook'ları
+│   ├── lib/         # Yardımcı fonksiyonlar ve algoritma uygulamaları
+│   │   ├── algorithms/  # Algoritma implementasyonları
+│   │   ├── data-structures/  # Veri yapısı implementasyonları
+│   ├── styles/      # Global stil tanımlamaları
+│   ├── visualization/  # Görselleştirme bileşenleri
+├── .gitignore
+├── next.config.js
+├── package.json
+├── postcss.config.js
+├── README.md
+├── tailwind.config.js
+├── tsconfig.json
+```
 
-## Learn More
+## Katkıda Bulunma
 
-To learn more about Next.js, take a look at the following resources:
+Bu proje geliştirilmeye açıktır. Katkıda bulunmak için:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Bir fork oluşturun
+2. Yeni bir branch oluşturun (`git checkout -b feature/amazing-feature`)
+3. Değişikliklerinizi commit edin (`git commit -m 'Add some amazing feature'`)
+4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
+5. Bir Pull Request oluşturun
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Özellik İstekleri ve Hata Bildirimleri
 
-## Deploy on Vercel
+Yeni özellik önerileri veya hata bildirimleri için lütfen bir issue açın.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Lisans
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Bu proje MIT lisansı altında lisanslanmıştır - detaylar için [LICENSE](LICENSE) dosyasına bakın.
+
+## İletişim
+
+Proje sahibi: [gok.zaferr@gmail.com](mailto:gok.zaferr@gmail.com)
+
+---
+
+Algorithms Playground, algoritmaları öğrenmek ve anlamak için etkili bir araçtır. İyi öğrenmeler!
