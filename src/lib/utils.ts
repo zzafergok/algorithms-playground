@@ -1,0 +1,130 @@
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+import dayjs from 'dayjs';
+import 'dayjs/locale/tr';
+
+// Tailwind sınıflarını birleştiren yardımcı fonksiyon
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+// Tarih formatlamak için yardımcı fonksiyon
+export function formatDate(
+  date: Date | string,
+  format: string = 'DD MMMM YYYY'
+) {
+  dayjs.locale('tr');
+  return dayjs(date).format(format);
+}
+
+// Rastgele dizi oluşturmak için yardımcı fonksiyon
+export function generateRandomArray(
+  length: number = 20,
+  min: number = 5,
+  max: number = 100
+): number[] {
+  return Array.from(
+    { length },
+    () => Math.floor(Math.random() * (max - min + 1)) + min
+  );
+}
+
+// Bir diziyi karıştırmak için yardımcı fonksiyon (Fisher-Yates algoritması)
+export function shuffleArray<T>(array: T[]): T[] {
+  const result = [...array];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+// Gecikmeli çalıştırma için yardımcı fonksiyon
+export function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Algoritma adımlarını formatlayan yardımcı fonksiyon
+export function formatAlgorithmSteps(
+  algorithm: string,
+  steps: string[]
+): string {
+  return `# ${algorithm} Algoritması\n\n${steps.map((step, index) => `${index + 1}. ${step}`).join('\n')}`;
+}
+
+// Algoritma hızını ölçen yardımcı fonksiyon
+export function measureAlgorithmTime<T>(
+  algorithm: (input: any) => T,
+  input: any
+): { result: T; time: number } {
+  const start = performance.now();
+  const result = algorithm(input);
+  const end = performance.now();
+  return { result, time: end - start };
+}
+
+// Kod bloğunu vurgulayan yardımcı fonksiyon
+export function highlightCode(code: string, highlightLine: number): string[] {
+  return code.split('\n').map((line, index) => {
+    const lineNumber = index + 1;
+    return lineNumber === highlightLine
+      ? `<span class="code-highlight">${line}</span>`
+      : line;
+  });
+}
+
+// İki diziyi karşılaştıran yardımcı fonksiyon
+export function arraysEqual<T>(a: T[], b: T[]): boolean {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
+// Algoritma karmaşıklık seviyesini veren fonksiyon
+export function getComplexityName(complexity: string): {
+  name: string;
+  description: string;
+} {
+  const complexities: Record<string, { name: string; description: string }> = {
+    'O(1)': {
+      name: 'Sabit Zaman',
+      description:
+        'Giriş boyutu ne olursa olsun, algoritma her zaman aynı sürede çalışır.',
+    },
+    'O(log n)': {
+      name: 'Logaritmik Zaman',
+      description:
+        'Giriş boyutu arttıkça, çalışma süresi logaritmik olarak artar.',
+    },
+    'O(n)': {
+      name: 'Doğrusal Zaman',
+      description: 'Çalışma süresi, giriş boyutu ile doğrusal olarak artar.',
+    },
+    'O(n log n)': {
+      name: 'Linearitmik Zaman',
+      description:
+        'Çalışma süresi, giriş boyutu ile logaritmik çarpanlı doğrusal olarak artar.',
+    },
+    'O(n²)': {
+      name: 'Karesel Zaman',
+      description: 'Çalışma süresi, giriş boyutunun karesi ile orantılıdır.',
+    },
+    'O(n³)': {
+      name: 'Kübik Zaman',
+      description: 'Çalışma süresi, giriş boyutunun küpü ile orantılıdır.',
+    },
+    'O(2^n)': {
+      name: 'Üstel Zaman',
+      description: 'Çalışma süresi, 2 üzeri giriş boyutu ile orantılıdır.',
+    },
+  };
+
+  return (
+    complexities[complexity] || {
+      name: 'Bilinmeyen Karmaşıklık',
+      description: 'Bu algoritmanın karmaşıklığı belirtilmemiş.',
+    }
+  );
+}
