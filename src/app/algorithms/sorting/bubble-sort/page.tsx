@@ -5,27 +5,7 @@ import { SortingVisualizer } from '@/components/algorithms/sorting-visualizer';
 import { InteractiveDemo } from '@/components/common/interactive-demo';
 import { CodeBlock } from '@/components/common/code-block';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
-// Bubble sort algoritma implementasyonu
-function bubbleSort(arr: number[]): number[] {
-  // Dizinin bir kopyasını oluştur
-  const result = [...arr];
-  const n = result.length;
-
-  // Dış döngü - her geçişte en az bir eleman sıralanır
-  for (let i = 0; i < n - 1; i++) {
-    // İç döngü - her geçişte elemanları karşılaştır
-    for (let j = 0; j < n - i - 1; j++) {
-      // Mevcut eleman bir sonrakinden büyükse, yerlerini değiştir
-      if (result[j] > result[j + 1]) {
-        // Destructuring assignment ile yer değiştirme
-        [result[j], result[j + 1]] = [result[j + 1], result[j]];
-      }
-    }
-  }
-
-  return result;
-}
+import { bubbleSort } from '@/lib/algorithms/sorting';
 
 export default function BubbleSortPage() {
   const pseudocode = `function bubbleSort(arr):

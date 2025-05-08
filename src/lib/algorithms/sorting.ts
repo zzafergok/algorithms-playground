@@ -1,14 +1,22 @@
-export function bubbleSort<T extends number>(arr: T[]): T[] {
-  const n = arr.length;
+// Bubble sort algoritma implementasyonu
+export function bubbleSort(arr: number[]): number[] {
+  // Dizinin bir kopyasını oluştur
+  const result = [...arr];
+  const n = result.length;
+
+  // Dış döngü - her geçişte en az bir eleman sıralanır
   for (let i = 0; i < n - 1; i++) {
+    // İç döngü - her geçişte elemanları karşılaştır
     for (let j = 0; j < n - i - 1; j++) {
-      if (arr[j] > arr[j + 1]) {
-        // Swap elements
-        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+      // Mevcut eleman bir sonrakinden büyükse, yerlerini değiştir
+      if (result[j] > result[j + 1]) {
+        // Destructuring assignment ile yer değiştirme
+        [result[j], result[j + 1]] = [result[j + 1], result[j]];
       }
     }
   }
-  return arr;
+
+  return result;
 }
 
 export function selectionSort<T extends number>(arr: T[]): T[] {
