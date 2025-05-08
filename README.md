@@ -1,8 +1,8 @@
-# AlgoViz - Algoritma Görselleştirme Platformu
+# Algorithms Playground - Algoritma Görselleştirme Platformu
 
-AlgoViz, algoritmaları interaktif bir şekilde öğrenmenizi sağlayan kapsamlı bir eğitim platformudur. Bu uygulama, algoritmaların çalışma prensiplerini görsel olarak anlama, adım adım takip etme ve kendi verilerinizle test etme imkanı sunar.
+Algorithms Playground, algoritmaları interaktif bir şekilde öğrenmenizi sağlayan kapsamlı bir eğitim platformudur. Bu uygulama, algoritmaların çalışma prensiplerini görsel olarak anlama, adım adım takip etme ve kendi verilerinizle test etme imkanı sunar.
 
-![AlgoViz Screenshot](https://via.placeholder.com/800x400)
+![Algorithms Playground Screenshot](https://via.placeholder.com/800x400)
 
 ## Özellikler
 
@@ -41,8 +41,8 @@ Projeyi yerel makinenizde çalıştırmak için şu adımları izleyin:
 
 ```bash
 # Projeyi klonlayın
-git clone https://github.com/yourusername/algoviz.git
-cd algoviz
+git clone https://github.com/zzafergok/algorithms-playground.git
+cd algorithms-playground
 
 # Bağımlılıkları yükleyin
 npm install
