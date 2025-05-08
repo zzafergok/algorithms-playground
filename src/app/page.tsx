@@ -142,8 +142,12 @@ export default function Home() {
               </CardContent>
               <CardFooter>
                 <Button asChild variant="ghost">
-                  <Link href={category.href}>
-                    Keşfet <ArrowRight className="ml-2 h-4 w-4" />
+                  <Link
+                    href={category.href}
+                    className="flex justify-between items-center gap-3"
+                  >
+                    <span className="flex-grow text-center">Keşfet</span>
+                    <ArrowRight className="h-3 w-3" />
                   </Link>
                 </Button>
               </CardFooter>

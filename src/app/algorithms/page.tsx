@@ -435,6 +435,49 @@ export default function AlgorithmsPage() {
         </p>
       </div>
 
+      {/* Algoritma Seçimi İpuçları Bölümü */}
+      <div className="mt-12 p-6 bg-muted rounded-lg">
+        <h2 className="text-2xl font-bold mb-4">Algoritma Seçimi Rehberi</h2>
+        <div className="prose dark:prose-invert max-w-none">
+          <p>
+            İhtiyacınıza uygun algoritma seçmek, sorununuzun verimli çözümü için
+            kritik öneme sahiptir. İşte algoritma seçerken göz önünde
+            bulundurmanız gereken bazı faktörler:
+          </p>
+
+          <ul>
+            <li>
+              <strong>Problem Tipi:</strong> Sıralama, arama, optimizasyon gibi
+              temel problem tipiniz nedir?
+            </li>
+            <li>
+              <strong>Veri Boyutu:</strong> Çok büyük veri kümeleri için
+              asimptotik karmaşıklığı daha düşük algoritmalar tercih
+              edilmelidir.
+            </li>
+            <li>
+              <strong>Zaman ve Alan Kısıtlamaları:</strong> Hızlı çalışma mı
+              yoksa düşük bellek kullanımı mı daha önemli?
+            </li>
+            <li>
+              <strong>İşlem Tipi:</strong> Dinamik veri mi yoksa statik veri mi
+              işlenecek?
+            </li>
+            <li>
+              <strong>Uygulama Ortamı:</strong> Algoritmanın çalışacağı platform
+              veya sistem özellikleri.
+            </li>
+          </ul>
+
+          <p>
+            Bu platformda sunulan algoritmalar, çeşitli problem türlerine
+            yönelik çözümleri ve bunların uygulanma şekillerini göstermektedir.
+            Her algoritmanın avantajları, dezavantajları ve karmaşıklık
+            analizleri detaylı olarak incelenmiştir.
+          </p>
+        </div>
+      </div>
+
       {/* Algoritma Kategorileri Özeti */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {algorithmCategories.map((category) => (
@@ -541,49 +584,6 @@ export default function AlgorithmsPage() {
               </div>
             ))}
           </div>
-        </div>
-      </div>
-
-      {/* Algoritma Seçimi İpuçları Bölümü */}
-      <div className="mt-12 p-6 bg-muted rounded-lg">
-        <h2 className="text-2xl font-bold mb-4">Algoritma Seçimi Rehberi</h2>
-        <div className="prose dark:prose-invert max-w-none">
-          <p>
-            İhtiyacınıza uygun algoritma seçmek, sorununuzun verimli çözümü için
-            kritik öneme sahiptir. İşte algoritma seçerken göz önünde
-            bulundurmanız gereken bazı faktörler:
-          </p>
-
-          <ul>
-            <li>
-              <strong>Problem Tipi:</strong> Sıralama, arama, optimizasyon gibi
-              temel problem tipiniz nedir?
-            </li>
-            <li>
-              <strong>Veri Boyutu:</strong> Çok büyük veri kümeleri için
-              asimptotik karmaşıklığı daha düşük algoritmalar tercih
-              edilmelidir.
-            </li>
-            <li>
-              <strong>Zaman ve Alan Kısıtlamaları:</strong> Hızlı çalışma mı
-              yoksa düşük bellek kullanımı mı daha önemli?
-            </li>
-            <li>
-              <strong>İşlem Tipi:</strong> Dinamik veri mi yoksa statik veri mi
-              işlenecek?
-            </li>
-            <li>
-              <strong>Uygulama Ortamı:</strong> Algoritmanın çalışacağı platform
-              veya sistem özellikleri.
-            </li>
-          </ul>
-
-          <p>
-            Bu platformda sunulan algoritmalar, çeşitli problem türlerine
-            yönelik çözümleri ve bunların uygulanma şekillerini göstermektedir.
-            Her algoritmanın avantajları, dezavantajları ve karmaşıklık
-            analizleri detaylı olarak incelenmiştir.
-          </p>
         </div>
       </div>
     </div>
