@@ -56,9 +56,13 @@ export default function Home() {
             algoritmalarda ustalaşın.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Button asChild size="lg">
-              <Link href="/algorithms">
-                Algoritmalar <ArrowRight className="ml-2 h-4 w-4" />
+            <Button asChild size="lg" className="">
+              <Link
+                href="/algorithms"
+                className="flex justify-between items-center gap-3"
+              >
+                <span className="flex-grow text-center">Algoritmalar</span>
+                <ArrowRight className="h-3 w-3" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">

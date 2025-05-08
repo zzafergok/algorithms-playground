@@ -8,7 +8,7 @@ import { ThemeToggle } from '@/components/theme/theme-toggle';
 
 const navItems = [
   { label: 'Ana Sayfa', href: '/' },
-  { label: 'Algoritmalar', href: '/algorithms/sorting' },
+  { label: 'Algoritmalar', href: '/algorithms' },
   { label: 'Hakkında', href: '/hakkinda' },
 ];
 

@@ -52,9 +52,13 @@ export default function AdvancedAlgorithmsPage() {
               </p>
             </CardContent>
             <CardFooter>
-              <Button asChild>
-                <Link href={algorithm.path}>
-                  İncele <ArrowRight className="ml-2 h-4 w-4" />
+              <Button asChild variant="ghost" size="sm" className="mt-2">
+                <Link
+                  href={algorithm.path}
+                  className="flex justify-between items-center gap-3"
+                >
+                  <span className="flex-grow text-center">İncele</span>
+                  <ArrowRight className="h-3 w-3" />
                 </Link>
               </Button>
             </CardFooter>
