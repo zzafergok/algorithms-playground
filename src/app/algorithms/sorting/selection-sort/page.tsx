@@ -1,12 +1,11 @@
 'use client';
 
 import React from 'react';
-import { InteractiveDemo } from '@/components/common/interactive-demo';
+import { selectionSort } from '@/lib/algorithms/sorting';
 import { CodeBlock } from '@/components/common/code-block';
+import { InteractiveDemo } from '@/components/common/interactive-demo';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { selectionSort } from '@/lib/algorithms/sorting';
-import { AlgorithmComplexity } from '@/components/ui/algorithm-complexity';
 
 export default function SelectionSortPage() {
   // Algorithm implementations in different languages
@@ -138,17 +137,6 @@ public static int[] selectionSort(int[] arr) {
 }`,
   };
 
-  // Simulated complexity data for visualization
-  const complexityData = Array.from({ length: 10 }, (_, i) => {
-    const n = (i + 1) * 10;
-    return {
-      inputSize: n,
-      worstCase: n * n,
-      averageCase: n * n,
-      bestCase: n * n, // O(n²) for all cases
-    };
-  });
-
   // Detailed selection sort explanation
   const selectionSortDescription = `
 Selection Sort, dizideki en küçük elemanı bulup başa yerleştiren bir sıralama algoritmasıdır. Bu algoritma, diziyi sıralı ve sırasız olmak üzere iki bölüme ayırır. Her adımda, sırasız bölümdeki en küçük elemanı bulur ve sıralı bölümün sonuna ekler.
@@ -193,17 +181,6 @@ Selection Sort, veri kümesinin büyüklüğünden bağımsız olarak her zaman 
               </div>
             </CardContent>
           </Card>
-
-          {/* Complexity Analysis */}
-          <AlgorithmComplexity
-            timeComplexity={{
-              worstCase: 'O(n²)',
-              averageCase: 'O(n²)',
-              bestCase: 'O(n²)',
-            }}
-            spaceComplexity="O(1) - Yerinde sıralama"
-            complexityData={complexityData}
-          />
         </div>
       </div>
 

@@ -1,12 +1,11 @@
 'use client';
 
 import React from 'react';
-import { InteractiveDemo } from '@/components/common/interactive-demo';
+import { bubbleSort } from '@/lib/algorithms/sorting';
 import { CodeBlock } from '@/components/common/code-block';
+import { InteractiveDemo } from '@/components/common/interactive-demo';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { bubbleSort } from '@/lib/algorithms/sorting';
-import { AlgorithmComplexity } from '@/components/ui/algorithm-complexity';
 
 export default function BubbleSortPage() {
   // Algorithm implementations in different languages
@@ -138,17 +137,6 @@ public static int[] bubbleSort(int[] arr) {
 }`,
   };
 
-  // Simulated complexity data for visualization
-  const complexityData = Array.from({ length: 10 }, (_, i) => {
-    const n = (i + 1) * 10;
-    return {
-      inputSize: n,
-      worstCase: n * n,
-      averageCase: n * n,
-      bestCase: n, // O(n) for best case (already sorted)
-    };
-  });
-
   // Detailed bubble sort explanation
   const bubbleSortDescription = `
 Bubble Sort, en basit sıralama algoritmalarından biridir. Her geçişte, komşu elemanları karşılaştırarak, büyük elemanların dizinin sonuna doğru kabarcık gibi yükselmesini sağlar.
@@ -189,17 +177,6 @@ Bubble Sort, eğitim amaçlı ve küçük veri setleri için uygundur, ancak bü
               </div>
             </CardContent>
           </Card>
-
-          {/* Complexity Analysis */}
-          <AlgorithmComplexity
-            timeComplexity={{
-              worstCase: 'O(n²)',
-              averageCase: 'O(n²)',
-              bestCase: 'O(n)',
-            }}
-            spaceComplexity="O(1) - Yerinde sıralama"
-            complexityData={complexityData}
-          />
         </div>
       </div>
 

@@ -6,20 +6,12 @@ import {
   generateComplexityData,
 } from '@/lib/complexity-analysis';
 import { CodeBlock } from '@/components/common/code-block';
-import { AlgorithmComplexity } from '@/components/ui/algorithm-complexity';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function InsertionSortPage() {
   const rawComplexityData = generateComplexityData(
     TimeComplexityFunctions.quadratic
   );
-
-  const complexityData = rawComplexityData.map((item) => ({
-    inputSize: item.n,
-    worstCase: item.value,
-    averageCase: item.value,
-    bestCase: item.n, // Best case for insertion sort is O(n)
-  }));
 
   const insertionSortDescription = `
 Insertion Sort, dizinin her elemanını sıralanmış kısımla karşılaştırarak 
@@ -79,16 +71,6 @@ function insertionSort(arr: number[]): number[] {
               <CodeBlock code={insertionSortCode} language="typescript" />
             </CardContent>
           </Card>
-
-          <AlgorithmComplexity
-            timeComplexity={{
-              worstCase: 'O(n²)',
-              averageCase: 'O(n²)',
-              bestCase: 'O(n)',
-            }}
-            spaceComplexity="O(1) - Yerinde sıralama"
-            complexityData={complexityData}
-          />
         </div>
       </div>
     </div>

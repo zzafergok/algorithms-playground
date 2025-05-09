@@ -6,20 +6,12 @@ import {
   generateComplexityData,
 } from '@/lib/complexity-analysis';
 import { CodeBlock } from '@/components/common/code-block';
-import { AlgorithmComplexity } from '@/components/ui/algorithm-complexity';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function QuickSortPage() {
   const rawComplexityData = generateComplexityData(
     TimeComplexityFunctions.linearithmic
   );
-
-  const complexityData = rawComplexityData.map((item) => ({
-    inputSize: item.n,
-    worstCase: item.n ** 2, // O(n²) for worst case
-    averageCase: item.value, // O(n log n) for average case
-    bestCase: item.value, // O(n log n) for best case
-  }));
 
   const quickSortDescription = `
 Quick Sort, "Böl ve Fethet" stratejisini kullanan hızlı ve verimli bir sıralama algoritmasıdır.
@@ -92,16 +84,6 @@ function quickSort(arr: number[]): number[] {
               <CodeBlock code={quickSortCode} language="typescript" />
             </CardContent>
           </Card>
-
-          <AlgorithmComplexity
-            timeComplexity={{
-              worstCase: 'O(n²)',
-              averageCase: 'O(n log n)',
-              bestCase: 'O(n log n)',
-            }}
-            spaceComplexity="O(log n) - Özyineleme için bellek"
-            complexityData={complexityData}
-          />
         </div>
       </div>
     </div>

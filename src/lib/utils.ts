@@ -1,5 +1,3 @@
-import 'dayjs/locale/tr';
-import dayjs from 'dayjs';
 import { twMerge } from 'tailwind-merge';
 import { type ClassValue, clsx } from 'clsx';
 

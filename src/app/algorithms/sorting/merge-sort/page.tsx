@@ -6,20 +6,12 @@ import {
   generateComplexityData,
 } from '@/lib/complexity-analysis';
 import { CodeBlock } from '@/components/common/code-block';
-import { AlgorithmComplexity } from '@/components/ui/algorithm-complexity';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function MergeSortPage() {
   const rawComplexityData = generateComplexityData(
     TimeComplexityFunctions.linearithmic
   );
-
-  const complexityData = rawComplexityData.map((item) => ({
-    inputSize: item.n,
-    worstCase: item.value,
-    averageCase: item.value,
-    bestCase: item.value,
-  }));
 
   const mergeSortDescription = `
 Merge Sort, "Böl ve Fethet" stratejisini kullanan bir sıralama algoritmasıdır. 
@@ -105,16 +97,6 @@ function merge(left: number[], right: number[]): number[] {
               <CodeBlock code={mergeSortCode} language="typescript" />
             </CardContent>
           </Card>
-
-          <AlgorithmComplexity
-            timeComplexity={{
-              worstCase: 'O(n log n)',
-              averageCase: 'O(n log n)',
-              bestCase: 'O(n log n)',
-            }}
-            spaceComplexity="O(n) - Ek bellek kullanımı"
-            complexityData={complexityData}
-          />
         </div>
       </div>
     </div>

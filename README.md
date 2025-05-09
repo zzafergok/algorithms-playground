@@ -31,7 +31,6 @@ Algorithms Playground, algoritmaları interaktif bir şekilde öğrenmenizi sağ
 - [TypeScript](https://www.typescriptlang.org/) - Tip güvenliği
 - [Tailwind CSS](https://tailwindcss.com/) - Stil ve arayüz
 - [shadcn/ui](https://ui.shadcn.com/) - UI bileşenleri
-- [Recharts](https://recharts.org/) - Veri görselleştirme grafikleri
 - [Lucide React](https://lucide.dev/) - İkonlar
 - [next-themes](https://github.com/pacocoursey/next-themes) - Tema desteği
 
@@ -75,18 +74,14 @@ algorithms-playground/
 │   │   ├── algorithms/  # Algoritma sayfaları
 │   │   ├── page.tsx     # Ana sayfa
 │   ├── components/  # UI bileşenleri
-│   │   ├── algorithms/  # Algoritma görselleştirme bileşenleri
 │   │   ├── common/      # Ortak bileşenler
 │   │   ├── layout/      # Düzen bileşenleri
 │   │   ├── theme/       # Tema bileşenleri
 │   │   ├── ui/          # Temel UI bileşenleri (shadcn)
 │   ├── context/     # React context tanımlamaları
-│   ├── hooks/       # Özel React hook'ları
 │   ├── lib/         # Yardımcı fonksiyonlar ve algoritma uygulamaları
 │   │   ├── algorithms/  # Algoritma implementasyonları
-│   │   ├── data-structures/  # Veri yapısı implementasyonları
 │   ├── styles/      # Global stil tanımlamaları
-│   ├── visualization/  # Görselleştirme bileşenleri
 ├── .gitignore
 ├── next.config.js
 ├── package.json
