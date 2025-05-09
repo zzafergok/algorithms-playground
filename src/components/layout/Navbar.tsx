@@ -237,6 +237,7 @@ const navItems: NavItem[] = [
     children: [
       { label: 'Belgelendirme', href: '/resources/documentation' },
       { label: 'Katkıda Bulunma', href: '/resources/contributing' },
+      { label: 'Kod Örnekleri', href: '/resources/code-examples' },
       { label: 'Sık Sorulan Sorular', href: '/resources/faq' },
     ],
   },
