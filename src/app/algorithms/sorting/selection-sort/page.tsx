@@ -6,7 +6,6 @@ import { CodeBlock } from '@/components/common/code-block';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { selectionSort } from '@/lib/algorithms/sorting';
-import { generateRandomArray } from '@/lib/utils';
 import { AlgorithmComplexity } from '@/components/ui/algorithm-complexity';
 
 export default function SelectionSortPage() {

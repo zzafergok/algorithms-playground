@@ -1,25 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
-import { SortingVisualizer } from '@/components/algorithms/sorting-visualizer';
+import React from 'react';
 import { InteractiveDemo } from '@/components/common/interactive-demo';
 import { CodeBlock } from '@/components/common/code-block';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { bubbleSort } from '@/lib/algorithms/sorting';
-import { generateRandomArray } from '@/lib/utils';
-import { PerformanceMetrics } from '@/components/ui/performance-metrics';
 import { AlgorithmComplexity } from '@/components/ui/algorithm-complexity';
 
 export default function BubbleSortPage() {
-  // State for visualization and interactive components
-  const [initialArray, setInitialArray] = useState<number[]>(
-    generateRandomArray(20, 10, 100)
-  );
-  const [performanceMetrics, setPerformanceMetrics] = useState<any | null>(
-    null
-  );
-
   // Algorithm implementations in different languages
   const implementations = {
     javascript: `/**

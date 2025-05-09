@@ -1,36 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
-import { AlgorithmVisualizer } from '@/visualization/components/AlgorithmVisualizer';
-import { insertionSort } from '@/lib/algorithms/sorting';
-import { generateRandomArray } from '@/lib/utils';
-import {
-  performanceTracker,
-  AlgorithmPerformanceMetrics,
-} from '@/lib/performance-tracker';
+import React from 'react';
 import {
   TimeComplexityFunctions,
   generateComplexityData,
 } from '@/lib/complexity-analysis';
-
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CodeBlock } from '@/components/ui/code-block';
-import { PerformanceMetrics } from '@/components/ui/performance-metrics';
+import { CodeBlock } from '@/components/common/code-block';
 import { AlgorithmComplexity } from '@/components/ui/algorithm-complexity';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function InsertionSortPage() {
-  const [initialArray, setInitialArray] = useState(
-    generateRandomArray(42, 10, 10, 100)
-  );
-  const [performanceMetrics, setPerformanceMetrics] =
-    useState<AlgorithmPerformanceMetrics | null>(null);
-
-  const handleAlgorithmRun = (array: number[]) => {
-    const metrics = performanceTracker.measure(insertionSort, array);
-    setPerformanceMetrics(metrics);
-    return array;
-  };
-
   const rawComplexityData = generateComplexityData(
     TimeComplexityFunctions.quadratic
   );
@@ -80,28 +59,7 @@ function insertionSort(arr: number[]): number[] {
       </h1>
 
       <div className="grid md:grid-cols-2 gap-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Algoritma Görselleştirmesi</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <AlgorithmVisualizer
-              algorithm={handleAlgorithmRun}
-              initialArray={initialArray}
-            />
-          </CardContent>
-        </Card>
-
         <div className="space-y-6">
-          {performanceMetrics && (
-            <PerformanceMetrics
-              executionTime={performanceMetrics.executionTime}
-              memoryUsage={performanceMetrics.memoryUsageAfter}
-              comparisons={performanceMetrics.comparisons}
-              swaps={performanceMetrics.swaps}
-            />
-          )}
-
           <Card>
             <CardHeader>
               <CardTitle>Insertion Sort Açıklaması</CardTitle>
@@ -118,7 +76,7 @@ function insertionSort(arr: number[]): number[] {
               <CardTitle>Kod Örneği</CardTitle>
             </CardHeader>
             <CardContent>
-              <CodeBlock language="typescript">{insertionSortCode}</CodeBlock>
+              <CodeBlock code={insertionSortCode} language="typescript" />
             </CardContent>
           </Card>
 

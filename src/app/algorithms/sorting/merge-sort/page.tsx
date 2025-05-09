@@ -1,68 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
-import { AlgorithmVisualizer } from '@/visualization/components/AlgorithmVisualizer';
-import { generateRandomArray } from '@/lib/utils';
-import { performanceTracker } from '@/lib/performance-tracker';
+import React from 'react';
 import {
   TimeComplexityFunctions,
   generateComplexityData,
 } from '@/lib/complexity-analysis';
-
-// Implement mergeSort function locally
-function merge(left: number[], right: number[]): number[] {
-  let result = [];
-  let leftIndex = 0;
-  let rightIndex = 0;
-
-  while (leftIndex < left.length && rightIndex < right.length) {
-    if (left[leftIndex] < right[rightIndex]) {
-      result.push(left[leftIndex]);
-      leftIndex++;
-    } else {
-      result.push(right[rightIndex]);
-      rightIndex++;
-    }
-  }
-
-  return result.concat(left.slice(leftIndex), right.slice(rightIndex));
-}
-
-function mergeSort(arr: number[]): number[] {
-  if (arr.length <= 1) return arr;
-
-  const middle = Math.floor(arr.length / 2);
-  const left = arr.slice(0, middle);
-  const right = arr.slice(middle);
-
-  return merge(mergeSort(left), mergeSort(right));
-}
-
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CodeBlock } from '@/components/ui/code-block';
-import { PerformanceMetrics } from '@/components/ui/performance-metrics';
+import { CodeBlock } from '@/components/common/code-block';
 import { AlgorithmComplexity } from '@/components/ui/algorithm-complexity';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function MergeSortPage() {
-  const [initialArray, setInitialArray] = useState(
-    generateRandomArray(10, 10, 100)
-  );
-  interface PerformanceMetricsType {
-    executionTime: number;
-    memoryUsageAfter: number;
-    comparisons: number;
-    swaps: number;
-  }
-
-  const [performanceMetrics, setPerformanceMetrics] =
-    useState<PerformanceMetricsType | null>(null);
-
-  const handleAlgorithmRun = (array: number[]) => {
-    const metrics = performanceTracker.measure(mergeSort, array);
-    setPerformanceMetrics(metrics);
-    return array;
-  };
-
   const rawComplexityData = generateComplexityData(
     TimeComplexityFunctions.linearithmic
   );
@@ -138,28 +85,7 @@ function merge(left: number[], right: number[]): number[] {
       </h1>
 
       <div className="grid md:grid-cols-2 gap-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Algoritma Görselleştirmesi</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <AlgorithmVisualizer
-              algorithm={handleAlgorithmRun}
-              initialArray={initialArray}
-            />
-          </CardContent>
-        </Card>
-
         <div className="space-y-6">
-          {performanceMetrics && (
-            <PerformanceMetrics
-              executionTime={performanceMetrics.executionTime}
-              memoryUsage={performanceMetrics.memoryUsageAfter}
-              comparisons={performanceMetrics.comparisons}
-              swaps={performanceMetrics.swaps}
-            />
-          )}
-
           <Card>
             <CardHeader>
               <CardTitle>Merge Sort Açıklaması</CardTitle>
@@ -176,7 +102,7 @@ function merge(left: number[], right: number[]): number[] {
               <CardTitle>Kod Örneği</CardTitle>
             </CardHeader>
             <CardContent>
-              <CodeBlock language="typescript">{mergeSortCode}</CodeBlock>
+              <CodeBlock code={mergeSortCode} language="typescript" />
             </CardContent>
           </Card>
 

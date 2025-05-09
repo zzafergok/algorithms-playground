@@ -1,20 +1,11 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-import dayjs from 'dayjs';
 import 'dayjs/locale/tr';
+import dayjs from 'dayjs';
+import { twMerge } from 'tailwind-merge';
+import { type ClassValue, clsx } from 'clsx';
 
 // Tailwind sınıflarını birleştiren yardımcı fonksiyon
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
-}
-
-// Tarih formatlamak için yardımcı fonksiyon
-export function formatDate(
-  date: Date | string,
-  format: string = 'DD MMMM YYYY'
-) {
-  dayjs.locale('tr');
-  return dayjs(date).format(format);
 }
 
 // Rastgele dizi oluşturmak için yardımcı fonksiyon
@@ -27,29 +18,6 @@ export function generateRandomArray(
     { length },
     () => Math.floor(Math.random() * (max - min + 1)) + min
   );
-}
-
-// Bir diziyi karıştırmak için yardımcı fonksiyon (Fisher-Yates algoritması)
-export function shuffleArray<T>(array: T[]): T[] {
-  const result = [...array];
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]];
-  }
-  return result;
-}
-
-// Gecikmeli çalıştırma için yardımcı fonksiyon
-export function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-// Algoritma adımlarını formatlayan yardımcı fonksiyon
-export function formatAlgorithmSteps(
-  algorithm: string,
-  steps: string[]
-): string {
-  return `# ${algorithm} Algoritması\n\n${steps.map((step, index) => `${index + 1}. ${step}`).join('\n')}`;
 }
 
 // Algoritma hızını ölçen yardımcı fonksiyon
@@ -71,15 +39,6 @@ export function highlightCode(code: string, highlightLine: number): string[] {
       ? `<span class="code-highlight">${line}</span>`
       : line;
   });
-}
-
-// İki diziyi karşılaştıran yardımcı fonksiyon
-export function arraysEqual<T>(a: T[], b: T[]): boolean {
-  if (a.length !== b.length) return false;
-  for (let i = 0; i < a.length; i++) {
-    if (a[i] !== b[i]) return false;
-  }
-  return true;
 }
 
 // Algoritma karmaşıklık seviyesini veren fonksiyon
