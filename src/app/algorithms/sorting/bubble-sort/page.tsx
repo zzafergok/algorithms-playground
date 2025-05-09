@@ -1,126 +1,232 @@
 'use client';
 
-import { AlgorithmExplanation } from '@/components/common/explanation';
+import React, { useState } from 'react';
 import { SortingVisualizer } from '@/components/algorithms/sorting-visualizer';
 import { InteractiveDemo } from '@/components/common/interactive-demo';
 import { CodeBlock } from '@/components/common/code-block';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { bubbleSort } from '@/lib/algorithms/sorting';
+import { generateRandomArray } from '@/lib/utils';
+import { PerformanceMetrics } from '@/components/ui/performance-metrics';
+import { AlgorithmComplexity } from '@/components/ui/algorithm-complexity';
 
 export default function BubbleSortPage() {
-  const pseudocode = `function bubbleSort(arr):
-    n = arr.length
-    
-    for i from 0 to n-1:
-        for j from 0 to n-i-1:
-            if arr[j] > arr[j+1]:
-                swap arr[j] and arr[j+1]
-                
-    return arr`;
+  // State for visualization and interactive components
+  const [initialArray, setInitialArray] = useState<number[]>(
+    generateRandomArray(20, 10, 100)
+  );
+  const [performanceMetrics, setPerformanceMetrics] = useState<any | null>(
+    null
+  );
 
+  // Algorithm implementations in different languages
   const implementations = {
-    javascript: `function bubbleSort(arr) {
+    javascript: `/**
+ * Bubble Sort implementation for JavaScript arrays
+ * @param {Array} arr - The array to sort
+ * @returns {Array} - A new sorted array
+ */
+function bubbleSort(arr) {
+  // Create a copy to avoid modifying the original array
   const result = [...arr];
   const n = result.length;
   
+  // Outer loop - each pass places one element in its final position
   for (let i = 0; i < n - 1; i++) {
+    // Optimization: track if any swaps occurred during this pass
+    let swapped = false;
+    
+    // Inner loop - compare adjacent elements and swap if needed
     for (let j = 0; j < n - i - 1; j++) {
       if (result[j] > result[j + 1]) {
+        // Destructuring swap - cleaner than using a temp variable
         [result[j], result[j + 1]] = [result[j + 1], result[j]];
+        swapped = true;
       }
     }
+    
+    // If no swaps occurred, the array is already sorted
+    if (!swapped) break;
   }
   
   return result;
 }`,
     python: `def bubble_sort(arr):
-    n = len(arr)
-    # Dizinin bir kopyasını oluştur
-    result = arr.copy()
+    """
+    Implementation of Bubble Sort algorithm in Python
     
-    # Dış döngü
+    Args:
+        arr: Input list to be sorted
+        
+    Returns:
+        A new sorted list
+    """
+    # Create a copy to avoid modifying the original list
+    result = arr.copy()
+    n = len(result)
+    
+    # Outer loop - each pass places one element in its final position
     for i in range(n - 1):
-        # İç döngü
+        # Optimization: track if any swaps occurred during this pass
+        swapped = False
+        
+        # Inner loop - compare adjacent elements and swap if needed
         for j in range(n - i - 1):
-            # Karşılaştırma ve yer değiştirme
+            # Compare and swap if needed
             if result[j] > result[j + 1]:
                 result[j], result[j + 1] = result[j + 1], result[j]
+                swapped = True
+                
+        # If no swaps occurred, the list is already sorted
+        if not swapped:
+            break
                 
     return result`,
-    java: `public static int[] bubbleSort(int[] arr) {
-    // Dizinin bir kopyasını oluştur
+    typescript: `/**
+ * Bubble Sort implementation for TypeScript arrays
+ * @param arr - The array to sort
+ * @returns A new sorted array
+ */
+function bubbleSort<T>(arr: T[]): T[] {
+  // Create a copy to avoid modifying the original array
+  const result = [...arr];
+  const n = result.length;
+  
+  // Outer loop - each pass places one element in its final position
+  for (let i = 0; i < n - 1; i++) {
+    // Optimization: track if any swaps occurred during this pass
+    let swapped = false;
+    
+    // Inner loop - compare adjacent elements and swap if needed
+    for (let j = 0; j < n - i - 1; j++) {
+      if (result[j] > result[j + 1]) {
+        // Destructuring swap - cleaner than using a temp variable
+        [result[j], result[j + 1]] = [result[j + 1], result[j]];
+        swapped = true;
+      }
+    }
+    
+    // If no swaps occurred, the array is already sorted
+    if (!swapped) break;
+  }
+  
+  return result;
+}`,
+    java: `/**
+ * Bubble Sort implementation in Java
+ * 
+ * @param arr The array to sort
+ * @return A new sorted array
+ */
+public static int[] bubbleSort(int[] arr) {
+    // Create a copy to avoid modifying the original array
     int[] result = Arrays.copyOf(arr, arr.length);
     int n = result.length;
     
-    // Dış döngü
+    // Outer loop - each pass places one element in its final position
     for (int i = 0; i < n - 1; i++) {
-        // İç döngü
+        // Optimization: track if any swaps occurred during this pass
+        boolean swapped = false;
+        
+        // Inner loop - compare adjacent elements and swap if needed
         for (int j = 0; j < n - i - 1; j++) {
-            // Karşılaştırma ve yer değiştirme
+            // Compare and swap if needed
             if (result[j] > result[j + 1]) {
-                // Değerleri takas et
+                // Swap elements
                 int temp = result[j];
                 result[j] = result[j + 1];
                 result[j + 1] = temp;
+                swapped = true;
             }
         }
+        
+        // If no swaps occurred, the array is already sorted
+        if (!swapped) break;
     }
     
     return result;
 }`,
   };
 
+  // Simulated complexity data for visualization
+  const complexityData = Array.from({ length: 10 }, (_, i) => {
+    const n = (i + 1) * 10;
+    return {
+      inputSize: n,
+      worstCase: n * n,
+      averageCase: n * n,
+      bestCase: n, // O(n) for best case (already sorted)
+    };
+  });
+
+  // Detailed bubble sort explanation
+  const bubbleSortDescription = `
+Bubble Sort, en basit sıralama algoritmalarından biridir. Her geçişte, komşu elemanları karşılaştırarak, büyük elemanların dizinin sonuna doğru kabarcık gibi yükselmesini sağlar.
+
+## Çalışma Prensibi:
+
+1. Dizinin başından başlayarak, her bir elemanı sağındaki komşusuyla karşılaştırır.
+2. Eğer soldaki eleman, sağdakinden büyükse, yerlerini değiştirir.
+3. Bu işlem, dizinin başından sonuna kadar tekrarlanır.
+4. Her tam geçiş sonrası, en büyük eleman dizinin sonuna yerleşir.
+5. Bir sonraki geçişte, son eleman zaten yerleştiği için, bir önceki elemana kadar karşılaştırma yapılır.
+6. Hiçbir takas işlemi gerçekleşmediğinde, dizi sıralanmış demektir ve algoritma sonlanır.
+
+## Optimizasyonlar:
+
+1. **Erken Çıkış**: Eğer bir geçişte hiçbir takas yapılmamışsa, dizi sıralanmış demektir.
+2. **Sınır Takibi**: Her geçişte, bir önceki geçişte yerleştirilen elemanlar için gereksiz karşılaştırma yapılmaz.
+
+Bubble Sort, eğitim amaçlı ve küçük veri setleri için uygundur, ancak büyük veri setleri için verimli değildir.
+`;
+
   return (
-    <div className="space-y-12">
-      <AlgorithmExplanation
-        title="Bubble Sort (Kabarcık Sıralama) Algoritması"
-        description="Bubble Sort, en temel sıralama algoritmalarından biridir. Adını, her geçişte dizinin en büyük elemanını 'kabarcık' gibi üste taşımasından alır. Algoritma, komşu elemanları karşılaştırarak ve gerektiğinde yer değiştirerek çalışır."
-        timeComplexity={{
-          best: 'O(n)',
-          average: 'O(n²)',
-          worst: 'O(n²)',
-        }}
-        spaceComplexity="O(1)"
-        advantages={[
-          'Anlaşılması ve uygulanması çok kolaydır',
-          'Küçük veri setleri için makul performans sunar',
-          'Ekstra bellek kullanımı gerektirmez (in-place algoritma)',
-          'Zaten sıralı olan verileri tespit edebilir',
-        ]}
-        disadvantages={[
-          'Büyük veri setleri için yavaştır - O(n²) karmaşıklığı',
-          'Selection Sort ve Insertion Sort gibi benzer karmaşıklığa sahip algoritmalardan genellikle daha yavaş çalışır',
-          'Her eleman için potansiyel olarak çok sayıda takas işlemi yapması gerekir',
-        ]}
-        pseudocode={pseudocode}
-        applications={[
-          'Eğitim amaçlı olarak sıralama algoritma prensiplerini öğrenmek için',
-          'Küçük veri setleri veya neredeyse sıralı veri setleri üzerinde',
-          'Düşük bellek kullanımı gerektiren sistemlerde',
-          'Paralel programlama ortamlarında (her bir geçiş bağımsız olarak yapılabilir)',
-        ]}
-      />
+    <div className="container mx-auto py-12 space-y-12">
+      <h1 className="text-4xl font-bold mb-8 text-center text-primary">
+        Bubble Sort Algoritması
+      </h1>
 
-      {/* <div className="space-y-4">
-        <h2 className="text-2xl font-bold">İnteraktif Görselleştirme</h2>
-        <p className="text-muted-foreground">
-          Bubble Sort algoritmasının çalışma prensibi adım adım
-          gösterilmektedir. Yeni bir dizi oluşturabilir, adımları hesaplatabilir
-          ve algoritmanın çalışmasını görsel olarak takip edebilirsiniz.
-        </p>
-        <SortingVisualizer algorithm="bubble" />
-      </div> */}
+      <div className="grid">
+        <div className="space-y-6">
+          {/* Algorithm Description */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Bubble Sort Açıklaması</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="prose dark:prose-invert max-w-none">
+                <p className="whitespace-pre-wrap">{bubbleSortDescription}</p>
+              </div>
+            </CardContent>
+          </Card>
 
+          {/* Complexity Analysis */}
+          <AlgorithmComplexity
+            timeComplexity={{
+              worstCase: 'O(n²)',
+              averageCase: 'O(n²)',
+              bestCase: 'O(n)',
+            }}
+            spaceComplexity="O(1) - Yerinde sıralama"
+            complexityData={complexityData}
+          />
+        </div>
+      </div>
+
+      {/* Code Examples Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kod Örnekleri</h2>
         <p className="text-muted-foreground">
           Bubble Sort algoritmasının farklı programlama dillerindeki
-          uygulamaları aşağıda verilmiştir.
+          uygulamaları aşağıda verilmiştir. Her örnek, algoritmanın optimize
+          edilmiş versiyonunu içerir ve detaylı açıklamalarla sunulmuştur.
         </p>
 
         <Tabs defaultValue="javascript">
           <TabsList>
             <TabsTrigger value="javascript">JavaScript</TabsTrigger>
+            <TabsTrigger value="typescript">TypeScript</TabsTrigger>
             <TabsTrigger value="python">Python</TabsTrigger>
             <TabsTrigger value="java">Java</TabsTrigger>
           </TabsList>
@@ -129,6 +235,13 @@ export default function BubbleSortPage() {
               code={implementations.javascript}
               language="javascript"
               title="Bubble Sort - JavaScript"
+            />
+          </TabsContent>
+          <TabsContent value="typescript">
+            <CodeBlock
+              code={implementations.typescript}
+              language="typescript"
+              title="Bubble Sort - TypeScript"
             />
           </TabsContent>
           <TabsContent value="python">
@@ -148,6 +261,7 @@ export default function BubbleSortPage() {
         </Tabs>
       </div>
 
+      {/* Interactive Demo Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kendi Verilerinizle Test Edin</h2>
         <p className="text-muted-foreground">
@@ -163,12 +277,185 @@ export default function BubbleSortPage() {
           inputType="array"
           inputPlaceholder="5,3,8,4,2"
           outputFormatter={(output) => (
-            <div>
-              <span className="font-medium">Sıralanmış Dizi: </span>
-              <span>{JSON.stringify(output)}</span>
+            <div className="space-y-2">
+              <div>
+                <span className="font-medium">Sıralanmış Dizi: </span>
+                <span>{JSON.stringify(output)}</span>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Not: Bubble Sort büyük veri setleri için verimli değildir.
+                1000'den fazla eleman içeren diziler için daha verimli
+                algoritmalar tercih edin.
+              </p>
             </div>
           )}
         />
+      </div>
+
+      {/* Algorithmic Analysis Section */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold">Algoritma Analizi</h2>
+
+        <Card className="overflow-hidden">
+          <CardHeader>
+            <CardTitle>Zaman ve Alan Karmaşıklığı</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">Zaman Karmaşıklığı</h3>
+                <ul className="space-y-2">
+                  <li>
+                    <span className="font-medium">En İyi Durum: </span>
+                    <code className="text-sm bg-muted px-1 py-0.5 rounded">
+                      O(n)
+                    </code>{' '}
+                    - Dizi zaten sıralıysa, algoritma tek bir geçişte tamamlanır
+                    (erken çıkış optimizasyonu ile).
+                  </li>
+                  <li>
+                    <span className="font-medium">Ortalama Durum: </span>
+                    <code className="text-sm bg-muted px-1 py-0.5 rounded">
+                      O(n²)
+                    </code>{' '}
+                    - İç içe iki döngü kullanır ve ortalamada n²/2 karşılaştırma
+                    gerektirir.
+                  </li>
+                  <li>
+                    <span className="font-medium">En Kötü Durum: </span>
+                    <code className="text-sm bg-muted px-1 py-0.5 rounded">
+                      O(n²)
+                    </code>{' '}
+                    - Dizi tersine sıralıysa, her eleman için bir takas gerekir,
+                    n(n-1)/2 karşılaştırma yapılır.
+                  </li>
+                </ul>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">Alan Karmaşıklığı</h3>
+                <p>
+                  <code className="text-sm bg-muted px-1 py-0.5 rounded">
+                    O(1)
+                  </code>{' '}
+                  - Bubble Sort yerinde (in-place) bir sıralama algoritmasıdır.
+                  Giriş dizisinin boyutundan bağımsız olarak sabit miktarda
+                  ekstra bellek kullanır.
+                </p>
+
+                <h3 className="text-lg font-medium">Kararlılık (Stability)</h3>
+                <p>
+                  Bubble Sort <span className="font-medium">kararlı</span> bir
+                  algoritma olduğundan, eşit değere sahip elemanların göreceli
+                  sırası korunur. Bu özellik, ikincil sıralama kriterleri olan
+                  uygulamalarda önemlidir.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Avantajlar ve Dezavantajlar</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-lg font-medium text-green-600 dark:text-green-400 mb-2">
+                  Avantajlar
+                </h3>
+                <ul className="space-y-2 list-disc pl-5">
+                  <li>Anlaşılması ve uygulanması son derece kolaydır.</li>
+                  <li>
+                    Ekstra bellek alanı gerektirmez (O(1) alan karmaşıklığı).
+                  </li>
+                  <li>
+                    Kararlı bir algoritma olduğundan, eşit değerli elemanların
+                    sırası değişmez.
+                  </li>
+                  <li>
+                    Erken çıkış optimizasyonu ile zaten sıralı veriler için O(n)
+                    karmaşıklığa sahiptir.
+                  </li>
+                  <li>
+                    Çok küçük veri setleri için basit ve verimli olabilir.
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium text-red-600 dark:text-red-400 mb-2">
+                  Dezavantajlar
+                </h3>
+                <ul className="space-y-2 list-disc pl-5">
+                  <li>
+                    Büyük veri setleri için O(n²) zaman karmaşıklığı nedeniyle
+                    oldukça verimsizdir.
+                  </li>
+                  <li>
+                    Selection Sort ve Insertion Sort gibi diğer basit
+                    algoritmalardan genellikle daha yavaştır.
+                  </li>
+                  <li>
+                    Takas işlemi sayısı fazladır, bu da performansı düşürür.
+                  </li>
+                  <li>
+                    Modern uygulamalarda, daha iyi performans sunan algoritmalar
+                    (Quick Sort, Merge Sort vb.) tercih edilir.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Related Algorithms Section */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold">İlgili Algoritmalar</h2>
+        <p className="text-muted-foreground">
+          Bubble Sort'a benzer veya alternatif olarak kullanılabilecek diğer
+          sıralama algoritmaları:
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <Card className="hover:shadow-md transition-shadow">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">Insertion Sort</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <p className="text-sm text-muted-foreground">
+                Küçük veri setleri için verimli ve kısmen sıralı veriler için
+                O(n) performans sunar.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-md transition-shadow">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">Selection Sort</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <p className="text-sm text-muted-foreground">
+                Bubble Sort'a benzer karmaşıklığa sahip, ancak takas işlemi
+                sayısı daha azdır.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-md transition-shadow">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">Cocktail Sort</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <p className="text-sm text-muted-foreground">
+                Bubble Sort'un iki yönlü bir varyasyonu, daha hızlı yakınsama
+                sağlayabilir.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
