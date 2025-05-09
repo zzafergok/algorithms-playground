@@ -1,23 +1,26 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
+import { useState, useEffect } from 'react';
+
 import { Menu, X, ChevronDown } from 'lucide-react';
-import { ThemeToggle } from '@/components/theme/theme-toggle';
-import { Button } from '@/components/ui/button';
+
 import {
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuGroup,
   DropdownMenuSub,
+  DropdownMenuItem,
+  DropdownMenuGroup,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
-  DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/theme/theme-toggle';
+
 import { cn } from '@/lib/utils';
 
 // Navigation item interface with support for nested menus
@@ -40,16 +43,19 @@ const navItems: NavItem[] = [
         href: '/algorithms/sorting',
         children: [
           { label: 'Bubble Sort', href: '/algorithms/sorting/bubble-sort' },
-          {
-            label: 'Selection Sort',
-            href: '/algorithms/sorting/selection-sort',
-          },
+          { label: 'Counting Sort', href: '/algorithms/sorting/counting-sort' },
+          { label: 'Heap Sort', href: '/algorithms/sorting/heap-sort' },
           {
             label: 'Insertion Sort',
             href: '/algorithms/sorting/insertion-sort',
           },
           { label: 'Merge Sort', href: '/algorithms/sorting/merge-sort' },
           { label: 'Quick Sort', href: '/algorithms/sorting/quick-sort' },
+          { label: 'Radix Sort', href: '/algorithms/sorting/radix-sort' },
+          {
+            label: 'Selection Sort',
+            href: '/algorithms/sorting/selection-sort',
+          },
         ],
       },
       {
