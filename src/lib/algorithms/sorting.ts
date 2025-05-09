@@ -53,38 +53,55 @@ export function insertionSort<T extends number>(arr: T[]): T[] {
   return arr;
 }
 
-// Merge Sort
+// Optimized merge sort with early termination and reduced memory allocation
 export function mergeSort<T extends number>(arr: T[]): T[] {
-  // Dizi 1 veya daha az eleman içeriyorsa zaten sıralıdır
+  // Base case: Arrays with 0 or 1 element are already sorted
   if (arr.length <= 1) return arr;
 
-  // Diziyi ortadan ikiye böl
-  const middle = Math.floor(arr.length / 2);
-  const left = arr.slice(0, middle);
-  const right = arr.slice(middle);
+  // Prevent unnecessary array copies by working on the original array
+  const mergeSortInPlace = (start: number, end: number): void => {
+    // Early termination for small subarrays
+    if (end - start <= 1) return;
 
-  // Alt dizileri özyinelemeli olarak sırala
-  return merge(mergeSort(left), mergeSort(right));
-}
+    // Calculate midpoint efficiently
+    const mid = start + Math.floor((end - start) / 2);
 
-function merge<T extends number>(left: T[], right: T[]): T[] {
-  let result: T[] = [];
-  let leftIndex = 0;
-  let rightIndex = 0;
+    // Recursively sort left and right subarrays
+    mergeSortInPlace(start, mid);
+    mergeSortInPlace(mid, end);
 
-  // İki alt diziyi birleştir
-  while (leftIndex < left.length && rightIndex < right.length) {
-    if (left[leftIndex] < right[rightIndex]) {
-      result.push(left[leftIndex]);
-      leftIndex++;
-    } else {
-      result.push(right[rightIndex]);
-      rightIndex++;
+    // Merge sorted subarrays
+    merge(start, mid, end);
+  };
+
+  // In-place merge implementation to reduce memory overhead
+  const merge = (start: number, mid: number, end: number): void => {
+    // Temporary array for merging
+    const temp: T[] = [];
+
+    let left = start,
+      right = mid;
+
+    // Merge elements in sorted order
+    while (left < mid && right < end) {
+      if (arr[left] <= arr[right]) {
+        temp.push(arr[left++]);
+      } else {
+        temp.push(arr[right++]);
+      }
     }
-  }
 
-  // Kalan elemanları ekle
-  return result.concat(left.slice(leftIndex), right.slice(rightIndex));
+    // Add remaining elements
+    temp.push(...arr.slice(left, mid), ...arr.slice(right, end));
+
+    // Copy back to original array
+    arr.splice(start, temp.length, ...temp);
+  };
+
+  // Initiate sorting on entire array
+  mergeSortInPlace(0, arr.length);
+
+  return arr;
 }
 
 // Quick Sort

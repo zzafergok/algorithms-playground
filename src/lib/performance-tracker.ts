@@ -18,86 +18,28 @@ export interface AlgorithmPerformanceMetrics {
 }
 
 export class PerformanceTracker {
-  private startMemory: number = 0;
-  private comparisons: number = 0;
-  private swaps: number = 0;
-
-  constructor() {
-    this.reset();
-  }
-
-  reset() {
-    this.startMemory = this.getMemoryUsage();
-    this.comparisons = 0;
-    this.swaps = 0;
-  }
-
-  private getMemoryUsage(): number {
-    if (
-      typeof window !== 'undefined' &&
-      window.performance &&
-      window.performance.memory
-    ) {
-      return window.performance.memory.usedJSHeapSize / 1024; // Convert to KB
+  // Use more precise memory tracking
+  private getMemoryUsage(): {
+    usedMemory: number;
+    totalMemory: number;
+    memoryUsagePercent: number;
+  } {
+    // Fallback for environments without memory tracking
+    if (typeof window === 'undefined' || !window.performance?.memory) {
+      return {
+        usedMemory: 0,
+        totalMemory: 0,
+        memoryUsagePercent: 0,
+      };
     }
-    return 0;
-  }
 
-  trackComparison() {
-    this.comparisons++;
-  }
+    const { usedJSHeapSize, totalJSHeapSize } = window.performance.memory;
 
-  trackSwap() {
-    this.swaps++;
-  }
-
-  measure<T>(
-    algorithm: (arr: T[]) => T[],
-    input: T[]
-  ): AlgorithmPerformanceMetrics {
-    // Reset tracking
-    this.reset();
-
-    // Measure start time
-    const startTime = performance.now();
-
-    // Create a copy of the input to avoid mutation
-    const inputCopy = [...input];
-
-    // Perform the algorithm with custom comparison and swap tracking
-    const trackedAlgorithm = (arr: T[]) => {
-      const wrappedAlgorithm = (comparison: (a: T, b: T) => boolean) => {
-        return (a: T, b: T) => {
-          this.trackComparison();
-          return comparison(a, b);
-        };
-      };
-
-      const wrappedSwap = (arr: T[], i: number, j: number) => {
-        this.trackSwap();
-        const temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-      };
-
-      return algorithm(arr);
-    };
-
-    // Run the algorithm
-    const result = trackedAlgorithm(inputCopy);
-
-    // Measure end time
-    const endTime = performance.now();
-
-    // Calculate memory usage
-    const endMemory = this.getMemoryUsage();
-
+    // Calculate memory usage percentage for more meaningful insights
     return {
-      executionTime: endTime - startTime,
-      memoryUsageBefore: this.startMemory,
-      memoryUsageAfter: endMemory,
-      comparisons: this.comparisons,
-      swaps: this.swaps,
+      usedMemory: usedJSHeapSize / 1024, // KB
+      totalMemory: totalJSHeapSize / 1024, // KB
+      memoryUsagePercent: (usedJSHeapSize / totalJSHeapSize) * 100,
     };
   }
 }
