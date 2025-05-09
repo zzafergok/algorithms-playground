@@ -115,3 +115,21 @@
 .algorithm-explanation {
   @apply max-w-none;
 }
+
+/* Gradient animation for the fun fact section */
+@keyframes gradient-x {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 15s ease infinite;
+  background-size: 200% 200%;
+}
