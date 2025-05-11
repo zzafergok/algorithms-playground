@@ -1,138 +1,298 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 
-import { motion } from 'framer-motion';
-import { Search, Filter, Code, Copy, Check } from 'lucide-react';
-
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  DropdownMenu,
-  DropdownMenuLabel,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-  DropdownMenuCheckboxItem,
-} from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { CodeBlock } from '@/components/common/code-block';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
-// Code example interface
-interface CodeExample {
+import {
+  X,
+  Code2,
+  Filter,
+  Layers,
+  Target,
+  Search,
+  GitBranch,
+  BarChart3,
+  Settings2,
+  BookMarked,
+  ChevronDown,
+  Copy,
+  Check,
+  ExternalLink,
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// Kategori tipleri
+type Category = {
   id: string;
   name: string;
+  icon: React.ReactNode;
+};
+
+// Zorluk tipleri
+type Difficulty = 'Kolay' | 'Orta' | 'Zor';
+
+// Programlama dili kod örneği tipi
+type LanguageCode = {
+  language: string;
+  code: string;
+};
+
+// Güncellenen kod örneği tipi - kod örnekleri eklendi
+type CodeExample = {
+  id: string;
+  title: string;
   description: string;
   category: string;
-  difficulty: 'Kolay' | 'Orta' | 'Zor';
-  tags: string[];
-  implementations: {
-    [key: string]: {
-      code: string;
-      explanation?: string;
-    };
-  };
-}
+  difficulty: Difficulty;
+  languages: string[];
+  githubUrl?: string;
+  concepts: string[];
+  codeExamples: LanguageCode[]; // Yeni alan - kod örnekleri
+};
+
+// Kod kopyalama butonu componenti
+const CopyButton = ({ text }: { text: string }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = useCallback(() => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }, [text]);
+
+  return (
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={handleCopy}
+      className="absolute top-2 right-2"
+    >
+      {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+    </Button>
+  );
+};
+
+// Kod modal componenti
+const CodeModal = ({ example }: { example: CodeExample }) => {
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    example.codeExamples[0]?.language || ''
+  );
+
+  // Seçili dile ait kod örneğini bul
+  const currentCode = example.codeExamples.find(
+    (code) => code.language === selectedLanguage
+  );
+
+  return (
+    <DialogContent className="max-w-4xl max-h-[80vh]">
+      <DialogHeader>
+        <DialogTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Code2 className="h-5 w-5" />
+            {example.title}
+          </div>
+          {example.githubUrl && (
+            <Button variant="outline" size="sm" asChild>
+              <a
+                href={example.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                <ExternalLink className="h-4 w-4" />
+                GitHub
+              </a>
+            </Button>
+          )}
+        </DialogTitle>
+      </DialogHeader>
+
+      <div className="space-y-4">
+        {/* Açıklama */}
+        <div>
+          <p className="text-muted-foreground">{example.description}</p>
+        </div>
+
+        {/* Konseptler ve zorluk */}
+        <div className="flex flex-wrap gap-2">
+          <Badge variant={getDifficultyColor(example.difficulty)}>
+            {example.difficulty}
+          </Badge>
+          {example.concepts.map((concept) => (
+            <Badge key={concept} variant="secondary">
+              {concept}
+            </Badge>
+          ))}
+        </div>
+
+        {/* Dil sekmeli kod örnekleri */}
+        {example.codeExamples.length > 0 && (
+          <Tabs value={selectedLanguage} onValueChange={setSelectedLanguage}>
+            <TabsList className="w-full">
+              {example.codeExamples.map((codeExample) => (
+                <TabsTrigger
+                  key={codeExample.language}
+                  value={codeExample.language}
+                  className="flex-1"
+                >
+                  {codeExample.language}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            {example.codeExamples.map((codeExample) => (
+              <TabsContent
+                key={codeExample.language}
+                value={codeExample.language}
+              >
+                <ScrollArea className="h-[400px] w-full rounded-md border">
+                  <div className="relative">
+                    <CopyButton text={codeExample.code} />
+                    <pre className="p-4">
+                      <code className="text-sm">{codeExample.code}</code>
+                    </pre>
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+            ))}
+          </Tabs>
+        )}
+      </div>
+    </DialogContent>
+  );
+};
+
+// Zorluk renk belirleme fonksiyonu
+const getDifficultyColor = (difficulty: Difficulty) => {
+  switch (difficulty) {
+    case 'Kolay':
+      return 'success';
+    case 'Orta':
+      return 'warning';
+    case 'Zor':
+      return 'destructive';
+    default:
+      return 'secondary';
+  }
+};
 
 export default function CodeExamplesPage() {
-  // State variables
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredExamples, setFilteredExamples] = useState<CodeExample[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedDifficulties, setSelectedDifficulties] = useState<string[]>(
-    []
+  // Arama terimi state'i
+  const [searchTerm, setSearchTerm] = useState('');
+  // Seçili kategoriler state'i - Set kullanarak benzersiz değerler
+  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
+    new Set()
   );
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  // Seçili zorluklar state'i - Set kullanarak benzersiz değerler
+  const [selectedDifficulties, setSelectedDifficulties] = useState<
+    Set<Difficulty>
+  >(new Set());
+  // Filtre paneli açık/kapalı state'i
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  // Language options
-  const languageOptions = ['typescript', 'python', 'java'];
+  // Kategoriler listesi
+  const categories: Category[] = [
+    {
+      id: 'sorting',
+      name: 'Sıralama',
+      icon: <Settings2 className="h-4 w-4" />,
+    },
+    { id: 'searching', name: 'Arama', icon: <Search className="h-4 w-4" /> },
+    { id: 'graph', name: 'Graf', icon: <Code2 className="h-4 w-4" /> },
+    {
+      id: 'dp',
+      name: 'Dinamik Programlama',
+      icon: <BookMarked className="h-4 w-4" />,
+    },
+    {
+      id: 'data-structures',
+      name: 'Veri Yapıları',
+      icon: <Layers className="h-4 w-4" />,
+    },
+    { id: 'greedy', name: 'Açgözlü', icon: <Target className="h-4 w-4" /> },
+    {
+      id: 'backtracking',
+      name: 'Geri İzleme',
+      icon: <GitBranch className="h-4 w-4" />,
+    },
+    { id: 'math', name: 'Matematik', icon: <BarChart3 className="h-4 w-4" /> },
+  ];
 
-  // All code examples data
+  // Kod örnekleri verisi - kod örnekleri ile güncellenmiş
   const codeExamples: CodeExample[] = [
     {
-      id: 'bubble-sort',
-      name: 'Bubble Sort',
+      id: '1',
+      title: 'Bubble Sort Implementasyonu',
       description:
-        'Her adımda komşu elemanları karşılaştırarak ve gerekirse değiştirerek çalışan basit bir sıralama algoritması.',
-      category: 'Sıralama Algoritmaları',
+        'Adım adım bubble sort algoritmasının farklı dillerde implementasyonu',
+      category: 'sorting',
       difficulty: 'Kolay',
-      tags: ['sıralama', 'karşılaştırma-temelli', 'in-place'],
-      implementations: {
-        typescript: {
-          code: `// Bubble sort algoritma implementasyonu
-export function bubbleSort(arr: number[]): number[] {
-  // Dizinin bir kopyasını oluştur
+      languages: ['JavaScript', 'Python', 'Java'],
+      githubUrl:
+        'https://github.com/zzafergok/algorithms-playground/tree/main/src/lib/algorithms/sorting.ts',
+      concepts: ['Sıralama', 'Karşılaştırma', 'Swap İşlemi'],
+      codeExamples: [
+        {
+          language: 'JavaScript',
+          code: `function bubbleSort(arr) {
+  const n = arr.length;
   const result = [...arr];
-  const n = result.length;
-
-  // Dış döngü - her geçişte en az bir eleman sıralanır
+  
   for (let i = 0; i < n - 1; i++) {
-    // İç döngü - her geçişte elemanları karşılaştır
     for (let j = 0; j < n - i - 1; j++) {
-      // Mevcut eleman bir sonrakinden büyükse, yerlerini değiştir
       if (result[j] > result[j + 1]) {
-        // Destructuring assignment ile yer değiştirme
+        // Swap elements
         [result[j], result[j + 1]] = [result[j + 1], result[j]];
       }
     }
   }
-
+  
   return result;
-}`,
-          explanation:
-            'Bubble Sort, her adımda komşu elemanları karşılaştırıp gerektiğinde yerlerini değiştirerek çalışır. Bu süreç, en büyük elemanların sona taşınmasıyla sonuçlanır. Her geçişte, en azından bir eleman doğru pozisyona yerleşir. En kötü ve ortalama durumda O(n²) zaman karmaşıklığına sahiptir.',
+}
+
+// Kullanım örneği
+const array = [64, 34, 25, 12, 22, 11, 90];
+console.log(bubbleSort(array)); // [11, 12, 22, 25, 34, 64, 90]`,
         },
-        python: {
+        {
+          language: 'Python',
           code: `def bubble_sort(arr):
-    """
-    Bubble Sort algoritması ile bir listeyi sıralar.
-    
-    Args:
-        arr: Sıralanacak liste
-        
-    Returns:
-        Sıralanmış liste
-    """
-    # Listenin bir kopyasını oluştur
+    n = len(arr)
     result = arr.copy()
-    n = len(result)
     
-    # Dış döngü - her geçişte en az bir eleman sıralanır
     for i in range(n - 1):
-        # İç döngü - her geçişte elemanları karşılaştır
-        for j in range(0, n - i - 1):
-            # Mevcut eleman bir sonrakinden büyükse, yerlerini değiştir
+        for j in range(n - i - 1):
             if result[j] > result[j + 1]:
+                # Swap elements
                 result[j], result[j + 1] = result[j + 1], result[j]
-                
-    return result`,
-          explanation:
-            "Python implementasyonu, fonksiyonel ve açıklayıcıdır. Orijinal diziyi değiştirmemek için bir kopya oluşturur ve standart Python syntax'ını kullanarak elemanların yerlerini değiştirir.",
-        },
-        java: {
-          code: `/**
- * Bubble Sort algorithm implementation
- */
-public class BubbleSort {
     
-    /**
-     * Sorts an array using Bubble Sort algorithm
-     * 
-     * @param arr The array to be sorted
-     * @return The sorted array
-     */
+    return result
+
+# Kullanım örneği
+array = [64, 34, 25, 12, 22, 11, 90]
+print(bubble_sort(array))  # [11, 12, 22, 25, 34, 64, 90]`,
+        },
+        {
+          language: 'Java',
+          code: `public class BubbleSort {
     public static int[] bubbleSort(int[] arr) {
-        // Create a copy of the input array
+        int n = arr.length;
         int[] result = arr.clone();
-        int n = result.length;
         
-        // Outer loop - each pass places at least one element
         for (int i = 0; i < n - 1; i++) {
-            // Inner loop - compare adjacent elements
             for (int j = 0; j < n - i - 1; j++) {
-                // If current element is greater than the next one, swap them
                 if (result[j] > result[j + 1]) {
                     // Swap elements
                     int temp = result[j];
@@ -144,1238 +304,696 @@ public class BubbleSort {
         
         return result;
     }
+    
+    public static void main(String[] args) {
+        int[] array = {64, 34, 25, 12, 22, 11, 90};
+        int[] sorted = bubbleSort(array);
+        System.out.println(Arrays.toString(sorted));
+    }
 }`,
-          // Continuing the code examples page...
-          explanation:
-            'Java implementasyonu, sınıf yapısı içinde statik bir metot olarak tanımlanmıştır. Tip güvenliği ve açıklayıcı yorum satırları, kodu anlaşılır kılmaktadır. Daha verimli bir kod için erken çıkış optimizasyonu da eklenebilir.',
         },
-      },
+      ],
     },
     {
-      id: 'binary-search',
-      name: 'Binary Search',
-      description:
-        'Sıralı dizilerde, her adımda arama alanını yarıya bölerek logaritmik zamanda arama yapan algoritma.',
-      category: 'Arama Algoritmaları',
+      id: '2',
+      title: 'Binary Search Algorithm',
+      description: 'Verimli arama algoritması örneği ve farklı varyasyonları',
+      category: 'searching',
       difficulty: 'Orta',
-      tags: ['arama', 'sıralı-dizi', 'logaritmik'],
-      implementations: {
-        typescript: {
-          code: `/**
- * Sıralı bir dizide ikili arama algoritması
- * 
- * @param arr Arama yapılacak sıralı dizi
- * @param target Aranan değer
- * @returns Hedef değerin indeksi veya bulunamazsa -1
- */
-export function binarySearch(arr: number[], target: number): number {
-  // Başlangıç ve bitiş indekslerini ayarla
+      languages: ['JavaScript', 'Python', 'C++'],
+      concepts: ['Arama', 'Böl ve Fethet', 'Logaritmik Karmaşıklık'],
+      codeExamples: [
+        {
+          language: 'JavaScript',
+          code: `function binarySearch(arr, target) {
   let left = 0;
   let right = arr.length - 1;
   
-  // Arama alanı var oldukça devam et
   while (left <= right) {
-    // Orta noktayı bul (taşma olmadan)
-    const mid = left + Math.floor((right - left) / 2);
+    const mid = Math.floor((left + right) / 2);
     
-    // Hedef bulundu mu?
     if (arr[mid] === target) {
       return mid;
     }
     
-    // Sol yarıyı ara
-    if (arr[mid] > target) {
-      right = mid - 1;
-    } 
-    // Sağ yarıyı ara
-    else {
+    if (arr[mid] < target) {
       left = mid + 1;
+    } else {
+      right = mid - 1;
     }
   }
   
-  // Hedef bulunamadı
-  return -1;
-}`,
-          explanation:
-            "Binary Search, sıralı bir dizide logaritmik zaman karmaşıklığında (O(log n)) arama yapar. Her adımda, arama alanını yarıya bölerek hedefin hangi yarıda olabileceğine karar verir. Bu, linear search'e göre çok daha verimlidir, özellikle büyük veri setlerinde.",
+  return -1; // Element not found
+}
+
+// Kullanım örneği
+const sortedArray = [1, 3, 5, 7, 9, 11, 13, 15];
+console.log(binarySearch(sortedArray, 7)); // 3
+console.log(binarySearch(sortedArray, 6)); // -1`,
         },
-        python: {
+        {
+          language: 'Python',
           code: `def binary_search(arr, target):
-    """
-    Sıralı bir dizide ikili arama algoritması
-    
-    Args:
-        arr: Arama yapılacak sıralı dizi
-        target: Aranan değer
-        
-    Returns:
-        Hedef değerin indeksi veya bulunamazsa -1
-    """
-    # Başlangıç ve bitiş indekslerini ayarla
     left, right = 0, len(arr) - 1
     
-    # Arama alanı var oldukça devam et
     while left <= right:
-        # Orta noktayı bul
-        mid = left + (right - left) // 2
+        mid = (left + right) // 2
         
-        # Hedef bulundu mu?
         if arr[mid] == target:
             return mid
-            
-        # Sol yarıyı ara
-        if arr[mid] > target:
-            right = mid - 1
-        # Sağ yarıyı ara
-        else:
+        
+        if arr[mid] < target:
             left = mid + 1
+        else:
+            right = mid - 1
     
-    # Hedef bulunamadı
-    return -1`,
-          explanation:
-            'Python implementasyonu, kodun okunabilirliğini artıran açıklayıcı yorumlar ve dokümantasyon içerir. Integer bölme operatörü (//) kullanılarak taşma sorunları önlenir.',
+    return -1  # Element not found
+
+# Kullanım örneği
+sorted_array = [1, 3, 5, 7, 9, 11, 13, 15]
+print(binary_search(sorted_array, 7))  # 3
+print(binary_search(sorted_array, 6))  # -1`,
         },
-        java: {
-          code: `/**
- * Binary Search algorithm implementation
- */
-public class BinarySearch {
+        {
+          language: 'C++',
+          code: `#include <iostream>
+#include <vector>
+
+int binarySearch(const std::vector<int>& arr, int target) {
+    int left = 0;
+    int right = arr.size() - 1;
     
-    /**
-     * Searches for a target value in a sorted array
-     * 
-     * @param arr The sorted array to search in
-     * @param target The value to search for
-     * @return The index of the target or -1 if not found
-     */
-    public static int binarySearch(int[] arr, int target) {
-        // Set initial bounds
-        int left = 0;
-        int right = arr.length - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
         
-        // Continue as long as the search space exists
-        while (left <= right) {
-            // Find the middle point (prevent overflow)
-            int mid = left + (right - left) / 2;
-            
-            // Check if target is found
-            if (arr[mid] == target) {
-                return mid;
-            }
-            
-            // Search the left half
-            if (arr[mid] > target) {
-                right = mid - 1;
-            }
-            // Search the right half
-            else {
-                left = mid + 1;
-            }
+        if (arr[mid] == target) {
+            return mid;
         }
         
-        // Target not found
-        return -1;
+        if (arr[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
     }
-}`,
-          explanation:
-            'Java implementasyonu, statik bir metot içinde tutulmuş ve kapsamlı yorum satırlarıyla açıklanmıştır. Taşma sorunlarını önlemek için güvenli bir orta nokta hesaplama yöntemi kullanılmıştır.',
-        },
-      },
-    },
-    {
-      id: 'linked-list',
-      name: 'Linked List',
-      description:
-        'Her düğümün veri ve bir sonraki düğüme referans içerdiği dinamik bir veri yapısı.',
-      category: 'Veri Yapıları',
-      difficulty: 'Orta',
-      tags: ['veri-yapısı', 'bağlı-liste', 'dinamik'],
-      implementations: {
-        typescript: {
-          code: `/**
- * Linked List düğümü sınıfı
- */
-class ListNode<T> {
-  value: T;
-  next: ListNode<T> | null;
-  
-  constructor(value: T, next: ListNode<T> | null = null) {
-    this.value = value;
-    this.next = next;
-  }
+    
+    return -1; // Element not found
 }
 
-/**
- * Tek yönlü bağlı liste implementasyonu
- */
-export class LinkedList<T> {
-  private head: ListNode<T> | null;
-  private size: number;
-  
-  constructor() {
-    this.head = null;
-    this.size = 0;
-  }
-  
-  /**
-   * Liste boyutunu döndürür
-   */
-  getSize(): number {
-    return this.size;
-  }
-  
-  /**
-   * Liste boş mu kontrol eder
-   */
-  isEmpty(): boolean {
-    return this.size === 0;
-  }
-  
-  /**
-   * Listenin başına eleman ekler
-   */
-  prepend(value: T): void {
-    const newNode = new ListNode(value, this.head);
-    this.head = newNode;
-    this.size++;
-  }
-  
-  /**
-   * Listenin sonuna eleman ekler
-   */
-  append(value: T): void {
-    const newNode = new ListNode(value);
-    
-    // Liste boşsa, yeni düğüm head olur
-    if (!this.head) {
-      this.head = newNode;
-    } else {
-      // Listenin sonuna git
-      let current = this.head;
-      while (current.next) {
-        current = current.next;
-      }
-      // Son düğüme yeni düğümü bağla
-      current.next = newNode;
-    }
-    
-    this.size++;
-  }
-  
-  /**
-   * Belirli bir indeksteki elemanı bulur
-   */
-  get(index: number): T | null {
-    // Geçersiz indeks kontrolü
-    if (index < 0 || index >= this.size) {
-      return null;
-    }
-    
-    let current = this.head;
-    for (let i = 0; i < index && current; i++) {
-      current = current.next;
-    }
-    
-    return current ? current.value : null;
-  }
-  
-  /**
-   * Belirli bir indeksteki elemanı siler
-   */
-  removeAt(index: number): T | null {
-    // Geçersiz indeks kontrolü
-    if (index < 0 || index >= this.size || !this.head) {
-      return null;
-    }
-    
-    let removedValue: T;
-    
-    // Baştan silme
-    if (index === 0) {
-      removedValue = this.head.value;
-      this.head = this.head.next;
-    } else {
-      // Silinecek düğümün öncesine git
-      let current = this.head;
-      for (let i = 0; i < index - 1 && current.next; i++) {
-        current = current.next;
-      }
-      
-      if (current.next) {
-        removedValue = current.next.value;
-        current.next = current.next.next;
-      } else {
-        return null;
-      }
-    }
-    
-    this.size--;
-    return removedValue;
-  }
-  
-  /**
-   * Tüm listeyi diziye dönüştürür
-   */
-  toArray(): T[] {
-    const result: T[] = [];
-    let current = this.head;
-    
-    while (current) {
-      result.push(current.value);
-      current = current.next;
-    }
-    
-    return result;
-  }
+int main() {
+    std::vector<int> sortedArray = {1, 3, 5, 7, 9, 11, 13, 15};
+    std::cout << binarySearch(sortedArray, 7) << std::endl; // 3
+    std::cout << binarySearch(sortedArray, 6) << std::endl; // -1
+    return 0;
 }`,
-          explanation:
-            "TypeScript'te jenerik bir sınıf olarak implementasyonu, tip güvenliği ve yeniden kullanılabilirlik sağlar. Bu implementasyon, temel bağlı liste operasyonlarını (ekleme, silme, erişim) içerir ve jenerik tip kullanarak farklı veri tipleriyle çalışabilir.",
         },
-        python: {
-          code: `class ListNode:
-    """Linked List düğümü sınıfı"""
-    def __init__(self, value, next=None):
-        self.value = value
-        self.next = next
-        
-class LinkedList:
-    """Tek yönlü bağlı liste implementasyonu"""
-    def __init__(self):
-        self.head = None
-        self.size = 0
-        
-    def get_size(self):
-        """Liste boyutunu döndürür"""
-        return self.size
-        
-    def is_empty(self):
-        """Liste boş mu kontrol eder"""
-        return self.size == 0
-        
-    def prepend(self, value):
-        """Listenin başına eleman ekler"""
-        self.head = ListNode(value, self.head)
-        self.size += 1
-        
-    def append(self, value):
-        """Listenin sonuna eleman ekler"""
-        new_node = ListNode(value)
-        
-        # Liste boşsa, yeni düğüm head olur
-        if self.head is None:
-            self.head = new_node
-        else:
-            # Listenin sonuna git
-            current = self.head
-            while current.next:
-                current = current.next
-            # Son düğüme yeni düğümü bağla
-            current.next = new_node
-            
-        self.size += 1
-        
-    def get(self, index):
-        """Belirli bir indeksteki elemanı bulur"""
-        # Geçersiz indeks kontrolü
-        if index < 0 or index >= self.size:
-            return None
-            
-        current = self.head
-        for i in range(index):
-            if current is None:
-                return None
-            current = current.next
-            
-        return current.value if current else None
-        
-    def remove_at(self, index):
-        """Belirli bir indeksteki elemanı siler"""
-        # Geçersiz indeks kontrolü
-        if index < 0 or index >= self.size or self.head is None:
-            return None
-            
-        # Baştan silme
-        if index == 0:
-            removed_value = self.head.value
-            self.head = self.head.next
-        else:
-            # Silinecek düğümün öncesine git
-            current = self.head
-            for i in range(index - 1):
-                if current.next is None:
-                    return None
-                current = current.next
-                
-            if current.next:
-                removed_value = current.next.value
-                current.next = current.next.next
-            else:
-                return None
-                
-        self.size -= 1
-        return removed_value
-        
-    def to_list(self):
-        """Tüm listeyi diziye dönüştürür"""
-        result = []
-        current = self.head
-        
-        while current:
-            result.append(current.value)
-            current = current.next
-            
-        return result`,
-          explanation:
-            "Python implementasyonu, doc-string'ler kullanarak her metodun amacını ve işlevini belirtmektedir. Pythonic yaklaşımla yazılmış, okuması ve anlaması kolay bir implementasyondur. None kontrolü, Python'un null değer yaklaşımına uygundur.",
-        },
-        java: {
-          code: `/**
- * Linked List implementation in Java
- */
-public class LinkedList<T> {
-    
-    /**
-     * Node class for linked list
-     */
-    private class ListNode {
-        T value;
-        ListNode next;
-        
-        public ListNode(T value) {
-            this.value = value;
-            this.next = null;
-        }
-        
-        public ListNode(T value, ListNode next) {
-            this.value = value;
-            this.next = next;
-        }
-    }
-    
-    private ListNode head;
-    private int size;
-    
-    /**
-     * Constructor for LinkedList
-     */
-    public LinkedList() {
-        this.head = null;
-        this.size = 0;
-    }
-    
-    /**
-     * Returns the size of the list
-     */
-    public int getSize() {
-        return size;
-    }
-    
-    /**
-     * Checks if the list is empty
-     */
-    public boolean isEmpty() {
-        return size == 0;
-    }
-    
-    /**
-     * Adds an element to the beginning of the list
-     */
-    public void prepend(T value) {
-        head = new ListNode(value, head);
-        size++;
-    }
-    
-    /**
-     * Adds an element to the end of the list
-     */
-    public void append(T value) {
-        ListNode newNode = new ListNode(value);
-        
-        // If the list is empty, the new node becomes the head
-        if (head == null) {
-            head = newNode;
-        } else {
-            // Go to the end of the list
-            ListNode current = head;
-            while (current.next != null) {
-                current = current.next;
-            }
-            // Link the new node to the end
-            current.next = newNode;
-        }
-        
-        size++;
-    }
-    
-    /**
-     * Gets the element at a specific index
-     */
-    public T get(int index) {
-        // Check for invalid index
-        if (index < 0 || index >= size) {
-            return null;
-        }
-        
-        ListNode current = head;
-        for (int i = 0; i < index && current != null; i++) {
-            current = current.next;
-        }
-        
-        return current != null ? current.value : null;
-    }
-    
-    /**
-     * Removes the element at a specific index
-     */
-    public T removeAt(int index) {
-        // Check for invalid index
-        if (index < 0 || index >= size || head == null) {
-            return null;
-        }
-        
-        T removedValue;
-        
-        // Remove from the beginning
-        if (index == 0) {
-            removedValue = head.value;
-            head = head.next;
-        } else {
-            // Go to the node before the one to be removed
-            ListNode current = head;
-            for (int i = 0; i < index - 1 && current.next != null; i++) {
-                current = current.next;
-            }
-            
-            if (current.next != null) {
-                removedValue = current.next.value;
-                current.next = current.next.next;
-            } else {
-                return null;
-            }
-        }
-        
-        size--;
-        return removedValue;
-    }
-    
-    /**
-     * Converts the list to an array
-     */
-    public Object[] toArray() {
-        Object[] result = new Object[size];
-        ListNode current = head;
-        int index = 0;
-        
-        while (current != null) {
-            result[index++] = current.value;
-            current = current.next;
-        }
-        
-        return result;
-    }
-}`,
-          explanation:
-            "Java implementasyonu, iç içe sınıf yapısını kullanarak düğüm tanımını kapsüllemektedir. Jenerik tip kullanımı sayesinde farklı veri tipleriyle çalışabilir. Java'nın tip sistemi ve nesne yönelimli özellikleri, güçlü bir kapsülleme sağlar.",
-        },
-      },
+      ],
     },
     {
-      id: 'dijkstra',
-      name: 'Dijkstra Algorithm',
-      description:
-        'Bir düğümden diğer tüm düğümlere olan en kısa yolları bulan, ağırlıklı graflarda kullanılan algoritma.',
-      category: 'Graf Algoritmaları',
-      difficulty: 'Zor',
-      tags: ['graf', 'en-kısa-yol', 'ağırlıklı-graf'],
-      implementations: {
-        typescript: {
-          code: `/**
- * Dijkstra's algoritması implementasyonu
- * @param graph Ağırlıklı graf (komşuluk listesi)
- * @param startVertex Başlangıç düğümü
- * @returns En kısa mesafeler ve önceki düğümler
- */
-export function dijkstra(
-  graph: Record<string, Record<string, number>>,
-  startVertex: string
-): { distances: Record<string, number>; previousVertices: Record<string, string | null> } {
-  // Tüm düğümleri al
-  const vertices = Object.keys(graph);
+      id: '3',
+      title: 'Dynamic Programming - Fibonacci',
+      description: 'Fibonacci serisinin dinamik programlama ile optimal çözümü',
+      category: 'dp',
+      difficulty: 'Kolay',
+      languages: ['JavaScript', 'Python', 'Java'],
+      concepts: ['Dinamik Programlama', 'Memoization', 'Optimizasyon'],
+      codeExamples: [
+        {
+          language: 'JavaScript',
+          code: `// Memoization yaklaşımı
+function fibonacciMemo(n, memo = {}) {
+  if (n <= 1) return n;
   
-  // Mesafeleri ve önceki düğümleri saklamak için objeler
-  const distances: Record<string, number> = {};
-  const previousVertices: Record<string, string | null> = {};
-  // Ziyaret edilmemiş düğümleri takip etmek için set
-  const unvisited = new Set<string>();
-  
-  // İlk durumu ayarla
-  for (const vertex of vertices) {
-    // Başlangıç düğümü dışındaki tüm düğümlerin mesafesi sonsuz
-    distances[vertex] = vertex === startVertex ? 0 : Infinity;
-    // Başlangıçta önceki düğüm null
-    previousVertices[vertex] = null;
-    // Tüm düğümleri ziyaret edilmemiş olarak işaretle
-    unvisited.add(vertex);
+  if (!memo[n]) {
+    memo[n] = fibonacciMemo(n - 1, memo) + fibonacciMemo(n - 2, memo);
   }
   
-  // Ziyaret edilmemiş düğüm kaldığı sürece devam et
-  while (unvisited.size > 0) {
-    // En küçük mesafeye sahip ziyaret edilmemiş düğümü bul
-    let currentVertex: string | null = null;
-    let smallestDistance = Infinity;
-    
-    for (const vertex of unvisited) {
-      if (distances[vertex] < smallestDistance) {
-        smallestDistance = distances[vertex];
-        currentVertex = vertex;
-      }
-    }
-    
-    // Tüm erişilebilir düğümler ziyaret edildiyse çık
-    if (currentVertex === null || distances[currentVertex] === Infinity) {
-      break;
-    }
-    
-    // Mevcut düğümü ziyaret edildi olarak işaretle
-    unvisited.delete(currentVertex);
-    
-    // Mevcut düğümün komşularını kontrol et
-    for (const neighbor in graph[currentVertex]) {
-      // Eğer komşu ziyaret edilmemişse
-      if (unvisited.has(neighbor)) {
-        // Mevcut düğüm üzerinden komşuya olan mesafeyi hesapla
-        const distance = distances[currentVertex] + graph[currentVertex][neighbor];
-        
-        // Eğer yeni mesafe daha kısaysa, güncelle
-        if (distance < distances[neighbor]) {
-          distances[neighbor] = distance;
-          previousVertices[neighbor] = currentVertex;
-        }
-      }
-    }
-  }
-  
-  return { distances, previousVertices };
+  return memo[n];
 }
 
-/**
- * En kısa yolu yeniden oluşturur
- * @param previousVertices Önceki düğümler haritası
- * @param startVertex Başlangıç düğümü
- * @param endVertex Bitiş düğümü
- * @returns En kısa yol (düğüm dizisi)
- */
-export function reconstructPath(
-  previousVertices: Record<string, string | null>,
-  startVertex: string,
-  endVertex: string
-): string[] {
-  const path: string[] = [];
-  let currentVertex: string | null = endVertex;
+// Tabulation yaklaşımı
+function fibonacciTab(n) {
+  if (n <= 1) return n;
   
-  // Yolu bitiş düğümünden başlangıç düğümüne doğru geri izle
-  while (currentVertex !== null) {
-    path.unshift(currentVertex);
-    currentVertex = previousVertices[currentVertex];
+  const dp = new Array(n + 1);
+  dp[0] = 0;
+  dp[1] = 1;
+  
+  for (let i = 2; i <= n; i++) {
+    dp[i] = dp[i - 1] + dp[i - 2];
   }
   
-  // Eğer başlangıç düğümünden bitiş düğümüne bir yol yoksa boş dizi döndür
-  return path[0] === startVertex ? path : [];
-}`,
-          explanation:
-            'Bu TypeScript implementasyonu, graf veri yapısını komşuluk listesi olarak temsil eder. Algoritma, her adımda en küçük mesafeye sahip düğümü seçer ve komşularına olan mesafeleri günceller. Yol yeniden oluşturma fonksiyonu, en kısa yolu bitiş düğümünden başlangıç düğümüne doğru geri izleyerek bulur.',
+  return dp[n];
+}
+
+// Space-optimized yaklaşım
+function fibonacciOptimized(n) {
+  if (n <= 1) return n;
+  
+  let prev2 = 0;
+  let prev1 = 1;
+  
+  for (let i = 2; i <= n; i++) {
+    const current = prev1 + prev2;
+    prev2 = prev1;
+    prev1 = current;
+  }
+  
+  return prev1;
+}
+
+// Kullanım örneği
+console.log(fibonacciMemo(10)); // 55
+console.log(fibonacciTab(10)); // 55
+console.log(fibonacciOptimized(10)); // 55`,
         },
-        python: {
-          code: `import heapq
+        {
+          language: 'Python',
+          code: `# Memoization yaklaşımı
+def fibonacci_memo(n, memo=None):
+    if memo is None:
+        memo = {}
+    
+    if n <= 1:
+        return n
+    
+    if n not in memo:
+        memo[n] = fibonacci_memo(n - 1, memo) + fibonacci_memo(n - 2, memo)
+    
+    return memo[n]
 
-def dijkstra(graph, start_vertex):
-    """
-    Dijkstra'nın en kısa yol algoritması
+# Tabulation yaklaşımı
+def fibonacci_tab(n):
+    if n <= 1:
+        return n
     
-    Args:
-        graph: Ağırlıklı graf (komşuluk listesi olarak) - {vertex: {neighbor: weight}}
-        start_vertex: Başlangıç düğümü
-        
-    Returns:
-        distances: Her düğüme olan en kısa mesafeler
-        previous_vertices: Her düğüme olan en kısa yolda bir önceki düğüm
-    """
-    # Tüm düğümleri al
-    vertices = list(graph.keys())
+    dp = [0] * (n + 1)
+    dp[0] = 0
+    dp[1] = 1
     
-    # Mesafeleri ve önceki düğümleri saklamak için sözlükler
-    distances = {vertex: float('infinity') for vertex in vertices}
-    distances[start_vertex] = 0
-    previous_vertices = {vertex: None for vertex in vertices}
+    for i in range(2, n + 1):
+        dp[i] = dp[i - 1] + dp[i - 2]
     
-    # Öncelik kuyruğu (min heap)
-    priority_queue = [(0, start_vertex)]
-    
-    # Ziyaret edilmiş düğümleri takip etmek için küme
-    visited = set()
-    
-    while priority_queue:
-        # En küçük mesafeye sahip düğümü al
-        current_distance, current_vertex = heapq.heappop(priority_queue)
-        
-        # Eğer düğüm zaten ziyaret edildiyse atla
-        if current_vertex in visited:
-            continue
-            
-        # Düğümü ziyaret edildi olarak işaretle
-        visited.add(current_vertex)
-        
-        # Eğer mevcut mesafe, kayıtlı mesafeden büyükse atla
-        if current_distance > distances[current_vertex]:
-            continue
-            
-        # Komşuları kontrol et
-        for neighbor, weight in graph[current_vertex].items():
-            # Eğer komşu ziyaret edilmemişse
-            if neighbor not in visited:
-                # Yeni mesafeyi hesapla
-                distance = current_distance + weight
-                
-                # Eğer yeni mesafe daha kısaysa, güncelle
-                if distance < distances[neighbor]:
-                    distances[neighbor] = distance
-                    previous_vertices[neighbor] = current_vertex
-                    heapq.heappush(priority_queue, (distance, neighbor))
-    
-    return distances, previous_vertices
+    return dp[n]
 
-def reconstruct_path(previous_vertices, start_vertex, end_vertex):
-    """
-    En kısa yolu yeniden oluşturur
+# Space-optimized yaklaşım
+def fibonacci_optimized(n):
+    if n <= 1:
+        return n
     
-    Args:
-        previous_vertices: Her düğüme olan en kısa yolda bir önceki düğüm
-        start_vertex: Başlangıç düğümü
-        end_vertex: Bitiş düğümü
-        
-    Returns:
-        En kısa yol (düğüm listesi)
-    """
-    path = []
-    current_vertex = end_vertex
+    prev2, prev1 = 0, 1
     
-    # Yolu bitiş düğümünden başlangıç düğümüne doğru geri izle
-    while current_vertex is not None:
-        path.append(current_vertex)
-        current_vertex = previous_vertices[current_vertex]
-        
-    # Yolu tersine çevir
-    path.reverse()
+    for i in range(2, n + 1):
+        current = prev1 + prev2
+        prev2 = prev1
+        prev1 = current
     
-    # Eğer başlangıç düğümünden bitiş düğümüne bir yol yoksa boş liste döndür
-    return path if path and path[0] == start_vertex else []`,
-          explanation:
-            'Python implementasyonu, heapq modülünün öncelik kuyruğunu (min-heap) kullanarak verimliliği artırır. Bu, her adımda en küçük mesafeye sahip düğümü O(log n) sürede bulmayı sağlar. Ayrıca, ziyaret edilmiş düğümleri takip eden bir küme kullanarak gereksiz işlemleri önler.',
+    return prev1
+
+# Kullanım örneği
+print(fibonacci_memo(10))     # 55
+print(fibonacci_tab(10))      # 55
+print(fibonacci_optimized(10)) # 55`,
         },
-        java: {
-          code: `import java.util.*;
+        {
+          language: 'Java',
+          code: `import java.util.HashMap;
+import java.util.Map;
 
-/**
- * Dijkstra's Algorithm implementation
- */
-public class Dijkstra {
-    
-    /**
-     * Finds the shortest paths from a start vertex to all other vertices
-     * 
-     * @param graph The weighted graph as an adjacency map
-     * @param startVertex The starting vertex
-     * @return A map of distances and a map of previous vertices
-     */
-    public static Map<String, Object> dijkstra(
-            Map<String, Map<String, Integer>> graph, 
-            String startVertex) {
+public class Fibonacci {
+    // Memoization yaklaşımı
+    public static int fibonacciMemo(int n, Map<Integer, Integer> memo) {
+        if (n <= 1) return n;
         
-        // Get all vertices
-        Set<String> vertices = graph.keySet();
-        
-        // Maps to store distances and previous vertices
-        Map<String, Integer> distances = new HashMap<>();
-        Map<String, String> previousVertices = new HashMap<>();
-        
-        // Priority queue to get the vertex with the smallest distance
-        PriorityQueue<Map.Entry<String, Integer>> priorityQueue = 
-            new PriorityQueue<>(Comparator.comparing(Map.Entry::getValue));
-            
-        // Set for visited vertices
-        Set<String> visited = new HashSet<>();
-        
-        // Initialize distances and previous vertices
-        for (String vertex : vertices) {
-            // Set all distances to infinity except the start vertex
-            distances.put(vertex, vertex.equals(startVertex) ? 0 : Integer.MAX_VALUE);
-            // Set all previous vertices to null
-            previousVertices.put(vertex, null);
+        if (memo.containsKey(n)) {
+            return memo.get(n);
         }
         
-        // Add the start vertex to the priority queue
-        priorityQueue.add(new AbstractMap.SimpleEntry<>(startVertex, 0));
-        
-        // Continue until the priority queue is empty
-        while (!priorityQueue.isEmpty()) {
-            // Get the vertex with the smallest distance
-            Map.Entry<String, Integer> entry = priorityQueue.poll();
-            String currentVertex = entry.getKey();
-            int currentDistance = entry.getValue();
-            
-            // Skip if already visited
-            if (visited.contains(currentVertex)) {
-                continue;
-            }
-            
-            // Mark as visited
-            visited.add(currentVertex);
-            
-            // Skip if the current distance is greater than the recorded distance
-            if (currentDistance > distances.get(currentVertex)) {
-                continue;
-            }
-            
-            // Check all neighbors
-            Map<String, Integer> neighbors = graph.get(currentVertex);
-            if (neighbors != null) {
-                for (Map.Entry<String, Integer> neighborEntry : neighbors.entrySet()) {
-                    String neighbor = neighborEntry.getKey();
-                    int weight = neighborEntry.getValue();
-                    
-                    // Skip if already visited
-                    if (visited.contains(neighbor)) {
-                        continue;
-                    }
-                    
-                    // Calculate new distance
-                    int distance = currentDistance + weight;
-                    
-                    // Update if the new distance is shorter
-                    if (distance < distances.get(neighbor)) {
-                        distances.put(neighbor, distance);
-                        previousVertices.put(neighbor, currentVertex);
-                        priorityQueue.add(new AbstractMap.SimpleEntry<>(neighbor, distance));
-                    }
-                }
-            }
-        }
-        
-        // Return both distances and previous vertices
-        Map<String, Object> result = new HashMap<>();
-        result.put("distances", distances);
-        result.put("previousVertices", previousVertices);
-        
+        int result = fibonacciMemo(n - 1, memo) + fibonacciMemo(n - 2, memo);
+        memo.put(n, result);
         return result;
     }
     
-    /**
-     * Reconstructs the shortest path from start to end
-     * 
-     * @param previousVertices Map of previous vertices
-     * @param startVertex The starting vertex
-     * @param endVertex The ending vertex
-     * @return The shortest path as a list of vertices
-     */
-    public static List<String> reconstructPath(
-            Map<String, String> previousVertices,
-            String startVertex,
-            String endVertex) {
+    // Tabulation yaklaşımı
+    public static int fibonacciTab(int n) {
+        if (n <= 1) return n;
         
-        List<String> path = new ArrayList<>();
-        String currentVertex = endVertex;
+        int[] dp = new int[n + 1];
+        dp[0] = 0;
+        dp[1] = 1;
         
-        // Trace the path from end to start
-        while (currentVertex != null) {
-            path.add(0, currentVertex);
-            currentVertex = previousVertices.get(currentVertex);
+        for (int i = 2; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
         }
         
-        // Return empty list if no path exists
-        return path.size() > 0 && path.get(0).equals(startVertex) ? path : new ArrayList<>();
+        return dp[n];
+    }
+    
+    // Space-optimized yaklaşım
+    public static int fibonacciOptimized(int n) {
+        if (n <= 1) return n;
+        
+        int prev2 = 0;
+        int prev1 = 1;
+        
+        for (int i = 2; i <= n; i++) {
+            int current = prev1 + prev2;
+            prev2 = prev1;
+            prev1 = current;
+        }
+        
+        return prev1;
+    }
+    
+    public static void main(String[] args) {
+        Map<Integer, Integer> memo = new HashMap<>();
+        System.out.println(fibonacciMemo(10, memo));  // 55
+        System.out.println(fibonacciTab(10));         // 55
+        System.out.println(fibonacciOptimized(10));   // 55
     }
 }`,
-          explanation:
-            "Java implementasyonu, öncelik kuyruğu (PriorityQueue) kullanarak en küçük mesafeye sahip düğümü verimli bir şekilde seçer. Ziyaret edilmiş düğümleri izlemek için bir Set kullanır. HashMap'ler, mesafe ve önceki düğüm bilgilerini saklamak için kullanılır. Java'nın güçlü koleksiyon framework'ü sayesinde, algoritma temiz ve okunabilir bir şekilde implemente edilmiştir.",
         },
-      },
+      ],
     },
+    // Diğer örnekler için codeExamples boş array olarak bırakıldı
+    ...Array.from({ length: 8 }, (_, index) => ({
+      ...[
+        {
+          id: '3',
+          title: 'Graph Traversal (BFS/DFS)',
+          description:
+            'Graf yapısında derinlik ve genişlik öncelikli arama örnekleri',
+          category: 'graph',
+          difficulty: 'Orta' as Difficulty,
+          languages: ['JavaScript', 'Python'],
+          concepts: ['Graf', 'Traversal', 'Queue', 'Stack'],
+        },
+        {
+          id: '5',
+          title: 'Quick Sort Algorithm',
+          description:
+            'Pivot tabanlı hızlı sıralama algoritması implementasyonu',
+          category: 'sorting',
+          difficulty: 'Orta' as Difficulty,
+          languages: ['JavaScript', 'Python', 'Java', 'C++'],
+          concepts: ['Böl ve Fethet', 'Pivot', 'Rekürsif Çözüm'],
+        },
+        {
+          id: '6',
+          title: "Dijkstra's Shortest Path",
+          description:
+            'En kısa yol algoritması ve graf problemlerinde kullanımı',
+          category: 'graph',
+          difficulty: 'Zor' as Difficulty,
+          languages: ['JavaScript', 'Python'],
+          concepts: ['Graf', 'En Kısa Yol', 'Priority Queue'],
+        },
+        {
+          id: '7',
+          title: 'Linked List Operations',
+          description: 'Bağlı liste veri yapısı ve temel operasyonları',
+          category: 'data-structures',
+          difficulty: 'Kolay' as Difficulty,
+          languages: ['JavaScript', 'Python', 'Java'],
+          concepts: ['Pointer', 'Node', 'Traversal'],
+        },
+        {
+          id: '8',
+          title: 'Binary Search Tree',
+          description: 'İkili arama ağacı implementasyonu ve işlemleri',
+          category: 'data-structures',
+          difficulty: 'Orta' as Difficulty,
+          languages: ['JavaScript', 'Python', 'Java'],
+          concepts: ['Ağaç', 'Rekürsif', 'Arama', 'Ekleme', 'Silme'],
+        },
+        {
+          id: '9',
+          title: 'Knapsack Problem',
+          description: 'Sırt çantası problemi - Dinamik programlama çözümü',
+          category: 'dp',
+          difficulty: 'Zor' as Difficulty,
+          languages: ['JavaScript', 'Python'],
+          concepts: ['Optimizasyon', 'Dinamik Programlama', 'Tablo'],
+        },
+        {
+          id: '10',
+          title: 'Huffman Coding',
+          description: 'Veri sıkıştırma için Huffman kodlama algoritması',
+          category: 'greedy',
+          difficulty: 'Zor' as Difficulty,
+          languages: ['JavaScript', 'Python'],
+          concepts: ['Sıkıştırma', 'Ağaç', 'Açgözlü'],
+        },
+        {
+          id: '11',
+          title: 'N-Queens Problem',
+          description: 'N vezir problemi - Geri izleme ile çözüm',
+          category: 'backtracking',
+          difficulty: 'Zor' as Difficulty,
+          languages: ['JavaScript', 'Python'],
+          concepts: ['Geri İzleme', 'Constraint', 'Recursive'],
+        },
+        {
+          id: '12',
+          title: 'GCD Algorithm (Euclidean)',
+          description: 'En büyük ortak bölen algoritması',
+          category: 'math',
+          difficulty: 'Kolay' as Difficulty,
+          languages: ['JavaScript', 'Python', 'Java', 'C++'],
+          concepts: ['Matematik', 'Modulo', 'Recursive'],
+        },
+      ][index],
+      codeExamples: [], // Boş kod örnekleri
+    })),
   ];
 
-  // Filter examples based on search and filters
-  useEffect(() => {
-    let filtered = [...codeExamples];
+  // Kategori toggle fonksiyonu
+  const toggleCategory = useCallback((categoryId: string) => {
+    setSelectedCategories((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(categoryId)) {
+        newSet.delete(categoryId);
+      } else {
+        newSet.add(categoryId);
+      }
+      return newSet;
+    });
+  }, []);
 
-    // Apply search filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (example) =>
-          example.name.toLowerCase().includes(query) ||
-          example.description.toLowerCase().includes(query) ||
-          // Continuing with the Code Examples page implementation...
-          example.tags.some((tag) => tag.toLowerCase().includes(query))
-      );
-    }
+  // Zorluk toggle fonksiyonu
+  const toggleDifficulty = useCallback((difficulty: Difficulty) => {
+    setSelectedDifficulties((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(difficulty)) {
+        newSet.delete(difficulty);
+      } else {
+        newSet.add(difficulty);
+      }
+      return newSet;
+    });
+  }, []);
 
-    // Apply category filter
-    if (selectedCategories.length > 0) {
-      filtered = filtered.filter((example) =>
-        selectedCategories.includes(example.category)
-      );
-    }
+  // Filtreleri temizle fonksiyonu
+  const clearFilters = useCallback(() => {
+    setSelectedCategories(new Set());
+    setSelectedDifficulties(new Set());
+    setSearchTerm('');
+  }, []);
 
-    // Apply difficulty filter
-    if (selectedDifficulties.length > 0) {
-      filtered = filtered.filter((example) =>
-        selectedDifficulties.includes(example.difficulty)
-      );
-    }
+  // Filtrelenmiş örnekler - useMemo ile optimize edildi
+  const filteredExamples = useMemo(() => {
+    return codeExamples.filter((example) => {
+      // Arama terimi kontrolü
+      const matchesSearch =
+        searchTerm === '' ||
+        example.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        example.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        example.concepts.some((concept) =>
+          concept.toLowerCase().includes(searchTerm.toLowerCase())
+        );
 
-    setFilteredExamples(filtered);
-  }, [searchQuery, selectedCategories, selectedDifficulties, codeExamples]);
+      // Kategori kontrolü
+      const matchesCategory =
+        selectedCategories.size === 0 ||
+        selectedCategories.has(example.category);
 
-  // Copy code to clipboard
-  const handleCopyCode = (id: string, language: string) => {
-    const example = codeExamples.find((ex) => ex.id === id);
-    if (example && example.implementations[language]) {
-      navigator.clipboard.writeText(example.implementations[language].code);
-      setCopiedId(`${id}-${language}`);
-      setTimeout(() => setCopiedId(null), 2000);
-    }
-  };
+      // Zorluk kontrolü
+      const matchesDifficulty =
+        selectedDifficulties.size === 0 ||
+        selectedDifficulties.has(example.difficulty);
 
-  // Toggle category selection
-  const toggleCategory = (category: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
-  };
+      return matchesSearch && matchesCategory && matchesDifficulty;
+    });
+  }, [searchTerm, selectedCategories, selectedDifficulties]);
 
-  // Toggle difficulty selection
-  const toggleDifficulty = (difficulty: string) => {
-    setSelectedDifficulties((prev) =>
-      prev.includes(difficulty)
-        ? prev.filter((d) => d !== difficulty)
-        : [...prev, difficulty]
-    );
-  };
-
-  // Get all unique categories
-  const allCategories = Array.from(
-    new Set(codeExamples.map((ex) => ex.category))
-  );
-
-  // Get all unique difficulties
-  const allDifficulties = Array.from(
-    new Set(codeExamples.map((ex) => ex.difficulty))
-  );
-
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: 'spring',
-        stiffness: 300,
-        damping: 24,
-      },
-    },
-  };
-
-  // Helper for difficulty badge color
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'Kolay':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
-      case 'Orta':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
-      case 'Zor':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
-    }
-  };
+  // Aktif filtre sayısı
+  const activeFilterCount = selectedCategories.size + selectedDifficulties.size;
 
   return (
-    <div className="container py-12 max-w-5xl mx-auto">
-      {/* Header section */}
-      <div className="mb-12">
-        <h1 className="text-4xl font-bold tracking-tight mb-4">
-          Kod Örnekleri
-        </h1>
-        <p className="text-xl text-muted-foreground max-w-3xl">
-          Çeşitli algoritmaların farklı programlama dillerinde örnek
-          implementasyonları. Bu örnekler, eğitim ve referans amacıyla
-          kullanılabilir.
+    <div className="space-y-8 max-w-7xl mx-auto">
+      {/* Sayfa başlığı */}
+      <div className="text-center space-y-4">
+        <h1 className="text-4xl font-bold tracking-tight">Kod Örnekleri</h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          Farklı programlama dillerinde algoritma implementasyonları ve detaylı
+          açıklamalar
         </p>
-
-        {/* Search and filter controls */}
-        <div className="mt-8 flex flex-col md:flex-row gap-4">
-          <div className="relative flex-grow">
-            <Search
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
-              size={18}
-            />
+      </div>
+      {/* Arama ve filtre kontrolleri */}
+      <div className="space-y-4">
+        {/* Arama çubuğu ve filtre butonu */}
+        <div className="flex flex-col sm:flex-row gap-4">
+          {/* Arama inputu */}
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
+              placeholder="Kod örneklerinde ara..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
-              placeholder="Algoritma veya etiket ara..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
-          {/* Category filter */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="flex gap-2">
-                <Filter size={16} />
-                <span className="hidden sm:inline">Kategoriler</span>
-                {selectedCategories.length > 0 && (
-                  <Badge className="ml-1">{selectedCategories.length}</Badge>
-                )}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>Algoritma Kategorileri</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {allCategories.map((category) => (
-                <DropdownMenuCheckboxItem
-                  key={category}
-                  checked={selectedCategories.includes(category)}
-                  onCheckedChange={() => toggleCategory(category)}
-                >
-                  {category}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* Difficulty filter */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="flex gap-2">
-                <Filter size={16} />
-                <span className="hidden sm:inline">Zorluk</span>
-                {selectedDifficulties.length > 0 && (
-                  <Badge className="ml-1">{selectedDifficulties.length}</Badge>
-                )}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>Zorluk Seviyeleri</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {allDifficulties.map((difficulty) => (
-                <DropdownMenuCheckboxItem
-                  key={difficulty}
-                  checked={selectedDifficulties.includes(difficulty)}
-                  onCheckedChange={() => toggleDifficulty(difficulty)}
-                >
-                  {difficulty}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
-
-      {/* Display the code examples */}
-      {filteredExamples.length > 0 ? (
-        <motion.div
-          className="space-y-12"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {filteredExamples.map((example) => (
-            <motion.div key={example.id} variants={itemVariants}>
-              <Card className="overflow-hidden">
-                <CardHeader>
-                  <div className="flex flex-wrap justify-between gap-4">
-                    <div>
-                      <CardTitle className="text-2xl">{example.name}</CardTitle>
-                      <p className="text-muted-foreground mt-1">
-                        {example.description}
-                      </p>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(example.difficulty)}`}
-                      >
-                        {example.difficulty}
-                      </span>
-                      <Badge variant="outline">{example.category}</Badge>
-                    </div>
-                  </div>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {example.tags.map((tag) => (
-                      <Badge key={tag} variant="secondary" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardHeader>
-
-                <CardContent>
-                  {/* Code tabs */}
-                  <Tabs defaultValue={languageOptions[0]}>
-                    <TabsList>
-                      {languageOptions.map((lang) => (
-                        <TabsTrigger key={lang} value={lang}>
-                          {lang === 'typescript'
-                            ? 'TypeScript'
-                            : lang === 'python'
-                              ? 'Python'
-                              : 'Java'}
-                        </TabsTrigger>
-                      ))}
-                    </TabsList>
-
-                    {/* Code content for each language */}
-                    {languageOptions.map((lang) => (
-                      <TabsContent key={lang} value={lang}>
-                        <div className="relative">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="absolute right-2 top-2 flex gap-1"
-                            onClick={() => handleCopyCode(example.id, lang)}
-                          >
-                            {copiedId === `${example.id}-${lang}` ? (
-                              <Check className="h-4 w-4" />
-                            ) : (
-                              <Copy className="h-4 w-4" />
-                            )}
-                            <span>
-                              {copiedId === `${example.id}-${lang}`
-                                ? 'Kopyalandı'
-                                : 'Kopyala'}
-                            </span>
-                          </Button>
-
-                          {example.implementations[lang] ? (
-                            <div>
-                              <CodeBlock
-                                code={example.implementations[lang].code}
-                                language={lang}
-                                showLineNumbers={true}
-                              />
-
-                              {example.implementations[lang].explanation && (
-                                <div className="mt-4 p-4 bg-muted/50 rounded-md">
-                                  <h4 className="font-medium mb-2">Açıklama</h4>
-                                  <p className="text-sm text-muted-foreground">
-                                    {example.implementations[lang].explanation}
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                          ) : (
-                            <div className="p-4 text-center text-muted-foreground">
-                              Bu algoritma için{' '}
-                              {lang === 'typescript'
-                                ? 'TypeScript'
-                                : lang === 'python'
-                                  ? 'Python'
-                                  : 'Java'}{' '}
-                              implementasyonu bulunmamaktadır.
-                            </div>
-                          )}
-                        </div>
-                      </TabsContent>
-                    ))}
-                  </Tabs>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
-      ) : (
-        // No results state
-        <div className="text-center py-16">
-          <Code className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-          <h3 className="text-xl font-medium mb-2">Kod örneği bulunamadı</h3>
-          <p className="text-muted-foreground mb-6">
-            Arama terimini değiştirin veya filtreleri temizleyin
-          </p>
+          {/* Filtre butonu */}
           <Button
-            variant="outline"
-            onClick={() => {
-              setSearchQuery('');
-              setSelectedCategories([]);
-              setSelectedDifficulties([]);
-            }}
+            variant={activeFilterCount > 0 ? 'default' : 'outline'}
+            onClick={() => setIsFilterOpen(!isFilterOpen)}
+            className="flex items-center gap-2"
           >
-            Filtreleri Temizle
+            <Filter className="h-4 w-4" />
+            Filtrele
+            {activeFilterCount > 0 && (
+              <Badge variant="secondary" className="ml-1">
+                {activeFilterCount}
+              </Badge>
+            )}
+            <ChevronDown
+              className={`h-4 w-4 transition-transform ${isFilterOpen ? 'rotate-180' : ''}`}
+            />
           </Button>
         </div>
-      )}
 
-      {/* Additional information */}
-      <div className="mt-16 p-6 bg-muted rounded-lg">
-        <h2 className="text-xl font-bold mb-4">Kod Kullanım Bilgileri</h2>
-        <div className="prose dark:prose-invert max-w-none">
-          <p>
-            Bu sayfadaki tüm kod örnekleri MIT lisansı altında sunulmaktadır ve
-            herhangi bir projenizde serbestçe kullanabilirsiniz. Kodları
-            kullanırken aşağıdaki hususları göz önünde bulundurun:
-          </p>
-          <ul>
-            <li>
-              Örnekler eğitim amaçlıdır ve üretim ortamında kullanmadan önce
-              test edilmelidir.
-            </li>
-            <li>
-              Bazı algoritmaların büyük veri setleri için optimizasyona ihtiyacı
-              olabilir.
-            </li>
-            <li>
-              Kodları kullanırken, uygulamanızın ihtiyaçlarına göre uyarlamaktan
-              çekinmeyin.
-            </li>
-            <li>
-              Örnekleri kullanırken projenizde Algorithms Playground'a atıfta
-              bulunmanız takdir edilir, ancak zorunlu değildir.
-            </li>
-          </ul>
-        </div>
+        {/* Filtre paneli */}
+        <AnimatePresence>
+          {isFilterOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden"
+            >
+              <Card className="p-6">
+                <div className="space-y-6">
+                  {/* Kategori filtreleri */}
+                  <div>
+                    <h3 className="font-semibold mb-3">Kategoriler</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {categories.map((category) => (
+                        <Button
+                          key={category.id}
+                          variant={
+                            selectedCategories.has(category.id)
+                              ? 'default'
+                              : 'outline'
+                          }
+                          size="sm"
+                          onClick={() => toggleCategory(category.id)}
+                          className="flex items-center gap-2"
+                        >
+                          {category.icon}
+                          {category.name}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Zorluk filtreleri */}
+                  <div>
+                    <h3 className="font-semibold mb-3">Zorluk Seviyesi</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {(['Kolay', 'Orta', 'Zor'] as Difficulty[]).map(
+                        (difficulty) => (
+                          <Button
+                            key={difficulty}
+                            variant={
+                              selectedDifficulties.has(difficulty)
+                                ? 'default'
+                                : 'outline'
+                            }
+                            size="sm"
+                            onClick={() => toggleDifficulty(difficulty)}
+                          >
+                            {difficulty}
+                          </Button>
+                        )
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Filtreleri temizle butonu */}
+                  {activeFilterCount > 0 && (
+                    <div className="flex justify-end">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={clearFilters}
+                        className="text-muted-foreground"
+                      >
+                        <X className="h-4 w-4 mr-1" />
+                        Filtreleri Temizle
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </Card>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      {/* Contributing section */}
-      <div className="mt-8 text-center">
-        <h3 className="text-lg font-medium mb-2">
-          Kendi kod örneğinizi eklemek mi istiyorsunuz?
-        </h3>
-        <p className="text-muted-foreground mb-4">
-          GitHub üzerinden katkıda bulunabilir ve kendi algoritma
-          implementasyonlarınızı paylaşabilirsiniz.
+      {/* Sonuç sayısı ve aktif filtreler */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <p className="text-muted-foreground">
+          {filteredExamples.length} kod örneği bulundu
         </p>
-        <Button asChild>
-          <a
-            href="/resources/contributing"
-            className="inline-flex items-center gap-2"
-          >
-            <Code className="h-4 w-4" />
-            Katkıda Bulunma Rehberi
-          </a>
-        </Button>
+
+        {/* Aktif filtreleri göster */}
+        {(selectedCategories.size > 0 || selectedDifficulties.size > 0) && (
+          <div className="flex flex-wrap gap-2">
+            {Array.from(selectedCategories).map((categoryId) => {
+              const category = categories.find((c) => c.id === categoryId);
+              return category ? (
+                <Badge
+                  key={categoryId}
+                  variant="secondary"
+                  className="flex items-center gap-1"
+                >
+                  {category.name}
+                  <X
+                    className="h-3 w-3 cursor-pointer hover:text-destructive"
+                    onClick={() => toggleCategory(categoryId)}
+                  />
+                </Badge>
+              ) : null;
+            })}
+            {Array.from(selectedDifficulties).map((difficulty) => (
+              <Badge
+                key={difficulty}
+                variant={getDifficultyColor(difficulty)}
+                className="flex items-center gap-1"
+              >
+                {difficulty}
+                <X
+                  className="h-3 w-3 cursor-pointer hover:text-destructive"
+                  onClick={() => toggleDifficulty(difficulty)}
+                />
+              </Badge>
+            ))}
+          </div>
+        )}
       </div>
+      {/* Kod örnekleri grid - Dialog eklendi */}
+      <AnimatePresence mode="popLayout">
+        {filteredExamples.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredExamples.map((example, index) => (
+              <motion.div
+                key={example.id}
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+              >
+                <Dialog>
+                  {/* Kart tetikleyici olarak Dialog trigger */}
+                  <DialogTrigger asChild>
+                    <Card className="h-full flex flex-col cursor-pointer hover:shadow-lg transition-shadow">
+                      <CardHeader>
+                        <div className="flex items-start justify-between mb-2">
+                          <CardTitle className="text-lg">
+                            {example.title}
+                          </CardTitle>
+                          <Badge
+                            variant={getDifficultyColor(example.difficulty)}
+                          >
+                            {example.difficulty}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground line-clamp-2">
+                          {example.description}
+                        </p>
+                      </CardHeader>
+                      <CardContent className="flex-1">
+                        {/* Diller */}
+                        <div className="mb-4">
+                          <p className="text-sm font-medium mb-2">Diller:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {example.languages.map((lang) => (
+                              <Badge
+                                key={lang}
+                                variant="outline"
+                                className="text-xs"
+                              >
+                                {lang}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Konseptler */}
+                        <div className="mb-4">
+                          <p className="text-sm font-medium mb-2">
+                            Konseptler:
+                          </p>
+                          <div className="flex flex-wrap gap-1">
+                            {example.concepts.map((concept) => (
+                              <Badge
+                                key={concept}
+                                variant="secondary"
+                                className="text-xs"
+                              >
+                                {concept}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Kategori */}
+                        <div className="mb-4">
+                          <p className="text-sm font-medium mb-1">Kategori:</p>
+                          <Badge variant="outline">
+                            {
+                              categories.find((c) => c.id === example.category)
+                                ?.name
+                            }
+                          </Badge>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </DialogTrigger>
+                  {/* Modal içeriği */}
+                  <CodeModal example={example} />
+                </Dialog>
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-12"
+          >
+            <p className="text-muted-foreground text-lg">
+              Arama kriterlerinize uygun kod örneği bulunamadı.
+            </p>
+            <Button variant="outline" className="mt-4" onClick={clearFilters}>
+              Filtreleri Temizle
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

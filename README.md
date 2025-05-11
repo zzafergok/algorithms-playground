@@ -30,7 +30,6 @@ Algorithms Playground, algoritmaları interaktif bir şekilde öğrenmenizi sağ
 - [Next.js](https://nextjs.org/) - React framework (App Router)
 - [TypeScript](https://www.typescriptlang.org/) - Tip güvenliği
 - [Tailwind CSS](https://tailwindcss.com/) - Stil ve arayüz
-- [shadcn/ui](https://ui.shadcn.com/) - UI bileşenleri
 - [Lucide React](https://lucide.dev/) - İkonlar
 - [next-themes](https://github.com/pacocoursey/next-themes) - Tema desteği
 
@@ -77,7 +76,7 @@ algorithms-playground/
 │   │   ├── common/      # Ortak bileşenler
 │   │   ├── layout/      # Düzen bileşenleri
 │   │   ├── theme/       # Tema bileşenleri
-│   │   ├── ui/          # Temel UI bileşenleri (shadcn)
+│   │   ├── ui/          # Temel UI bileşenleri (radix-ui)
 │   ├── context/     # React context tanımlamaları
 │   ├── lib/         # Yardımcı fonksiyonlar ve algoritma uygulamaları
 │   │   ├── algorithms/  # Algoritma implementasyonları

@@ -44,8 +44,8 @@ const footerSections: FooterSection[] = [
         href: 'https://github.com/zzafergok/algorithms-playground',
         external: true,
       },
-      { label: 'Belgelendirme', href: '/docs' },
-      { label: 'Katkıda Bulunma', href: '/contributing' },
+      { label: 'Belgelendirme', href: '/resources/documentation' },
+      { label: 'Katkıda Bulunma', href: '/resources/contributing' },
     ],
   },
 ];
@@ -145,7 +145,7 @@ export default function Footer() {
       </div>
 
       {/* Copyright section */}
-      <div className="border-t border-border/40">
+      {/* <div className="border-t border-border/40">
         <div className="container py-6 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
           <p>
             &copy; {currentYear} Algorithms Playground. Tüm hakları saklıdır.
@@ -160,7 +160,7 @@ export default function Footer() {
             </Link>
           </p>
         </div>
-      </div>
+      </div> */}
 
       {/* Scroll to top button */}
       {showScrollTop && (

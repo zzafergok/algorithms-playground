@@ -311,7 +311,7 @@ export default function FAQPage() {
               <strong>Tailwind CSS:</strong> Stil ve arayüz
             </li>
             <li>
-              <strong>shadcn/ui:</strong> UI bileşenleri
+              <strong>radix/ui:</strong> UI bileşenleri
             </li>
             <li>
               <strong>Framer Motion:</strong> Animasyonlar
@@ -604,7 +604,7 @@ export default function FAQPage() {
                               </div>
 
                               {/* Helpful buttons */}
-                              <div className="mt-4 flex items-center space-x-4">
+                              {/* <div className="mt-4 flex items-center space-x-4">
                                 <span className="text-sm text-muted-foreground">
                                   Bu yanıt yardımcı oldu mu?
                                 </span>
@@ -632,7 +632,7 @@ export default function FAQPage() {
                                   <ThumbsDown className="h-4 w-4 mr-1" />
                                   Hayır
                                 </Button>
-                              </div>
+                              </div> */}
                             </div>
                           </motion.div>
                         )}

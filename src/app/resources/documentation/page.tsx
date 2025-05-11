@@ -123,7 +123,7 @@ export default function DocumentationPage() {
               <strong>Tailwind CSS:</strong> Stil ve arayüz
             </li>
             <li>
-              <strong>shadcn/ui:</strong> UI bileşenleri
+              <strong>radix/ui:</strong> UI bileşenleri
             </li>
             <li>
               <strong>Framer Motion:</strong> Animasyonlar
@@ -142,7 +142,7 @@ export default function DocumentationPage() {
 │   │   ├── common/      # Ortak bileşenler
 │   │   ├── layout/      # Düzen bileşenleri
 │   │   ├── theme/       # Tema bileşenleri
-│   │   ├── ui/          # Temel UI bileşenleri (shadcn)
+│   │   ├── ui/          # Temel UI bileşenleri (radix-ui)
 │   ├── context/     # React context tanımlamaları
 │   ├── lib/         # Yardımcı fonksiyonlar ve algoritma uygulamaları
 │   │   ├── algorithms/  # Algoritma implementasyonları

@@ -592,25 +592,6 @@ function sortArray<T extends number>(array: T[]): T[] {
         ))}
       </motion.div>
 
-      {/* Code of Conduct */}
-      <div className="mt-16 p-6 bg-muted rounded-lg">
-        <h2 className="text-xl font-bold mb-4">Davranış Kuralları</h2>
-        <p className="mb-4">
-          Bu projeye katkıda bulunan herkes, topluluğumuzu taciz etmeyen bir
-          deneyim haline getirmek için Katılımcı Sözleşmemize uymayı kabul eder.
-          Lütfen tüm etkileşimlerinizde profesyonel ve saygılı olun.
-        </p>
-        <Button asChild>
-          <a
-            href="https://github.com/zzafergok/algorithms-playground/blob/main/CODE_OF_CONDUCT.md"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Davranış Kurallarını Okuyun
-          </a>
-        </Button>
-      </div>
-
       {/* Help section */}
       <div className="mt-12 text-center">
         <div className="inline-flex items-center gap-2 bg-primary/10 text-primary p-2 rounded-full mb-4">
