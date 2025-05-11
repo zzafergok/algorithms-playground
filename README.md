@@ -2,7 +2,7 @@
 
 Algorithms Playground, algoritmaları interaktif bir şekilde öğrenmenizi sağlayan kapsamlı bir eğitim platformudur. Bu uygulama, algoritmaların çalışma prensiplerini görsel olarak anlama, adım adım takip etme ve kendi verilerinizle test etme imkanı sunar.
 
-![Algorithms Playground Screenshot](https://via.placeholder.com/800x400)
+![Algorithms Playground Screenshot](/public/assets/20210104_230350.jpg)
 
 ## Özellikler
 
