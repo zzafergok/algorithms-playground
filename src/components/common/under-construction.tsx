@@ -2,8 +2,6 @@
 
 import Link from 'next/link';
 
-import { useState } from 'react';
-
 import {
   Send,
   Code,
@@ -30,7 +28,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 
 // Komponentin props arayüzü
 interface UnderConstructionProps {
@@ -80,32 +77,9 @@ export function UnderConstruction({
   returnPath,
   description,
 }: UnderConstructionProps) {
-  // Form durumunu yönetmek için state'ler
-  const [email, setEmail] = useState('');
-  const [suggestion, setSuggestion] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   // Geri dönüş yolunu belirle, belirtilmemişse kategori sayfasına yönlendir
   const backPath =
     returnPath || (category ? `/algorithms/${category}` : '/algorithms');
-
-  // Form gönderme işlemi
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // Gerçek formu göndermek yerine simüle ediyoruz
-    setIsSubmitting(true);
-
-    // API çağrısını 1.5 saniye sonra tamamlanmış gibi göster
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      // Form alanlarını temizle
-      setEmail('');
-      setSuggestion('');
-    }, 1500);
-  };
 
   return (
     <div className="space-y-8 py-8">
@@ -144,15 +118,15 @@ export function UnderConstruction({
       </motion.div>
 
       {/* Main Content */}
-      <div className="flex items-center justify-center gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
         {/* Left Section: Explanation */}
         <motion.div
-          className="md:col-span-2"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
+          className="h-full"
         >
-          <Card>
+          <Card className="h-full flex flex-col">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <AlertCircle className="h-5 w-5 text-amber-500" />
@@ -163,7 +137,7 @@ export function UnderConstruction({
                 hazır olacaktır.
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 flex-grow">
               <p>
                 <strong>{title}</strong> algoritmasına özel içerik,
                 görselleştirmeler ve interaktif demolar için çalışmalarımız
@@ -189,7 +163,7 @@ export function UnderConstruction({
                 </p>
               </div>
 
-              <div className="flex flex-wrap gap-4 pt-4">
+              <div className="flex flex-wrap gap-4 pt-4 mt-auto">
                 <Button variant="outline" size="sm" asChild>
                   <Link
                     href="https://github.com/zzafergok/algorithms-playground"
@@ -220,8 +194,9 @@ export function UnderConstruction({
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
+          className="h-full"
         >
-          <Card>
+          <Card className="h-full flex flex-col">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Lightbulb className="h-5 w-5 text-primary" />
@@ -231,7 +206,7 @@ export function UnderConstruction({
                 Bu algoritma için görüş ve önerilerinizi bizimle paylaşın
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 flex-grow flex flex-col">
               <div className="space-y-2">
                 <label className="text-sm font-medium">E-posta Adresi</label>
                 <Input
@@ -256,15 +231,17 @@ export function UnderConstruction({
                 </p>
               </div>
 
-              <Button className="w-full" asChild>
-                <a
-                  href={`mailto:gok.zaferr@gmail.com?subject=Algoritma Önerisi: ${title}&body=Merhaba,%0D%0A%0D%0A${title} algoritması hakkında önerilerim/katkılarım:%0D%0A%0D%0A[Lütfen önerilerinizi buraya yazınız]%0D%0A%0D%0ATeşekkürler,%0D%0A`}
-                  className="flex items-center gap-2"
-                >
-                  <Send className="h-4 w-4" />
-                  E-posta Gönder
-                </a>
-              </Button>
+              <div className="mt-auto pt-4">
+                <Button className="w-full" asChild>
+                  <a
+                    href={`mailto:gok.zaferr@gmail.com?subject=Algoritma Önerisi: ${title}&body=Merhaba,%0D%0A%0D%0A${title} algoritması hakkında önerilerim/katkılarım:%0D%0A%0D%0A[Lütfen önerilerinizi buraya yazınız]%0D%0A%0D%0ATeşekkürler,%0D%0A`}
+                    className="flex items-center gap-2"
+                  >
+                    <Send className="h-4 w-4" />
+                    E-posta Gönder
+                  </a>
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </motion.div>
