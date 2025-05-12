@@ -1,13 +1,19 @@
 'use client';
 
+import React from 'react';
+
 import { UnderConstruction } from '@/components/common/under-construction';
 
-export default function Bfs() {
+type Props = {};
+
+export default function Bfs({}: Props) {
   return (
-    <UnderConstruction
-      title="Breadth-First Search (BFS)"
-      description="Grafı seviye seviye dolaşan, en kısa yolu bulma ve seviye tabanlı işlemlerde kullanılan algoritma."
-      category="graph-algorithms"
-    />
+    <div>
+      <UnderConstruction
+        title="Breadth-First Search (Genişlik Öncelikli Arama)"
+        description="Grafı seviye seviye dolaşan, en kısa yolu bulma ve seviye tabanlı işlemlerde kullanılan, kuyruk veri yapısı ile uygulanan temel graf algoritması."
+        category="graph-algorithms"
+      />
+    </div>
   );
 }

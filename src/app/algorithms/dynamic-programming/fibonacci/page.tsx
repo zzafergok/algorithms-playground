@@ -1,13 +1,19 @@
 'use client';
 
+import React from 'react';
+
 import { UnderConstruction } from '@/components/common/under-construction';
 
-export default function Fibonacci() {
+type Props = {};
+
+export default function Fibonacci({}: Props) {
   return (
-    <UnderConstruction
-      title="Fibonacci Sequence"
-      description="Her sayının kendinden önceki iki sayının toplamı olduğu, memoization ile verimli hesaplanabilen dizi."
-      category="dynamic-programming"
-    />
+    <div>
+      <UnderConstruction
+        title="Fibonacci Sequence (Fibonacci Dizisi)"
+        description="Her sayının kendinden önceki iki sayının toplamı olduğu, dinamik programlama ve memoization teknikleri ile verimli hesaplanabilen matematiksel dizi."
+        category="dynamic-programming"
+      />
+    </div>
   );
 }

@@ -1,13 +1,19 @@
 'use client';
 
+import React from 'react';
+
 import { UnderConstruction } from '@/components/common/under-construction';
 
-export default function BellmanFord() {
+type Props = {};
+
+export default function BellmanFord({}: Props) {
   return (
-    <UnderConstruction
-      title="Bellman-Ford Algorithm"
-      description="Negatif ağırlıklı kenarları olan graflarda en kısa yolları bulan ve negatif çevrimleri tespit eden algoritma."
-      category="graph-algorithms"
-    />
+    <div>
+      <UnderConstruction
+        title="Bellman-Ford Algorithm (Bellman-Ford Algoritması)"
+        description="Negatif ağırlıklı kenarları olan yönlendirilmiş graflarda, tek bir kaynaktan tüm düğümlere olan en kısa yolları bulan ve negatif çevrimleri tespit edebilen algoritma."
+        category="graph-algorithms"
+      />
+    </div>
   );
 }

@@ -1,13 +1,19 @@
 'use client';
 
+import React from 'react';
+
 import { UnderConstruction } from '@/components/common/under-construction';
 
-export default function Dijkstra() {
+type Props = {};
+
+export default function Dijkstra({}: Props) {
   return (
-    <UnderConstruction
-      title="Dijkstra's Algorithm"
-      description="Bir düğümden diğer tüm düğümlere olan en kısa yolları bulan, ağırlıklı graflarda kullanılan algoritma."
-      category="graph-algorithms"
-    />
+    <div>
+      <UnderConstruction
+        title="Dijkstra's Algorithm (Dijkstra Algoritması)"
+        description="Ağırlıklı graflarda bir düğümden diğer tüm düğümlere olan en kısa yolları bulan, öncelikli kuyruk veri yapısını kullanan ve negatif kenar ağırlıklarını desteklemeyen graf algoritması."
+        category="graph-algorithms"
+      />
+    </div>
   );
 }

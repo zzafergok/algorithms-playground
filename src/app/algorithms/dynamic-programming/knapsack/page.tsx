@@ -1,13 +1,19 @@
 'use client';
 
+import React from 'react';
+
 import { UnderConstruction } from '@/components/common/under-construction';
 
-export default function Knapsack() {
+type Props = {};
+
+export default function Knapsack({}: Props) {
   return (
-    <UnderConstruction
-      title="Knapsack Problem"
-      description="Belirli bir ağırlık kapasitesindeki çantaya, maksimum değere sahip nesneleri yerleştirme problemi."
-      category="dynamic-programming"
-    />
+    <div>
+      <UnderConstruction
+        title="Knapsack Problem (Sırt Çantası Problemi)"
+        description="Belirli bir ağırlık kapasitesindeki çantaya, maksimum değere sahip nesneleri yerleştirmeyi amaçlayan, dinamik programlama yaklaşımıyla çözülen optimizasyon problemi."
+        category="dynamic-programming"
+      />
+    </div>
   );
 }

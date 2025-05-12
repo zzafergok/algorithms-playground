@@ -148,7 +148,6 @@ const navItems: NavItem[] = [
       {
         label: 'Böl ve Fethet',
         href: '/algorithms/divide-and-conquer',
-        description: 'Problemi alt problemlere bölerek çözen algoritmalar',
       },
       {
         label: 'Metin İşleme Algoritmaları',

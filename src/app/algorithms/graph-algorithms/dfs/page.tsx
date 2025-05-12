@@ -1,13 +1,19 @@
 'use client';
 
+import React from 'react';
+
 import { UnderConstruction } from '@/components/common/under-construction';
 
-export default function Dfs() {
+type Props = {};
+
+export default function Dfs({}: Props) {
   return (
-    <UnderConstruction
-      title="Depth-First Search (DFS)"
-      description="Grafı derinlemesine dolaşan, bağlantılı bileşenler ve çevrim tespitinde kullanılan algoritma."
-      category="graph-algorithms"
-    />
+    <div>
+      <UnderConstruction
+        title="Depth-First Search (Derinlik Öncelikli Arama)"
+        description="Grafı derinlemesine dolaşan, bağlantılı bileşenler ve çevrim tespitinde kullanılan, özyinelemeli yapı veya yığın ile uygulanan temel graf algoritması."
+        category="graph-algorithms"
+      />
+    </div>
   );
 }
