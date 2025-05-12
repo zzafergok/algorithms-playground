@@ -1,7 +1,13 @@
-import React from 'react';
+'use client';
 
-type Props = {};
+import { UnderConstruction } from '@/components/common/under-construction';
 
-export default function LongestCommonSubsequence({}: Props) {
-  return <div>LongestCommonSubsequence</div>;
+export default function LongestCommonSubsequence() {
+  return (
+    <UnderConstruction
+      title="Longest Common Subsequence"
+      description="İki dizi arasındaki en uzun ortak alt diziyi bulan algoritma."
+      category="dynamic-programming"
+    />
+  );
 }
