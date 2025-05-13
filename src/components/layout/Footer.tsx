@@ -85,7 +85,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* About section */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-lg font-semibold">Algorithms Playground</h3>
+            <h3 className="text-lg font-semibold">AlgoPit</h3>
             <p className="text-sm text-muted-foreground">
               Algoritmaları interaktif bir şekilde öğrenin ve uygulayın. Görsel
               öğrenme ile algoritma kavramlarını kolayca anlayın.
@@ -148,7 +148,7 @@ export default function Footer() {
       {/* <div className="border-t border-border/40">
         <div className="container py-6 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
           <p>
-            &copy; {currentYear} Algorithms Playground. Tüm hakları saklıdır.
+            &copy; {currentYear} AlgoPit. Tüm hakları saklıdır.
           </p>
           <p className="mt-2 md:mt-0">
             <Link href="/privacy" className="hover:text-foreground">

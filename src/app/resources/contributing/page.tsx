@@ -136,9 +136,8 @@ export default function ContributingPage() {
           Katkıda Bulunma
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Algorithms Playground'a katkıda bulunmak için rehber. Bu projeye
-          katkıda bulunarak, algoritma öğrenimine ve açık kaynak topluluğuna
-          destek olabilirsiniz.
+          AlgoPit'e katkıda bulunmak için rehber. Bu projeye katkıda bulunarak,
+          algoritma öğrenimine ve açık kaynak topluluğuna destek olabilirsiniz.
         </p>
       </div>
 

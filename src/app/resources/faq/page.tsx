@@ -30,14 +30,14 @@ export default function FAQPage() {
   const faqData: FAQItem[] = [
     {
       id: 'general-1',
-      question: 'Algorithms Playground nedir?',
+      question: 'AlgoPit nedir?',
       answer: (
         <p>
-          Algorithms Playground, algoritmaları interaktif bir şekilde öğrenmek
-          ve deneyimlemek için tasarlanmış bir eğitim platformudur.
-          Görselleştirmeler, adım adım açıklamalar ve canlı kod örnekleriyle,
-          hem acemi hem de deneyimli programcıların algoritmaları daha iyi
-          anlamasını sağlamayı amaçlıyoruz.
+          AlgoPit, algoritmaları interaktif bir şekilde öğrenmek ve deneyimlemek
+          için tasarlanmış bir eğitim platformudur. Görselleştirmeler, adım adım
+          açıklamalar ve canlı kod örnekleriyle, hem acemi hem de deneyimli
+          programcıların algoritmaları daha iyi anlamasını sağlamayı
+          amaçlıyoruz.
         </p>
       ),
       category: 'general',
@@ -48,10 +48,7 @@ export default function FAQPage() {
       question: 'Bu platform kimler için tasarlanmıştır?',
       answer: (
         <div>
-          <p>
-            Algorithms Playground, çeşitli düzeylerdeki kullanıcılar için
-            tasarlanmıştır:
-          </p>
+          <p>AlgoPit, çeşitli düzeylerdeki kullanıcılar için tasarlanmıştır:</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
             <li>Algoritma ve veri yapıları öğrenmek isteyen öğrenciler</li>
             <li>Bilgilerini pekiştirmek isteyen programcılar</li>
@@ -68,10 +65,10 @@ export default function FAQPage() {
       question: 'Platform ücretsiz mi kullanılabilir?',
       answer: (
         <p>
-          Evet, Algorithms Playground tamamen ücretsiz ve açık kaynaklı bir
-          projedir. GitHub üzerinden koda erişebilir, projeyi forklayabilir ve
-          katkıda bulunabilirsiniz. Eğitim materyallerini, interaktif demoları
-          ve tüm kaynakları herhangi bir ücret ödemeden kullanabilirsiniz.
+          Evet, AlgoPit tamamen ücretsiz ve açık kaynaklı bir projedir. GitHub
+          üzerinden koda erişebilir, projeyi forklayabilir ve katkıda
+          bulunabilirsiniz. Eğitim materyallerini, interaktif demoları ve tüm
+          kaynakları herhangi bir ücret ödemeden kullanabilirsiniz.
         </p>
       ),
       category: 'general',
@@ -179,10 +176,10 @@ export default function FAQPage() {
           Evet, tüm algoritma implementasyonları MIT lisansı altında
           sunulmaktadır, bu da kodları kendi projelerinizde özgürce
           kullanabileceğiniz anlamına gelir. Ancak, kodları kullanırken
-          projenizde Algorithms Playground'a atıfta bulunmanız takdir edilir,
-          ancak zorunlu değildir. Kodları kullanmadan önce, üretim ortamında
-          kullanım için optimize edilmemiş olabileceklerini ve ek testlere
-          ihtiyaç duyabileceğinizi unutmayın.
+          projenizde AlgoPit'e atıfta bulunmanız takdir edilir, ancak zorunlu
+          değildir. Kodları kullanmadan önce, üretim ortamında kullanım için
+          optimize edilmemiş olabileceklerini ve ek testlere ihtiyaç
+          duyabileceğinizi unutmayın.
         </p>
       ),
       category: 'usage',
@@ -297,8 +294,8 @@ export default function FAQPage() {
       answer: (
         <div>
           <p>
-            Algorithms Playground aşağıdaki modern web teknolojileri
-            kullanılarak geliştirilmiştir:
+            AlgoPit aşağıdaki modern web teknolojileri kullanılarak
+            geliştirilmiştir:
           </p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
             <li>
@@ -465,7 +462,7 @@ export default function FAQPage() {
           Sık Sorulan Sorular
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Algorithms Playground hakkında en çok sorulan sorular ve yanıtları
+          AlgoPit hakkında en çok sorulan sorular ve yanıtları
         </p>
 
         {/* Search box */}

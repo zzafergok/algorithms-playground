@@ -402,9 +402,7 @@ export default function Navbar() {
         {/* Logo and brand */}
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2">
-            <span className="font-bold text-xl text-primary">
-              Algorithms Playground
-            </span>
+            <span className="font-bold text-xl text-primary">AlgoPit</span>
           </Link>
         </div>
 

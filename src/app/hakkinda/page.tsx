@@ -140,7 +140,7 @@ export default function AboutPage() {
           transition={{ duration: 0.5 }}
         >
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            <span className="text-primary">Algorithms Playground</span> Nedir?
+            <span className="text-primary">AlgoPit</span> Nedir?
           </h1>
         </motion.div>
 
@@ -342,8 +342,8 @@ export default function AboutPage() {
         </h2>
         <div className="max-w-3xl mx-auto text-center space-y-4">
           <p className="text-lg">
-            Algorithms Playground açık kaynak bir projedir. Her türlü katkı ve
-            önerilerinizi memnuniyetle karşılıyoruz.
+            AlgoPit açık kaynak bir projedir. Her türlü katkı ve önerilerinizi
+            memnuniyetle karşılıyoruz.
           </p>
           <div className="flex justify-center gap-4">
             <Button asChild>

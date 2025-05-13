@@ -54,12 +54,11 @@ export default function DocumentationPage() {
       tags: ['başlangıç', 'giriş', 'temel'],
       content: (
         <div className="prose dark:prose-invert max-w-none">
-          <h3>Algorithms Playground'a Hoş Geldiniz</h3>
+          <h3>AlgoPit'e Hoş Geldiniz</h3>
           <p>
-            Algorithms Playground, algoritmaları interaktif bir şekilde
-            öğrenmenize yardımcı olan kapsamlı bir eğitim platformudur. Bu
-            belgede, platformun temel özelliklerini ve nasıl kullanılacağını
-            öğreneceksiniz.
+            AlgoPit, algoritmaları interaktif bir şekilde öğrenmenize yardımcı
+            olan kapsamlı bir eğitim platformudur. Bu belgede, platformun temel
+            özelliklerini ve nasıl kullanılacağını öğreneceksiniz.
           </p>
 
           <h4>Platformun Ana Özellikleri</h4>
@@ -106,9 +105,8 @@ export default function DocumentationPage() {
         <div className="prose dark:prose-invert max-w-none">
           <h3>Platform Mimarisi</h3>
           <p>
-            Algorithms Playground, modern web teknolojileri kullanılarak
-            geliştirilmiş bir full-stack uygulamadır. İşte platformun ana
-            bileşenleri:
+            AlgoPit, modern web teknolojileri kullanılarak geliştirilmiş bir
+            full-stack uygulamadır. İşte platformun ana bileşenleri:
           </p>
 
           <h4>Frontend</h4>
@@ -316,8 +314,8 @@ export default function DocumentationPage() {
         <div className="prose dark:prose-invert max-w-none">
           <h3>Konfigürasyon ve Ayarlar</h3>
           <p>
-            Algorithms Playground'u tercihlerinize göre özelleştirmek için
-            çeşitli ayarlar ve konfigürasyon seçenekleri bulunmaktadır.
+            AlgoPit'i tercihlerinize göre özelleştirmek için çeşitli ayarlar ve
+            konfigürasyon seçenekleri bulunmaktadır.
           </p>
 
           <h4>Tema Ayarları</h4>
@@ -403,8 +401,8 @@ export default function DocumentationPage() {
           Belgelendirme
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl">
-          Algorithms Playground'un tüm özelliklerini ve kullanımını anlatan
-          kapsamlı teknik belgelendirme
+          AlgoPit'in tüm özelliklerini ve kullanımını anlatan kapsamlı teknik
+          belgelendirme
         </p>
 
         {/* Search box */}

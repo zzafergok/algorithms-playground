@@ -1,8 +1,8 @@
-# Algorithms Playground - Algoritma Görselleştirme Platformu
+# AlgoPit - Algoritma Görselleştirme Platformu
 
-Algorithms Playground, algoritmaları interaktif bir şekilde öğrenmenizi sağlayan kapsamlı bir eğitim platformudur. Bu uygulama, algoritmaların çalışma prensiplerini görsel olarak anlama, adım adım takip etme ve kendi verilerinizle test etme imkanı sunar.
+AlgoPit, algoritmaları interaktif bir şekilde öğrenmenizi sağlayan kapsamlı bir eğitim platformudur. Bu uygulama, algoritmaların çalışma prensiplerini görsel olarak anlama, adım adım takip etme ve kendi verilerinizle test etme imkanı sunar.
 
-![Algorithms Playground Screenshot](/public/assets/20210104_230350.jpg)
+![AlgoPit Screenshot](/public/assets/20210104_230350.jpg)
 
 ## Özellikler
 
@@ -114,4 +114,4 @@ Proje sahibi: [gok.zaferr@gmail.com](mailto:gok.zaferr@gmail.com)
 
 ---
 
-Algorithms Playground, algoritmaları öğrenmek ve anlamak için etkili bir araçtır. İyi öğrenmeler!
+AlgoPit, algoritmaları öğrenmek ve anlamak için etkili bir araçtır. İyi öğrenmeler!
