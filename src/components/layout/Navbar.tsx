@@ -229,7 +229,7 @@ const navItems: NavItem[] = [
       },
     ],
   },
-  { label: 'Hakkında', href: '/hakkinda' },
+  { label: 'Hakkında', href: '/about' },
   {
     label: 'Kaynaklar',
     href: '/resources',

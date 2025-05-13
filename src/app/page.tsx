@@ -66,7 +66,7 @@ export default function Home() {
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link href="/hakkinda">Daha Fazla Bilgi</Link>
+              <Link href="/about">Daha Fazla Bilgi</Link>
             </Button>
           </div>
         </div>
