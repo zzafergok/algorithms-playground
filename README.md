@@ -1,117 +1,308 @@
-# AlgoPit - Algoritma Görselleştirme Platformu
+# AlgoPit - İnteraktif Algoritma Öğrenme Platformu
 
-AlgoPit, algoritmaları interaktif bir şekilde öğrenmenizi sağlayan kapsamlı bir eğitim platformudur. Bu uygulama, algoritmaların çalışma prensiplerini görsel olarak anlama, adım adım takip etme ve kendi verilerinizle test etme imkanı sunar.
+<div  align="center"> <img  src="https://img.shields.io/badge/Next.js-14.1.4-black?style=flat-square&logo=next.js"  alt="Next.js"> <img  src="https://img.shields.io/badge/TypeScript-5.4.3-blue?style=flat-square&logo=typescript"  alt="TypeScript"> <img  src="https://img.shields.io/badge/React-18.2.0-61DAFB?style=flat-square&logo=react"  alt="React"> <img  src="https://img.shields.io/badge/TailwindCSS-3.4.17-38B2AC?style=flat-square&logo=tailwind-css"  alt="Tailwind CSS"> <img  src="https://img.shields.io/badge/License-MIT-green?style=flat-square"  alt="License"> </div> <p  align="center"> <strong>Algoritmaları görsel olarak öğrenin, anlayın ve uygulayın</strong> </p>
 
-![AlgoPit Screenshot](/public/assets/20210104_230350.jpg)
+## 🎯 Proje Hakkında
 
-## Özellikler
+AlgoPit, algoritmaları ve veri yapılarını interaktif bir şekilde öğrenmenizi sağlayan kapsamlı bir eğitim platformudur. Platform, karmaşık algoritma kavramlarını görsel açıklamalar, adım adım görselleştirmeler ve pratik kod örnekleriyle basit hale getirir.
 
-- **İnteraktif Görselleştirmeler**: Algoritmaların çalışma mantığını adım adım görselleştirme
-- **Kapsamlı Algoritma Kütüphanesi**: Sıralama, arama, graf, dinamik programlama ve daha fazlası
-- **Kod Örnekleri**: Her algoritma için farklı programlama dillerinde (JavaScript, Python, Java) örnekler
-- **Canlı Demo**: Kendi verilerinizle algoritmaları test etme imkanı
-- **Detaylı Açıklamalar**: Her algoritmanın zaman/alan karmaşıklığı, avantajları ve dezavantajları
-- **Karanlık/Açık Tema**: Kullanıcı tercihine göre arayüz renk teması
+### 🌟 Temel Özellikler
 
-## Proje Kategorileri
+**İnteraktif Görselleştirmeler**: Her algoritmanın çalışma mantığını adım adım takip edebileceğiniz dinamik animasyonlar
 
-- 🔄 **Sıralama Algoritmaları**: Bubble Sort, Quick Sort, Merge Sort vb.
-- 🔍 **Arama Algoritmaları**: Binary Search, Linear Search vb.
-- 📊 **Graf Algoritmaları**: BFS, DFS, Dijkstra, Bellman-Ford vb.
-- 📋 **Veri Yapıları**: Linked List, Stack, Queue, Binary Search Tree, Hash Table vb.
-- 🧮 **Dinamik Programlama**: Fibonacci, Knapsack, Longest Common Subsequence vb.
-- ↩️ **Geri İzleme**: N-Queens, Subset Sum vb.
-- 🌐 **Kümeleme Algoritmaları**: K-Means, Hierarchical Clustering vb.
-- ⚙️ **Optimizasyon Algoritmaları**: Simulated Annealing, Genetic Algorithms vb.
-- 📝 **Metin İşleme Algoritmaları**: Rabin-Karp, KMP vb.
+**Kapsamlı İçerik Kütüphanesi**: 15+ kategori ve 50+ algoritma ile geniş bir öğrenme yelpazesi
 
-## Teknoloji Yığını
+**Çoklu Dil Desteği**: JavaScript, Python ve Java dillerinde detaylı kod implementasyonları
 
-- [Next.js](https://nextjs.org/) - React framework (App Router)
-- [TypeScript](https://www.typescriptlang.org/) - Tip güvenliği
-- [Tailwind CSS](https://tailwindcss.com/) - Stil ve arayüz
-- [Lucide React](https://lucide.dev/) - İkonlar
-- [next-themes](https://github.com/pacocoursey/next-themes) - Tema desteği
+**Performans Analizi**: Zaman ve alan karmaşıklığı analizleri ile algoritma performansının derinlemesine incelenmesi
 
-## Kurulum
+**Responsive Tasarım**: Masaüstü ve mobil cihazlarda kusursuz çalışan modern arayüz
 
-Projeyi yerel makinenizde çalıştırmak için şu adımları izleyin:
+**Tema Desteği**: Kullanıcı tercihlerine göre açık ve koyu tema seçenekleri
+
+## 📚 Algoritma Kategorileri
+
+### Sıralama Algoritmaları
+
+Bubble Sort, Selection Sort, Insertion Sort, Merge Sort, Quick Sort, Heap Sort, Counting Sort ve Radix Sort implementasyonları
+
+### Arama Algoritmaları
+
+Linear Search ve Binary Search algoritmaları ile arama teknikleri
+
+### Graf Algoritmaları
+
+Breadth-First Search (BFS), Depth-First Search (DFS), Dijkstra'nın En Kısa Yol Algoritması ve Bellman-Ford algoritması
+
+### Veri Yapıları
+
+Linked List, Stack, Queue, Binary Search Tree ve Hash Table veri yapıları ve işlemleri
+
+### Dinamik Programlama
+
+Fibonacci Serisi, Knapsack Problem ve Longest Common Subsequence çözümleri
+
+### Geri İzleme Algoritmaları
+
+N-Queens Problem ve Subset Sum Problem çözümleri
+
+### Açgözlü Algoritmalar
+
+Fractional Knapsack ve Huffman Coding algoritmaları
+
+### Metin İşleme Algoritmaları
+
+Rabin-Karp ve Knuth-Morris-Pratt (KMP) string arama algoritmaları
+
+### Matematiksel Algoritmalar
+
+Euclidean Algorithm (GCD) ve Sieve of Eratosthenes asal sayı algoritması
+
+### Optimizasyon Algoritmaları
+
+Simulated Annealing ve Genetic Algorithms meta-sezgisel yöntemler
+
+### İleri Seviye Algoritmalar
+
+Floyd's Cycle-Finding ve Topological Sort algoritmaları
+
+## 🛠️ Teknoloji Yığını
+
+### Frontend Framework
+
+**Next.js 14.1.4** - App Router ile modern React uygulaması geliştirme
+
+### Tip Güvenliği
+
+**TypeScript 5.4.3** - Güçlü tip kontrolü ve geliştirici deneyimi
+
+### Styling ve UI
+
+**Tailwind CSS 3.4.17** - Utility-first CSS framework **Radix UI** - Erişilebilir ve özelleştirilebilir UI bileşenleri **Lucide React** - Modern ve tutarlı ikon kütüphanesi
+
+### Animasyon
+
+**Framer Motion 12.10.5** - Performanslı ve esnek animasyon kütüphanesi
+
+### Tema Yönetimi
+
+**next-themes 0.3.0** - Dinamik tema değiştirme desteği
+
+### Geliştirme Araçları
+
+**ESLint** - Kod kalitesi kontrolü **Prettier** - Otomatik kod formatlaması **Jest** - Unit test framework
+
+## 🚀 Kurulum ve Çalıştırma
+
+### Sistem Gereksinimleri
+
+Node.js 18.0 veya üzeri sürüm gereklidir
+
+### Yerel Geliştirme Ortamı
 
 ```bash
-# Projeyi klonlayın
-git clone https://github.com/zzafergok/algorithms-playground.git
-cd algorithms-playground
+# Repository'yi klonlayın
+git  clone  https://github.com/zzafergok/algorithms-playground.git
+
+# Proje dizinine geçin
+cd  algorithms-playground
 
 # Bağımlılıkları yükleyin
-npm install
-# veya
-yarn install
-# veya
-pnpm install
-# veya
-bun install
+npm  install
+# veya yarn install
+# veya pnpm install
 
 # Geliştirme sunucusunu başlatın
-npm run dev
-# veya
-yarn dev
-# veya
-pnpm dev
-# veya
-bun dev
+npm  run  dev
+# veya yarn dev
+# veya pnpm dev
 ```
 
-Tarayıcınızda [http://localhost:3000](http://localhost:3000) adresini açarak uygulamayı görüntüleyebilirsiniz.
+Uygulama başarıyla başlatıldıktan sonra [http://localhost:3000](http://localhost:3000/) adresinden erişebilirsiniz.
 
-## Proje Yapısı
+### Production Build
+
+```bash
+# Production build oluşturun
+npm  run  build
+
+# Production sunucusunu başlatın
+npm  run  start
+```
+
+## 📁 Proje Yapısı
 
 ```
 algorithms-playground/
-├── public/          # Statik dosyalar
+
+├── public/ # Statik dosyalar
+
+│ └── assets/ # Görsel ve medya dosyaları
+
 ├── src/
-│   ├── app/         # Sayfa bileşenleri (Next.js App Router)
-│   │   ├── algorithms/  # Algoritma sayfaları
-│   │   ├── page.tsx     # Ana sayfa
-│   ├── components/  # UI bileşenleri
-│   │   ├── common/      # Ortak bileşenler
-│   │   ├── layout/      # Düzen bileşenleri
-│   │   ├── theme/       # Tema bileşenleri
-│   │   ├── ui/          # Temel UI bileşenleri (radix-ui)
-│   ├── context/     # React context tanımlamaları
-│   ├── lib/         # Yardımcı fonksiyonlar ve algoritma uygulamaları
-│   │   ├── algorithms/  # Algoritma implementasyonları
-│   ├── styles/      # Global stil tanımlamaları
-├── .gitignore
-├── next.config.js
-├── package.json
-├── postcss.config.js
-├── README.md
-├── tailwind.config.js
-├── tsconfig.json
+
+│ ├── app/ # Next.js App Router sayfaları
+
+│ │ ├── algorithms/ # Algoritma kategori sayfaları
+
+│ │ ├── resources/ # Kaynak ve dokümantasyon sayfaları
+
+│ │ ├── about/ # Hakkında sayfası
+
+│ │ ├── layout.tsx # Root layout bileşeni
+
+│ │ └── page.tsx # Ana sayfa
+
+│ ├── components/ # React bileşenleri
+
+│ │ ├── common/ # Ortak kullanılan bileşenler
+
+│ │ ├── layout/ # Layout bileşenleri
+
+│ │ ├── theme/ # Tema yönetimi bileşenleri
+
+│ │ └── ui/ # Temel UI bileşenleri
+
+│ ├── context/ # React Context tanımlamaları
+
+│ │ └── theme-provider.tsx
+
+│ ├── lib/ # Yardımcı fonksiyonlar ve algoritma implementasyonları
+
+│ │ ├── algorithms/ # Algoritma implementasyonları
+
+│ │ ├── complexity-analysis.ts
+
+│ │ └── utils.ts # Genel yardımcı fonksiyonlar
+
+│ └── styles/ # Global stil tanımlamaları
+
+│ └── globals.css
+
+├── .gitignore # Git ignore kuralları
+
+├── next.config.js # Next.js konfigürasyonu
+
+├── package.json # Proje bağımlılıkları ve scriptler
+
+├── postcss.config.js # PostCSS konfigürasyonu
+
+├── tailwind.config.js # Tailwind CSS konfigürasyonu
+
+├── tsconfig.json # TypeScript konfigürasyonu
+
+└── README.md # Proje dokümantasyonu
 ```
 
-## Katkıda Bulunma
+## 🎨 Bileşen Mimarisi
 
-Bu proje geliştirilmeye açıktır. Katkıda bulunmak için:
+### UI Bileşenleri
 
-1. Bir fork oluşturun
-2. Yeni bir branch oluşturun (`git checkout -b feature/amazing-feature`)
-3. Değişikliklerinizi commit edin (`git commit -m 'Add some amazing feature'`)
-4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
-5. Bir Pull Request oluşturun
+Radix UI temelinde oluşturulmuş, tutarlı ve erişilebilir bileşen kütüphanesi
 
-## Özellik İstekleri ve Hata Bildirimleri
+### Layout Bileşenleri
 
-Yeni özellik önerileri veya hata bildirimleri için lütfen bir issue açın.
+Responsive navigation, footer ve sidebar bileşenleri
 
-## Lisans
+### Algorithm Bileşenleri
 
-Bu proje MIT lisansı altında lisanslanmıştır - detaylar için [LICENSE](LICENSE) dosyasına bakın.
+Görselleştirme, açıklama ve interaktif demo bileşenleri
 
-## İletişim
+### Common Bileşenleri
 
-Proje sahibi: [gok.zaferr@gmail.com](mailto:gok.zaferr@gmail.com)
+CodeBlock, InteractiveDemo, AlgorithmExplanation ve UnderConstruction bileşenleri
+
+## 🧪 Test ve Kalite Kontrol
+
+```bash
+# Unit testleri çalıştırın
+npm  run  test
+
+# Linting kontrolü
+npm  run  lint
+
+# Kod formatlama
+npm  run  format
+```
+
+## 📖 Kullanım Kılavuzu
+
+### Algoritma Görselleştirmeleri
+
+Her algoritma sayfasında bulunan interaktif demo bölümünden kendi verilerinizi girerek algoritmanın çalışmasını gözlemleyebilirsiniz
+
+### Kod İnceleme
+
+Algoritmaların JavaScript, Python ve Java implementasyonlarını inceleyerek farklı dillerdeki uygulama farklarını öğrenebilirsiniz
+
+### Performans Analizi
+
+Her algoritmanın zaman ve alan karmaşıklığı detayları ile algoritma seçimi konusunda bilinçli kararlar verebilirsiniz
+
+### Karşılaştırmalı Öğrenme
+
+Benzer kategorideki algoritmaları karşılaştırarak hangisinin hangi durumlarda daha uygun olduğunu anlayabilirsiniz
+
+## 🤝 Katkıda Bulunma
+
+Projeye katkıda bulunmak için aşağıdaki adımları izleyebilirsiniz:
+
+### Katkı Süreci
+
+1.  **Repository'yi Fork Edin**: GitHub'da projeyi kendi hesabınıza fork edin
+
+2.  **Feature Branch Oluşturun**:
+
+```bash
+git checkout -b feature/yeni-ozellik-adi
+```
+
+3.  **Değişikliklerinizi Yapın**: Kod standartlarına uygun şekilde geliştirme yapın
+
+4.  **Testleri Çalıştırın**: Değişikliklerinizin mevcut fonksiyonaliteyi bozmadığından emin olun
+
+5.  **Commit Edin**: Açıklayıcı commit mesajları ile değişikliklerinizi commit edin
+
+```bash
+git commit -m "feat: yeni algoritma eklendi"
+```
+
+6.  **Push Edin**: Branch'inizi remote repository'ye push edin
+
+```bash
+git push origin feature/yeni-ozellik-adi
+```
+
+7.  **Pull Request Oluşturun**: GitHub üzerinden pull request açın
+
+### Katkı Alanları
+
+**Yeni Algoritmalar**: Eksik algoritmaların implementasyonu ve görselleştirilmesi
+**Dokümantasyon**: Algoritma açıklamalarının iyileştirilmesi ve yeni içerik eklenmesi
+**UI/UX İyileştirmeleri**: Kullanıcı deneyiminin geliştirilmesi
+**Performance Optimizasyonu**: Uygulamanın performansının artırılması
+**Bug Fixes**: Mevcut hataların düzeltilmesi
+
+### Kod Standartları
+
+TypeScript kullanımında strict mode tercih edilir ve tüm bileşenler için proper typing yapılmalıdır. ESLint ve Prettier konfigürasyonlarına uygun kod yazımı beklenir. Bileşen isimlendirmelerinde PascalCase, fonksiyon isimlendirmelerinde camelCase kullanılmalıdır.
+
+## 📞 İletişim ve Destek
+
+**Proje Geliştirici**: [gok.zaferr@gmail.com](mailto:gok.zaferr@gmail.com)
+
+**GitHub Issues**: [Yeni issue oluşturun](https://github.com/zzafergok/algorithms-playground/issues)
+
+**Dokümantasyon**: [Detaylı dokümantasyon](https://www.algopit.wiki/resources/documentation)
+
+## 🎯 Gelecek Hedefler
+
+**Çoklu Dil Desteği**: Arayüz çevirilerinin eklenmesi
+
+**Kullanıcı Profilleri**: İlerleme takibi ve kişiselleştirme özellikleri
+
+**API Entegrasyonu**: Algoritma performans karşılaştırmaları için backend servis geliştirme
 
 ---
 
-AlgoPit, algoritmaları öğrenmek ve anlamak için etkili bir araçtır. İyi öğrenmeler!
+<div  align="center">**AlgoPit ile algoritma öğrenmenin keyfini çıkarın! 🚀**</div>
