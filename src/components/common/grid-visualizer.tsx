@@ -1,23 +1,26 @@
 'use client';
 
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
-import { Label } from '@/components/ui/label';
+
 import {
+  Zap,
   Play,
   Square,
-  RotateCcw,
-  Zap,
   MapPin,
   Target,
+  RotateCcw,
   Construction,
 } from 'lucide-react';
+
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+
 import {
+  aStar,
   Graph,
   GraphNode,
   createGridGraph,
-  aStar,
   resetGraphState,
   manhattanDistance,
   euclideanDistance,
@@ -35,7 +38,6 @@ interface GridVisualizerProps {
 type CellMode = 'start' | 'goal' | 'obstacle' | 'clear';
 type AlgorithmState = 'idle' | 'running' | 'paused' | 'completed';
 
-// Grid visualizer component for pathfinding algorithms
 export function GridVisualizer({
   className,
   initialWidth = 20,
@@ -43,7 +45,6 @@ export function GridVisualizer({
   showControls = true,
   algorithm = 'astar',
 }: GridVisualizerProps) {
-  // Core state management for grid and algorithm execution
   const [gridWidth, setGridWidth] = useState(initialWidth);
   const [gridHeight, setGridHeight] = useState(initialHeight);
   const [graph, setGraph] = useState<Graph>(() =>
@@ -54,17 +55,14 @@ export function GridVisualizer({
     `${initialWidth - 3}-${initialHeight - 3}`
   );
 
-  // Algorithm execution and visualization state
   const [algorithmState, setAlgorithmState] = useState<AlgorithmState>('idle');
   const [cellMode, setCellMode] = useState<CellMode>('obstacle');
   const [animationSpeed, setAnimationSpeed] = useState<number>(50);
-  const [isDiagonal, setIsDiagonal] = useState<boolean>(false);
   const [heuristicType, setHeuristicType] = useState<'manhattan' | 'euclidean'>(
     'manhattan'
   );
   const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
 
-  // Algorithm results state
   const [pathFound, setPathFound] = useState<GraphNode[]>([]);
   const [visitedNodes, setVisitedNodes] = useState<GraphNode[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -74,14 +72,12 @@ export function GridVisualizer({
     executionTime: 0,
   });
 
-  // Memoized heuristic function selection
   const heuristicFunction = useMemo(() => {
     return heuristicType === 'manhattan'
       ? manhattanDistance
       : euclideanDistance;
   }, [heuristicType]);
 
-  // Reset grid to initial state
   const resetGrid = useCallback(() => {
     setAlgorithmState('idle');
     setCurrentStep(0);
@@ -94,7 +90,6 @@ export function GridVisualizer({
     setGraph(newGraph);
   }, [gridWidth, gridHeight]);
 
-  // Handle grid size changes
   const updateGridSize = useCallback((newWidth: number, newHeight: number) => {
     setGridWidth(newWidth);
     setGridHeight(newHeight);
@@ -109,7 +104,6 @@ export function GridVisualizer({
     setVisitedNodes([]);
   }, []);
 
-  // Handle cell click events for placing start, goal, and obstacles
   const handleCellClick = useCallback(
     (nodeId: string) => {
       if (algorithmState === 'running') return;
@@ -120,7 +114,6 @@ export function GridVisualizer({
 
       switch (cellMode) {
         case 'start':
-          // Clear previous start node and set new one
           if (startNode && newGraph.nodes.has(startNode)) {
             newGraph.nodes.get(startNode)!.isObstacle = false;
           }
@@ -129,7 +122,6 @@ export function GridVisualizer({
           break;
 
         case 'goal':
-          // Clear previous goal node and set new one
           if (goalNode && newGraph.nodes.has(goalNode)) {
             newGraph.nodes.get(goalNode)!.isObstacle = false;
           }
@@ -138,14 +130,12 @@ export function GridVisualizer({
           break;
 
         case 'obstacle':
-          // Toggle obstacle state (don't allow on start/goal)
           if (nodeId !== startNode && nodeId !== goalNode) {
             node.isObstacle = !node.isObstacle;
           }
           break;
 
         case 'clear':
-          // Clear the cell
           if (nodeId !== startNode && nodeId !== goalNode) {
             node.isObstacle = false;
           }
@@ -157,12 +147,10 @@ export function GridVisualizer({
     [graph, cellMode, startNode, goalNode, algorithmState]
   );
 
-  // Handle mouse drag for painting obstacles
   const handleCellMouseEnter = useCallback(
     (nodeId: string) => {
       if (!isMouseDown || algorithmState === 'running') return;
 
-      // Only paint obstacles or clear when dragging
       if (cellMode === 'obstacle' || cellMode === 'clear') {
         handleCellClick(nodeId);
       }
@@ -170,7 +158,6 @@ export function GridVisualizer({
     [isMouseDown, cellMode, handleCellClick, algorithmState]
   );
 
-  // Run the pathfinding algorithm
   const runAlgorithm = useCallback(async () => {
     if (!graph.nodes.has(startNode) || !graph.nodes.has(goalNode)) {
       return;
@@ -181,13 +168,11 @@ export function GridVisualizer({
 
     const startTime = performance.now();
 
-    // Execute A* algorithm
     const result = aStar(graph, startNode, goalNode, heuristicFunction);
 
     const endTime = performance.now();
     const executionTime = endTime - startTime;
 
-    // Update results and statistics
     setPathFound(result.path);
     setVisitedNodes(result.visitedNodes);
     setAlgorithmStats({
@@ -196,7 +181,6 @@ export function GridVisualizer({
       executionTime,
     });
 
-    // Animate the visualization step by step
     if (result.visitedNodes.length > 0) {
       for (let i = 0; i < result.visitedNodes.length; i++) {
         if (algorithmState !== 'running') break;
@@ -218,13 +202,11 @@ export function GridVisualizer({
     algorithmState,
   ]);
 
-  // Get cell appearance classes based on state
   const getCellClasses = useCallback(
     (nodeId: string, node: GraphNode) => {
       const baseClasses =
         'w-6 h-6 border border-gray-300 cursor-pointer transition-colors duration-150 hover:opacity-80';
 
-      // Priority order: start > goal > path > visited > obstacle > default
       if (nodeId === startNode) {
         return cn(baseClasses, 'bg-green-500 hover:bg-green-600');
       }
@@ -253,7 +235,6 @@ export function GridVisualizer({
     [startNode, goalNode, algorithmState, currentStep, visitedNodes]
   );
 
-  // Get cell icon based on type
   const getCellIcon = useCallback(
     (nodeId: string, node: GraphNode) => {
       if (nodeId === startNode) {
@@ -273,16 +254,13 @@ export function GridVisualizer({
     [startNode, goalNode]
   );
 
-  // Generate random maze pattern
   const generateMaze = useCallback(() => {
     const newGraph = { ...graph };
 
-    // Clear existing obstacles
     newGraph.nodes.forEach((node) => {
       node.isObstacle = false;
     });
 
-    // Generate random obstacles (about 30% of cells)
     newGraph.nodes.forEach((node, nodeId) => {
       if (nodeId !== startNode && nodeId !== goalNode && Math.random() < 0.3) {
         node.isObstacle = true;
@@ -292,7 +270,6 @@ export function GridVisualizer({
     setGraph(newGraph);
   }, [graph, startNode, goalNode]);
 
-  // Clear all obstacles
   const clearObstacles = useCallback(() => {
     const newGraph = { ...graph };
     newGraph.nodes.forEach((node) => {
@@ -301,7 +278,6 @@ export function GridVisualizer({
     setGraph(newGraph);
   }, [graph]);
 
-  // Effect to handle grid size changes
   useEffect(() => {
     if (algorithmState === 'idle') {
       updateGridSize(gridWidth, gridHeight);
@@ -310,11 +286,9 @@ export function GridVisualizer({
 
   return (
     <div className={cn('space-y-6', className)}>
-      {/* Control Panel */}
       {showControls && (
         <div className="space-y-4 p-4 bg-muted rounded-lg">
           <div className="flex flex-wrap gap-4 items-center">
-            {/* Algorithm Controls */}
             <Button
               onClick={runAlgorithm}
               disabled={algorithmState === 'running'}
@@ -354,7 +328,6 @@ export function GridVisualizer({
             </Button>
           </div>
 
-          {/* Grid Size Controls */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="space-y-2">
               <Label>Genişlik: {gridWidth}</Label>
@@ -407,7 +380,6 @@ export function GridVisualizer({
             </div>
           </div>
 
-          {/* Cell Mode Selection */}
           <div className="space-y-2">
             <Label>Yerleştirme Modu</Label>
             <div className="flex flex-wrap gap-2">
@@ -436,7 +408,6 @@ export function GridVisualizer({
             </div>
           </div>
 
-          {/* Algorithm Statistics */}
           {algorithmStats.nodesVisited > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-background rounded border">
               <div className="text-center">
@@ -468,7 +439,6 @@ export function GridVisualizer({
         </div>
       )}
 
-      {/* Grid Visualization */}
       <div className="flex justify-center">
         <div
           className="inline-block border-2 border-gray-400 bg-white"
@@ -506,7 +476,6 @@ export function GridVisualizer({
         </div>
       </div>
 
-      {/* Legend */}
       <div className="flex flex-wrap justify-center gap-4 text-sm">
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-green-500 border border-gray-300 flex items-center justify-center">

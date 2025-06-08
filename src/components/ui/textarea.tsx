@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+
 import { cn } from '@/lib/utils';
 
 export interface TextareaProps
@@ -24,7 +25,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   }
 );
 
-// Set a display name for better debugging in React DevTools
 Textarea.displayName = 'Textarea';
 
 export { Textarea };

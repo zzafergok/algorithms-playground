@@ -1,21 +1,20 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { AlgorithmExplanation } from '@/components/common/explanation';
-import { CodeBlock } from '@/components/common/code-block';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { CodeBlock } from '@/components/common/code-block';
+import { AlgorithmExplanation } from '@/components/common/explanation';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-// Floyd döngü algoritması implementasyonu
 function floydCycleFinding<T>(arr: T[]): {
   cycleExists: boolean;
   cycleStart?: number;
   cycleLength?: number;
 } {
-  // Boş dizi kontrolü
   if (arr.length === 0) {
     return { cycleExists: false };
   }
@@ -23,28 +22,21 @@ function floydCycleFinding<T>(arr: T[]): {
   let tortoise = 0; // Yavaş hareket eden işaretçi (kaplumbağa)
   let hare = 0; // Hızlı hareket eden işaretçi (tavşan)
 
-  // Faz 1: Döngünün varlığını tespit et
   do {
-    // Kaplumbağa bir adım, tavşan iki adım ilerler
     tortoise = getNextIndex(arr, tortoise);
     hare = getNextIndex(arr, getNextIndex(arr, hare));
 
-    // Dizi sınırlarını aşma kontrolü
     if (tortoise === -1 || hare === -1) {
       return { cycleExists: false };
     }
   } while (tortoise !== hare);
 
-  // Buraya ulaşıldıysa, döngü var demektir
-
-  // Faz 2: Döngünün başlangıç noktasını bul
   tortoise = 0;
   while (tortoise !== hare) {
     tortoise = getNextIndex(arr, tortoise);
     hare = getNextIndex(arr, hare);
   }
 
-  // Döngünün uzunluğunu hesapla
   let cycleLength = 1;
   hare = getNextIndex(arr, tortoise);
   while (tortoise !== hare) {
@@ -59,20 +51,14 @@ function floydCycleFinding<T>(arr: T[]): {
   };
 }
 
-// Bir sonraki indeksi döndüren yardımcı fonksiyon
 function getNextIndex<T>(arr: T[], currentIndex: number): number {
-  // Dizinin sınırları içinde olup olmadığımızı kontrol et
   if (currentIndex < 0 || currentIndex >= arr.length) {
     return -1;
   }
 
-  // Bir sonraki indeksi hesapla
-  // Bu örnek için, her değer bir sonraki elemana işaret eder
-  // Gerçek dünyada linked list'te bu bir pointer olurdu
   const nextIndex =
     typeof arr[currentIndex] === 'number' ? Number(arr[currentIndex]) : -1;
 
-  // Geçerli bir indeks mi kontrol et
   if (nextIndex < 0 || nextIndex >= arr.length) {
     return -1;
   }
@@ -80,7 +66,6 @@ function getNextIndex<T>(arr: T[], currentIndex: number): number {
   return nextIndex;
 }
 
-// Döngü bulma sonuçlarını görselleştiren bileşen
 const CycleVisualization: React.FC<{
   array: number[];
   result: { cycleExists: boolean; cycleStart?: number; cycleLength?: number };
@@ -89,16 +74,12 @@ const CycleVisualization: React.FC<{
     <div className="mt-4">
       <div className="flex flex-wrap gap-4 mb-4">
         {array.map((value, index) => {
-          // Döngüdeki elemanları farklı renkte göster
           let bgColor = 'bg-gray-200 dark:bg-gray-700';
 
           if (result.cycleExists && result.cycleStart !== undefined) {
-            // Döngünün başlangıç noktasını vurgula
             if (index === result.cycleStart) {
               bgColor = 'bg-green-500 dark:bg-green-600';
-            }
-            // Döngüdeki diğer elemanları vurgula
-            else if (
+            } else if (
               isCycleMember(
                 index,
                 result.cycleStart,
@@ -126,7 +107,6 @@ const CycleVisualization: React.FC<{
         })}
       </div>
 
-      {/* Ok işaretleri ile bağlantıları göster */}
       <div className="flex flex-wrap gap-4 mb-4">
         {array.map((value, index) => (
           <div key={index} className="flex items-center">
@@ -138,7 +118,6 @@ const CycleVisualization: React.FC<{
         ))}
       </div>
 
-      {/* Sonuç bilgilerini göster */}
       <Card className="mt-4">
         <CardHeader>
           <CardTitle>Sonuç</CardTitle>
@@ -173,7 +152,6 @@ const CycleVisualization: React.FC<{
   );
 };
 
-// Bir indeksin döngünün parçası olup olmadığını kontrol et
 function isCycleMember(
   index: number,
   cycleStart: number,
@@ -188,7 +166,6 @@ function isCycleMember(
   return false;
 }
 
-// Döngüdeki elemanları al
 function getCycleMembers(
   cycleStart: number,
   array: number[],
@@ -206,7 +183,6 @@ function getCycleMembers(
 }
 
 export default function FloydCycleFindingPage() {
-  // Örnek dizi durumu
   const [inputArray, setInputArray] = useState<number[]>([1, 3, 4, 2, 2]);
   const [inputText, setInputText] = useState('1, 3, 4, 2, 2');
   const [result, setResult] = useState<{
@@ -215,7 +191,6 @@ export default function FloydCycleFindingPage() {
     cycleLength?: number;
   }>({ cycleExists: false });
 
-  // Algoritma açıklaması için veriler
   const pseudocode = `function floydCycleFinding(arr):
     # Faz 1: Döngünün varlığını tespit et
     tortoise = 0 # Yavaş işaretçi
@@ -355,20 +330,16 @@ def get_next_index(arr, current_index):
     return next_index`,
   };
 
-  // Uygulama çalıştığında örnek diziyi işle
   useEffect(() => {
     handleRunAlgorithm();
   }, []);
 
-  // Input değişikliklerini işle
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
   };
 
-  // Algoritma çalıştırma işlevi
   const handleRunAlgorithm = () => {
     try {
-      // Girdiyi sayı dizisine dönüştür
       const parsedArray = inputText
         .split(',')
         .map((item) => parseInt(item.trim(), 10))
@@ -378,7 +349,6 @@ def get_next_index(arr, current_index):
         throw new Error('Lütfen geçerli bir sayı dizisi girin.');
       }
 
-      // Sayıların dizi indeksleri içinde olduğundan emin ol
       const isValid = parsedArray.every(
         (num) => num >= 0 && num < parsedArray.length
       );

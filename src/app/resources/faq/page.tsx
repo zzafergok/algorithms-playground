@@ -2,15 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 
+import { Search, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ChevronDown, ThumbsUp, ThumbsDown } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-// FAQ item interface
 interface FAQItem {
   id: string;
   tags: string[];
@@ -21,12 +20,10 @@ interface FAQItem {
 }
 
 export default function FAQPage() {
-  // State for search and expanded items
+  const [faqs, setFaqs] = useState<FAQItem[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
-  const [faqs, setFaqs] = useState<FAQItem[]>([]);
 
-  // FAQ items data
   const faqData: FAQItem[] = [
     {
       id: 'general-1',
@@ -383,16 +380,13 @@ export default function FAQPage() {
     },
   ];
 
-  // Update FAQ state on component mount
   useEffect(() => {
     setFaqs(faqData);
   }, []);
 
-  // Filter FAQs based on search query and category
   const getFilteredFaqs = (category: string) => {
     let filteredFaqs = [...faqData];
 
-    // Filter by search query if exists
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filteredFaqs = filteredFaqs.filter(
@@ -404,7 +398,6 @@ export default function FAQPage() {
       );
     }
 
-    // Filter by category if not "all"
     if (category !== 'all') {
       filteredFaqs = filteredFaqs.filter((faq) => faq.category === category);
     }
@@ -412,21 +405,12 @@ export default function FAQPage() {
     return filteredFaqs;
   };
 
-  // Toggle expand/collapse FAQ item
   const toggleItem = (id: string) => {
     setExpandedItems((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
-  // Record if answer was helpful
-  const markHelpful = (id: string, isHelpful: boolean) => {
-    setFaqs((prev) =>
-      prev.map((faq) => (faq.id === id ? { ...faq, isHelpful } : faq))
-    );
-  };
-
-  // Animation variants
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -447,7 +431,6 @@ export default function FAQPage() {
     },
   };
 
-  // Count FAQs by category
   const getCategoryCount = (category: string) => {
     return category === 'all'
       ? faqData.length
@@ -456,7 +439,6 @@ export default function FAQPage() {
 
   return (
     <div className="container py-12 max-w-4xl mx-auto">
-      {/* Header section */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold tracking-tight mb-4">
           Sık Sorulan Sorular
@@ -465,7 +447,6 @@ export default function FAQPage() {
           AlgoPit hakkında en çok sorulan sorular ve yanıtları
         </p>
 
-        {/* Search box */}
         <div className="relative mt-6 max-w-lg mx-auto">
           <Search
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
@@ -480,7 +461,6 @@ export default function FAQPage() {
         </div>
       </div>
 
-      {/* FAQ categories tabs */}
       <Tabs defaultValue="all" className="mb-8">
         <TabsList className="w-full">
           <TabsTrigger value="all" className="flex-1">
@@ -521,7 +501,6 @@ export default function FAQPage() {
           </TabsTrigger>
         </TabsList>
 
-        {/* FAQ content for each category */}
         {[
           'all',
           'general',
@@ -555,7 +534,6 @@ export default function FAQPage() {
                       variants={itemVariants}
                       className="border rounded-lg overflow-hidden"
                     >
-                      {/* Question header */}
                       <div
                         className={`p-4 flex justify-between items-center cursor-pointer ${
                           expandedItems.includes(faq.id)
@@ -572,7 +550,6 @@ export default function FAQPage() {
                         />
                       </div>
 
-                      {/* Answer content with animation */}
                       <AnimatePresence>
                         {expandedItems.includes(faq.id) && (
                           <motion.div
@@ -587,7 +564,6 @@ export default function FAQPage() {
                                 {faq.answer}
                               </div>
 
-                              {/* Tags */}
                               <div className="flex flex-wrap gap-1 mt-4">
                                 {faq.tags.map((tag) => (
                                   <Badge
@@ -599,37 +575,6 @@ export default function FAQPage() {
                                   </Badge>
                                 ))}
                               </div>
-
-                              {/* Helpful buttons */}
-                              {/* <div className="mt-4 flex items-center space-x-4">
-                                <span className="text-sm text-muted-foreground">
-                                  Bu yanıt yardımcı oldu mu?
-                                </span>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className={`${faq.isHelpful === true ? 'bg-green-100 dark:bg-green-900 border-green-200 dark:border-green-800' : ''}`}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    markHelpful(faq.id, true);
-                                  }}
-                                >
-                                  <ThumbsUp className="h-4 w-4 mr-1" />
-                                  Evet
-                                </Button>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className={`${faq.isHelpful === false ? 'bg-red-100 dark:bg-red-900 border-red-200 dark:border-red-800' : ''}`}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    markHelpful(faq.id, false);
-                                  }}
-                                >
-                                  <ThumbsDown className="h-4 w-4 mr-1" />
-                                  Hayır
-                                </Button>
-                              </div> */}
                             </div>
                           </motion.div>
                         )}
@@ -664,7 +609,6 @@ export default function FAQPage() {
         ))}
       </Tabs>
 
-      {/* Ask a question section */}
       <div className="mt-16 p-6 bg-muted rounded-lg text-center">
         <h2 className="text-xl font-bold mb-4">Sorunuzu Bulamadınız mı?</h2>
         <p className="mb-6 max-w-xl mx-auto">

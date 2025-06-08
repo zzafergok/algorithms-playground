@@ -1,14 +1,14 @@
 'use client';
 
 import * as React from 'react';
+
 import { X } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import * as ToastPrimitives from '@radix-ui/react-toast';
 
-// Root component for the toast system
+import { cn } from '@/lib/utils';
+
 const ToastProvider = ToastPrimitives.Provider;
 
-// Container for positioning toasts
 const ToastViewport = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Viewport>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Viewport>
@@ -24,7 +24,6 @@ const ToastViewport = React.forwardRef<
 ));
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName;
 
-// The toast component itself
 const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> & {
@@ -47,7 +46,6 @@ const Toast = React.forwardRef<
 });
 Toast.displayName = ToastPrimitives.Root.displayName;
 
-// Close button for the toast
 const ToastClose = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Close>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Close>
@@ -66,7 +64,6 @@ const ToastClose = React.forwardRef<
 ));
 ToastClose.displayName = ToastPrimitives.Close.displayName;
 
-// Title element for the toast
 const ToastTitle = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Title>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Title>
@@ -79,7 +76,6 @@ const ToastTitle = React.forwardRef<
 ));
 ToastTitle.displayName = ToastPrimitives.Title.displayName;
 
-// Description element for the toast
 const ToastDescription = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Description>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Description>
@@ -92,12 +88,11 @@ const ToastDescription = React.forwardRef<
 ));
 ToastDescription.displayName = ToastPrimitives.Description.displayName;
 
-// Export all the components
 export {
-  ToastProvider,
-  ToastViewport,
   Toast,
   ToastTitle,
-  ToastDescription,
   ToastClose,
+  ToastProvider,
+  ToastViewport,
+  ToastDescription,
 };

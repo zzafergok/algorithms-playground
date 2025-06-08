@@ -1,15 +1,16 @@
 'use client';
 
 import * as React from 'react';
+
 import { useTheme } from 'next-themes';
-import { Button } from '../ui/button';
 import { Moon, Sun } from 'lucide-react';
+
+import { Button } from '../ui/button';
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
-  // Hydration için component mount olduğunda göster
   React.useEffect(() => {
     setMounted(true);
   }, []);

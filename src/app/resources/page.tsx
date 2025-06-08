@@ -16,7 +16,6 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
-// Define the resource category interface
 interface ResourceCategory {
   title: string;
   description: string;
@@ -25,7 +24,6 @@ interface ResourceCategory {
 }
 
 export default function ResourcesPage() {
-  // Array of resource categories with their details
   const resourceCategories: ResourceCategory[] = [
     {
       title: 'Belgelendirme',
@@ -53,7 +51,6 @@ export default function ResourcesPage() {
     },
   ];
 
-  // Animation variants for staggered animations
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -79,7 +76,6 @@ export default function ResourcesPage() {
 
   return (
     <div className="container py-12 max-w-4xl mx-auto">
-      {/* Header section with title and description */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold tracking-tight mb-4">Kaynaklar</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -88,7 +84,6 @@ export default function ResourcesPage() {
         </p>
       </div>
 
-      {/* Resource categories displayed as animated cards */}
       <motion.div
         className="grid grid-cols-1 md:grid-cols-2 gap-6"
         variants={containerVariants}
@@ -107,9 +102,7 @@ export default function ResourcesPage() {
                 </div>
                 <CardDescription>{category.description}</CardDescription>
               </CardHeader>
-              <CardContent className="flex-grow">
-                {/* Content will expand with the card */}
-              </CardContent>
+              <CardContent className="flex-grow"></CardContent>
               <CardFooter>
                 <Button asChild className="w-full">
                   <Link href={category.href}>Görüntüle</Link>
@@ -120,7 +113,6 @@ export default function ResourcesPage() {
         ))}
       </motion.div>
 
-      {/* Additional resources section */}
       <div className="mt-16">
         <h2 className="text-2xl font-bold mb-6">Diğer Faydalı Kaynaklar</h2>
 
@@ -187,7 +179,6 @@ export default function ResourcesPage() {
         </div>
       </div>
 
-      {/* Community section */}
       <div className="mt-12 text-center p-8 border rounded-lg bg-card">
         <h2 className="text-2xl font-bold mb-4">Topluluk</h2>
         <p className="text-lg mb-6">

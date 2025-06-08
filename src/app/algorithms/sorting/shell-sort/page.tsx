@@ -1,37 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+
+import { CodeBlock } from '@/components/common/code-block';
 import { AlgorithmExplanation } from '@/components/common/explanation';
 import { InteractiveDemo } from '@/components/common/interactive-demo';
-import { CodeBlock } from '@/components/common/code-block';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-// Shell Sort algoritması implementasyonu
-function shellSort(arr: number[]): number[] {
-  const result = [...arr];
-  const n = result.length;
-
-  // Gap değerini n/2'den başlayarak her iterasyonda yarıya böl
-  for (let gap = Math.floor(n / 2); gap > 0; gap = Math.floor(gap / 2)) {
-    // Gap kadar ayrı olan elemanları insertion sort ile sırala
-    for (let i = gap; i < n; i++) {
-      const temp = result[i];
-      let j = i;
-
-      // Gap aralığında insertion sort uygula
-      while (j >= gap && result[j - gap] > temp) {
-        result[j] = result[j - gap];
-        j -= gap;
-      }
-      result[j] = temp;
-    }
-  }
-
-  return result;
-}
+import { shellSort } from '@/lib/algorithms/sorting';
 
 export default function ShellSortPage() {
-  // Algoritma açıklaması için veriler
   const pseudocode = `function shellSort(arr):
     n = length(arr)
     

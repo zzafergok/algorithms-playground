@@ -1,15 +1,16 @@
 'use client';
 
 import React from 'react';
-import { heapSort } from '@/lib/algorithms/sorting';
+
 import { CodeBlock } from '@/components/common/code-block';
 import { InteractiveDemo } from '@/components/common/interactive-demo';
+import { AlgorithmExplanation } from '@/components/common/explanation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlgorithmExplanation } from '@/components/common/explanation';
+
+import { heapSort } from '@/lib/algorithms/sorting';
 
 export default function HeapSortPage() {
-  // Algorithm implementations in different languages
   const implementations = {
     javascript: `/**
  * Heap Sort implementation for JavaScript arrays
@@ -241,7 +242,6 @@ private static void heapify(int[] arr, int n, int i) {
 }`,
   };
 
-  // Detailed heap sort explanation
   const heapSortDescription = `
 Heap Sort, binary heap veri yapısını kullanan karşılaştırma tabanlı bir sıralama algoritmasıdır. Bu algoritma, veriyi önce max-heap (veya min-heap) yapısına dönüştürür, ardından bu yapıyı kullanarak sıralama işlemini gerçekleştirir.
 
@@ -270,7 +270,6 @@ Heap Sort, merge sort gibi her zaman O(n log n) performansına sahip, ancak quic
 
       <div className="grid">
         <div className="space-y-6">
-          {/* Algorithm Description */}
           <Card>
             <CardHeader>
               <CardTitle>Heap Sort Açıklaması</CardTitle>
@@ -284,7 +283,6 @@ Heap Sort, merge sort gibi her zaman O(n log n) performansına sahip, ancak quic
         </div>
       </div>
 
-      {/* Code Examples Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kod Örnekleri</h2>
         <p className="text-muted-foreground">
@@ -331,7 +329,6 @@ Heap Sort, merge sort gibi her zaman O(n log n) performansına sahip, ancak quic
         </Tabs>
       </div>
 
-      {/* Interactive Demo Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kendi Verilerinizle Test Edin</h2>
         <p className="text-muted-foreground">
@@ -361,7 +358,6 @@ Heap Sort, merge sort gibi her zaman O(n log n) performansına sahip, ancak quic
         />
       </div>
 
-      {/* Algorithmic Analysis Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Algoritma Analizi</h2>
 
@@ -478,7 +474,6 @@ Heap Sort, merge sort gibi her zaman O(n log n) performansına sahip, ancak quic
         </Card>
       </div>
 
-      {/* Heap Sort vs Other Algorithms Comparison */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Heap Sort ve Diğer Algoritmalar</h2>
         <p className="text-muted-foreground">
@@ -550,7 +545,6 @@ Heap Sort, merge sort gibi her zaman O(n log n) performansına sahip, ancak quic
         </p>
       </div>
 
-      {/* Related Algorithms Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">İlgili Algoritmalar</h2>
         <p className="text-muted-foreground">
@@ -597,7 +591,6 @@ Heap Sort, merge sort gibi her zaman O(n log n) performansına sahip, ancak quic
         </div>
       </div>
 
-      {/* Full Algorithm Explanation */}
       <AlgorithmExplanation
         title="Heap Sort"
         description="Binary heap veri yapısını kullanan, karşılaştırma tabanlı bir sıralama algoritması."

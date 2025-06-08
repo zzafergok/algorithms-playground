@@ -6,9 +6,7 @@ import { CodeBlock } from '@/components/common/code-block';
 import { MSTVisualizer } from '@/components/common/mst-visualizer';
 import { AlgorithmExplanation } from '@/components/common/explanation';
 
-// Prim algoritması için ana sayfa komponenti
 export default function PrimAlgorithmPage() {
-  // Prim algoritması için açıklama verileri
   const algorithmData = {
     title: "Prim's Algorithm (Prim Algoritması)",
     description:
@@ -68,7 +66,6 @@ export default function PrimAlgorithmPage() {
     ],
   };
 
-  // Prim algoritması için JavaScript implementasyonu
   const primImplementation = `// Prim's Algorithm JavaScript implementasyonu
 class PrimMST {
   constructor(graph) {
@@ -303,10 +300,8 @@ console.log('Total Weight:', result.totalWeight);`;
 
   return (
     <div className="space-y-8">
-      {/* Algoritma açıklaması ve teorik bilgiler */}
       <AlgorithmExplanation {...algorithmData} />
 
-      {/* İnteraktif MST visualizer */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">
           İnteraktif Prim Algoritması Simülasyonu
@@ -323,7 +318,6 @@ console.log('Total Weight:', result.totalWeight);`;
         />
       </div>
 
-      {/* Kod implementasyonu */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">JavaScript Implementasyonu</h2>
         <p className="text-muted-foreground">
@@ -339,7 +333,6 @@ console.log('Total Weight:', result.totalWeight);`;
         />
       </div>
 
-      {/* Algoritma karşılaştırması */}
       <div className="bg-muted p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4">
           Prim vs Kruskal Algoritması Karşılaştırması
@@ -398,7 +391,6 @@ console.log('Total Weight:', result.totalWeight);`;
         </div>
       </div>
 
-      {/* Zaman karmaşıklığı analizi */}
       <div className="bg-blue-50 dark:bg-blue-950/20 p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4 text-blue-800 dark:text-blue-200">
           Zaman Karmaşıklığı Detay Analizi
@@ -436,7 +428,6 @@ console.log('Total Weight:', result.totalWeight);`;
         </div>
       </div>
 
-      {/* Pratik uygulama örnekleri */}
       <div className="bg-green-50 dark:bg-green-950/20 p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4 text-green-800 dark:text-green-200">
           Gerçek Dünya Uygulamaları
@@ -467,7 +458,6 @@ console.log('Total Weight:', result.totalWeight);`;
         </div>
       </div>
 
-      {/* Optimizasyon teknikleri */}
       <div className="bg-purple-50 dark:bg-purple-950/20 p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4 text-purple-800 dark:text-purple-200">
           Prim Algoritması Optimizasyon Teknikleri

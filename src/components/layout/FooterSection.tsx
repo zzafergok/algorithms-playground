@@ -1,6 +1,9 @@
 import Link from 'next/link';
+
 import { ExternalLink } from 'lucide-react';
+
 import { FooterSection as FooterSectionType } from '@/types/navigation';
+
 import { cn } from '@/lib/utils';
 
 interface FooterSectionProps {

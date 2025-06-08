@@ -1,15 +1,16 @@
 'use client';
 
 import React from 'react';
-import { countingSort } from '@/lib/algorithms/sorting';
+
 import { CodeBlock } from '@/components/common/code-block';
 import { InteractiveDemo } from '@/components/common/interactive-demo';
+import { AlgorithmExplanation } from '@/components/common/explanation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlgorithmExplanation } from '@/components/common/explanation';
+
+import { countingSort } from '@/lib/algorithms/sorting';
 
 export default function CountingSortPage() {
-  // Algorithm implementations in different languages
   const implementations = {
     javascript: `/**
  * Counting Sort implementation for JavaScript arrays
@@ -190,7 +191,6 @@ public static int[] countingSort(int[] arr) {
 }`,
   };
 
-  // Detailed counting sort explanation
   const countingSortDescription = `
 Counting Sort, karşılaştırma yapmadan sıralama yapan, belirli koşullar altında lineer zaman karmaşıklığı (O(n)) sunan bir sıralama algoritmasıdır. Giriş dizisindeki her elemanın kaç kez tekrarlandığını sayarak çalışır ve bu sayıları kullanarak sıralı bir dizi oluşturur.
 
@@ -221,7 +221,6 @@ Counting Sort, özellikle k değeri n ile karşılaştırılabilir olduğunda (k
 
       <div className="grid">
         <div className="space-y-6">
-          {/* Algorithm Description */}
           <Card>
             <CardHeader>
               <CardTitle>Counting Sort Açıklaması</CardTitle>
@@ -235,7 +234,6 @@ Counting Sort, özellikle k değeri n ile karşılaştırılabilir olduğunda (k
         </div>
       </div>
 
-      {/* Code Examples Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kod Örnekleri</h2>
         <p className="text-muted-foreground">
@@ -282,7 +280,6 @@ Counting Sort, özellikle k değeri n ile karşılaştırılabilir olduğunda (k
         </Tabs>
       </div>
 
-      {/* Interactive Demo Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kendi Verilerinizle Test Edin</h2>
         <p className="text-muted-foreground">
@@ -314,7 +311,6 @@ Counting Sort, özellikle k değeri n ile karşılaştırılabilir olduğunda (k
         />
       </div>
 
-      {/* Algorithmic Analysis Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Algoritma Analizi</h2>
 
@@ -433,7 +429,6 @@ Counting Sort, özellikle k değeri n ile karşılaştırılabilir olduğunda (k
         </Card>
       </div>
 
-      {/* Counting Sort vs Other Algorithms Comparison */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">
           Counting Sort ve Karşılaştırmalı Algoritmalar
@@ -519,7 +514,6 @@ Counting Sort, özellikle k değeri n ile karşılaştırılabilir olduğunda (k
         </p>
       </div>
 
-      {/* Related Algorithms Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">İlgili Algoritmalar</h2>
         <p className="text-muted-foreground">
@@ -567,7 +561,6 @@ Counting Sort, özellikle k değeri n ile karşılaştırılabilir olduğunda (k
         </div>
       </div>
 
-      {/* Full Algorithm Explanation */}
       <AlgorithmExplanation
         title="Counting Sort"
         description="Karşılaştırma yapmadan sıralama yapan, sınırlı değer aralığında lineer zamanda çalışan bir algoritma."

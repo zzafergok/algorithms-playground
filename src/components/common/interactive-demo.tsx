@@ -1,15 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+
 import {
   Card,
-  CardContent,
+  CardTitle,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardContent,
 } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+
 import { measureAlgorithmTime } from '@/lib/utils';
 
 interface InteractiveDemoProps {
@@ -51,15 +53,12 @@ export function InteractiveDemo({
 
     if (inputType === 'array') {
       try {
-        // Girdi bir dizi olarak girildiyse [...] şeklinde
         if (input.trim().startsWith('[') && input.trim().endsWith(']')) {
           return JSON.parse(input);
         }
 
-        // Girdi virgülle ayrılmış değerler olarak girildiyse
         return input.split(',').map((item) => {
           const trimmed = item.trim();
-          // Sayı mı yoksa metin mi olduğunu kontrol et
           if (!isNaN(parseFloat(trimmed)) && trimmed !== '') {
             return parseFloat(trimmed);
           }
@@ -80,7 +79,6 @@ export function InteractiveDemo({
     try {
       const parsedInput = parseInput(input);
 
-      // Algoritma fonksiyonunu çalıştır ve süreyi ölç
       const { result, time } = measureAlgorithmTime(
         algorithmFunction,
         parsedInput

@@ -1,14 +1,15 @@
 'use client';
 
 import React from 'react';
-import { bubbleSort } from '@/lib/algorithms/sorting';
+
 import { CodeBlock } from '@/components/common/code-block';
 import { InteractiveDemo } from '@/components/common/interactive-demo';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
+import { bubbleSort } from '@/lib/algorithms/sorting';
+
 export default function BubbleSortPage() {
-  // Algorithm implementations in different languages
   const implementations = {
     javascript: `/**
  * Bubble Sort implementation for JavaScript arrays
@@ -137,7 +138,6 @@ public static int[] bubbleSort(int[] arr) {
 }`,
   };
 
-  // Detailed bubble sort explanation
   const bubbleSortDescription = `
 Bubble Sort, en basit sıralama algoritmalarından biridir. Her geçişte, komşu elemanları karşılaştırarak, büyük elemanların dizinin sonuna doğru kabarcık gibi yükselmesini sağlar.
 
@@ -166,7 +166,6 @@ Bubble Sort, eğitim amaçlı ve küçük veri setleri için uygundur, ancak bü
 
       <div className="grid">
         <div className="space-y-6">
-          {/* Algorithm Description */}
           <Card>
             <CardHeader>
               <CardTitle>Bubble Sort Açıklaması</CardTitle>
@@ -180,7 +179,6 @@ Bubble Sort, eğitim amaçlı ve küçük veri setleri için uygundur, ancak bü
         </div>
       </div>
 
-      {/* Code Examples Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kod Örnekleri</h2>
         <p className="text-muted-foreground">
@@ -227,7 +225,6 @@ Bubble Sort, eğitim amaçlı ve küçük veri setleri için uygundur, ancak bü
         </Tabs>
       </div>
 
-      {/* Interactive Demo Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kendi Verilerinizle Test Edin</h2>
         <p className="text-muted-foreground">
@@ -258,7 +255,6 @@ Bubble Sort, eğitim amaçlı ve küçük veri setleri için uygundur, ancak bü
         />
       </div>
 
-      {/* Algorithmic Analysis Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Algoritma Analizi</h2>
 
@@ -377,7 +373,6 @@ Bubble Sort, eğitim amaçlı ve küçük veri setleri için uygundur, ancak bü
         </Card>
       </div>
 
-      {/* Related Algorithms Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">İlgili Algoritmalar</h2>
         <p className="text-muted-foreground">

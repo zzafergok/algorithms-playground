@@ -28,7 +28,6 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
-// Define documentation section interface
 interface DocSection {
   id: string;
   title: string;
@@ -39,12 +38,9 @@ interface DocSection {
 }
 
 export default function DocumentationPage() {
-  // State for search functionality
   const [searchQuery, setSearchQuery] = useState('');
-  // State to track expanded sections
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
 
-  // Documentation sections with detailed content
   const docSections: DocSection[] = [
     {
       id: 'getting-started',
@@ -376,14 +372,12 @@ export default function DocumentationPage() {
     },
   ];
 
-  // Toggle section expansion
   const toggleSection = (id: string) => {
     setExpandedSections((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
-  // Filter sections based on search query
   const filteredSections = docSections.filter((section) => {
     const query = searchQuery.toLowerCase();
     return (
@@ -395,7 +389,6 @@ export default function DocumentationPage() {
 
   return (
     <div className="container py-12 max-w-4xl mx-auto">
-      {/* Header section */}
       <div className="mb-12">
         <h1 className="text-4xl font-bold tracking-tight mb-4">
           Belgelendirme
@@ -405,7 +398,6 @@ export default function DocumentationPage() {
           belgelendirme
         </p>
 
-        {/* Search box */}
         <div className="relative mt-6">
           <Search
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
@@ -420,7 +412,6 @@ export default function DocumentationPage() {
         </div>
       </div>
 
-      {/* Quick links */}
       <div className="mb-8">
         <h2 className="text-lg font-semibold mb-3">Hızlı Bağlantılar:</h2>
         <div className="flex flex-wrap gap-2">
@@ -432,7 +423,6 @@ export default function DocumentationPage() {
         </div>
       </div>
 
-      {/* Documentation sections */}
       <div className="space-y-6">
         {filteredSections.map((section) => (
           <Card key={section.id} id={section.id} className="scroll-mt-20">
@@ -456,7 +446,6 @@ export default function DocumentationPage() {
                   }`}
                 />
               </div>
-              {/* Tags */}
               <div className="flex flex-wrap gap-1 pt-2">
                 {section.tags.map((tag) => (
                   <Badge key={tag} variant="secondary" className="text-xs">
@@ -466,7 +455,6 @@ export default function DocumentationPage() {
               </div>
             </CardHeader>
 
-            {/* Collapsible content */}
             {expandedSections.includes(section.id) && (
               <CardContent className="pt-0">{section.content}</CardContent>
             )}
@@ -474,7 +462,6 @@ export default function DocumentationPage() {
         ))}
       </div>
 
-      {/* No results message */}
       {filteredSections.length === 0 && (
         <div className="text-center py-12">
           <h3 className="text-lg font-medium mb-2">Arama sonucu bulunamadı</h3>
@@ -491,7 +478,6 @@ export default function DocumentationPage() {
         </div>
       )}
 
-      {/* Help section */}
       <div className="mt-16 p-6 bg-muted rounded-lg">
         <h2 className="text-xl font-bold mb-4">
           Daha Fazla Yardım mı Gerekiyor?
@@ -516,7 +502,6 @@ export default function DocumentationPage() {
         </ul>
       </div>
 
-      {/* Contact section */}
       <div className="mt-8 text-center">
         <h3 className="text-lg font-medium mb-2">Hala cevap bulamadınız mı?</h3>
         <p className="text-muted-foreground mb-4">

@@ -1,15 +1,16 @@
 'use client';
 
 import React from 'react';
-import { insertionSort } from '@/lib/algorithms/sorting';
+
 import { CodeBlock } from '@/components/common/code-block';
 import { InteractiveDemo } from '@/components/common/interactive-demo';
+import { AlgorithmExplanation } from '@/components/common/explanation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlgorithmExplanation } from '@/components/common/explanation';
+
+import { insertionSort } from '@/lib/algorithms/sorting';
 
 export default function InsertionSortPage() {
-  // Algorithm implementations in different languages
   const implementations = {
     javascript: `/**
  * Insertion Sort implementation for JavaScript arrays
@@ -131,7 +132,6 @@ public static int[] insertionSort(int[] arr) {
 }`,
   };
 
-  // Detailed insertion sort explanation
   const insertionSortDescription = `
 Insertion Sort, sıralanmış kısıma elemanları tek tek yerleştiren basit ve sezgisel bir sıralama algoritmasıdır. Bu algoritma, kart oyununda elimizdeki kartları sıralarken kullandığımız stratejiye benzer bir yaklaşım kullanır.
 
@@ -162,7 +162,6 @@ Insertion Sort, küçük veri setleri veya neredeyse sıralı diziler için oldu
 
       <div className="grid">
         <div className="space-y-6">
-          {/* Algorithm Description */}
           <Card>
             <CardHeader>
               <CardTitle>Insertion Sort Açıklaması</CardTitle>
@@ -178,7 +177,6 @@ Insertion Sort, küçük veri setleri veya neredeyse sıralı diziler için oldu
         </div>
       </div>
 
-      {/* Code Examples Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kod Örnekleri</h2>
         <p className="text-muted-foreground">
@@ -225,7 +223,6 @@ Insertion Sort, küçük veri setleri veya neredeyse sıralı diziler için oldu
         </Tabs>
       </div>
 
-      {/* Interactive Demo Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kendi Verilerinizle Test Edin</h2>
         <p className="text-muted-foreground">
@@ -255,7 +252,6 @@ Insertion Sort, küçük veri setleri veya neredeyse sıralı diziler için oldu
         />
       </div>
 
-      {/* Algorithmic Analysis Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Algoritma Analizi</h2>
 
@@ -372,7 +368,6 @@ Insertion Sort, küçük veri setleri veya neredeyse sıralı diziler için oldu
         </Card>
       </div>
 
-      {/* Insertion Sort Visualization Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Insertion Sort Nasıl Çalışır?</h2>
         <p className="text-muted-foreground">
@@ -484,7 +479,6 @@ Insertion Sort, küçük veri setleri veya neredeyse sıralı diziler için oldu
         </Card>
       </div>
 
-      {/* Insertion Sort vs Other Algorithms Comparison */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">
           Insertion Sort ve Diğer Algoritmalar
@@ -567,7 +561,6 @@ Insertion Sort, küçük veri setleri veya neredeyse sıralı diziler için oldu
         </p>
       </div>
 
-      {/* Related Algorithms Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">İlgili Algoritmalar</h2>
         <p className="text-muted-foreground">
@@ -615,7 +608,6 @@ Insertion Sort, küçük veri setleri veya neredeyse sıralı diziler için oldu
         </div>
       </div>
 
-      {/* Full Algorithm Explanation */}
       <AlgorithmExplanation
         title="Insertion Sort"
         description="Sıralanmış bir alt listeye elemanları birer birer ekleyerek sıralama yapan bir algoritma."

@@ -1,64 +1,52 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { AlgorithmExplanation } from '@/components/common/explanation';
+
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import { CodeBlock } from '@/components/common/code-block';
+import { AlgorithmExplanation } from '@/components/common/explanation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 
-// Graf veri yapısını temsil eden type
 type Graph = {
   [key: string]: string[];
 };
 
-// Topolojik sıralama algoritması - DFS yaklaşımı
 function topologicalSort(graph: Graph): {
   result: string[];
   hasCycle: boolean;
 } {
-  // Düğümlerin ziyaret durumunu izlemek için
   const visited: { [key: string]: boolean } = {};
   const tempVisited: { [key: string]: boolean } = {}; // Geçici ziyaret (çevrim tespiti için)
   const result: string[] = [];
   let hasCycle = false;
 
-  // Tüm düğümleri kontrol et
   const nodes = Object.keys(graph);
 
-  // DFS yardımcı fonksiyonu
   function dfs(node: string) {
-    // Çevrim kontrolü - eğer düğüm geçici olarak ziyaret edildiyse, çevrim var demektir
     if (tempVisited[node]) {
       hasCycle = true;
       return;
     }
 
-    // Eğer düğüm zaten ziyaret edildiyse, tekrar ziyaret etmeye gerek yok
     if (visited[node]) {
       return;
     }
 
-    // Düğümü geçici olarak ziyaret edildi olarak işaretle
     tempVisited[node] = true;
 
-    // Komşu düğümleri kontrol et
     const neighbors = graph[node] || [];
     for (const neighbor of neighbors) {
       dfs(neighbor);
     }
 
-    // Düğüm işlendi, artık kalıcı olarak ziyaret edildi
     visited[node] = true;
-    // Geçici ziyaret işaretini kaldır
     tempVisited[node] = false;
 
-    // Sonuç listesine ekle (başa ekleyerek sıralama tersine çevrilir)
     result.unshift(node);
   }
 
-  // Tüm düğümler için DFS
   for (const node of nodes) {
     if (!visited[node]) {
       dfs(node);
@@ -68,13 +56,11 @@ function topologicalSort(graph: Graph): {
   return { result, hasCycle };
 }
 
-// Graf görselleştirme bileşeni
 const GraphVisualization: React.FC<{
   graph: Graph;
   sortedNodes: string[];
   hasCycle: boolean;
 }> = ({ graph, sortedNodes, hasCycle }) => {
-  // Graf düğümlerini seçili sıralamaya göre düzenle
   const orderedNodes = [...sortedNodes];
 
   return (
@@ -137,7 +123,6 @@ const GraphVisualization: React.FC<{
 };
 
 export default function TopologicalSortPage() {
-  // Örnek graf durumu
   const [graph, setGraph] = useState<Graph>({
     A: ['C', 'D'],
     B: ['D'],
@@ -146,7 +131,6 @@ export default function TopologicalSortPage() {
     E: [],
   });
 
-  // Kullanıcı girdisi için durum
   const [graphInput, setGraphInput] = useState<string>(
     'A:C,D\nB:D\nC:E\nD:E\nE:'
   );
@@ -158,7 +142,6 @@ export default function TopologicalSortPage() {
     hasCycle: false,
   });
 
-  // Algoritma açıklaması için veriler
   const pseudocode = `function topologicalSort(graph):
     visited = {}  # Kalıcı ziyaret edilen düğümler
     tempVisited = {}  # Geçici ziyaret edilen düğümler (çevrim tespiti için)
@@ -362,32 +345,25 @@ public class TopologicalSort {
 }`,
   };
 
-  // Uygulama başladığında örnek grafa göre sıralama yap
   useEffect(() => {
     handleRunAlgorithm();
   }, []);
 
-  // Input değişikliklerini işle
   const handleGraphInputChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     setGraphInput(e.target.value);
   };
 
-  // Algoritma çalıştırma işlevi
   const handleRunAlgorithm = () => {
     try {
-      // Girdiyi graf veri yapısına dönüştür
       const parsedGraph: Graph = {};
 
-      // Satır satır işle
       const lines = graphInput.trim().split('\n');
 
       for (const line of lines) {
-        // Boş satırları atla
         if (!line.trim()) continue;
 
-        // Düğüm ve komşularını ayır (A:B,C,D formatı)
         const [node, neighborsStr] = line.split(':');
 
         if (!node) {
@@ -396,11 +372,9 @@ public class TopologicalSort {
           );
         }
 
-        // Düğümü oluştur
         const trimmedNode = node.trim();
         parsedGraph[trimmedNode] = [];
 
-        // Komşuları ekle (varsa)
         if (neighborsStr && neighborsStr.trim()) {
           const neighbors = neighborsStr
             .split(',')
@@ -410,12 +384,10 @@ public class TopologicalSort {
         }
       }
 
-      // Graf boş mu kontrol et
       if (Object.keys(parsedGraph).length === 0) {
         throw new Error('Graf boş olamaz. En az bir düğüm belirtin.');
       }
 
-      // Grafdaki tüm komşuların düğüm olarak tanımlandığından emin ol
       for (const [node, neighbors] of Object.entries(parsedGraph)) {
         for (const neighbor of neighbors) {
           if (!parsedGraph[neighbor]) {
@@ -425,7 +397,6 @@ public class TopologicalSort {
         }
       }
 
-      // Topolojik sıralama algoritmasını çalıştır
       setGraph(parsedGraph);
       const result = topologicalSort(parsedGraph);
       setSortResult(result);

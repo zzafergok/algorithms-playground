@@ -1,16 +1,10 @@
-// Bubble sort algoritma implementasyonu
 export function bubbleSort(arr: number[]): number[] {
-  // Dizinin bir kopyasını oluştur
   const result = [...arr];
   const n = result.length;
 
-  // Dış döngü - her geçişte en az bir eleman sıralanır
   for (let i = 0; i < n - 1; i++) {
-    // İç döngü - her geçişte elemanları karşılaştır
     for (let j = 0; j < n - i - 1; j++) {
-      // Mevcut eleman bir sonrakinden büyükse, yerlerini değiştir
       if (result[j] > result[j + 1]) {
-        // Destructuring assignment ile yer değiştirme
         [result[j], result[j + 1]] = [result[j + 1], result[j]];
       }
     }
@@ -19,7 +13,6 @@ export function bubbleSort(arr: number[]): number[] {
   return result;
 }
 
-// Selection sort algoritması - her iterasyonda minimum elemanı bulup yerleştirir
 export function selectionSort<T extends number>(arr: T[]): T[] {
   const n = arr.length;
   for (let i = 0; i < n - 1; i++) {
@@ -29,7 +22,6 @@ export function selectionSort<T extends number>(arr: T[]): T[] {
         minIndex = j;
       }
     }
-    // Swap the found minimum element with the first element
     if (minIndex !== i) {
       [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
     }
@@ -37,36 +29,26 @@ export function selectionSort<T extends number>(arr: T[]): T[] {
   return arr;
 }
 
-// Optimized merge sort with early termination and reduced memory allocation
 export function mergeSort<T extends number>(arr: T[]): T[] {
-  // Base case: Arrays with 0 or 1 element are already sorted
   if (arr.length <= 1) return arr;
 
-  // Prevent unnecessary array copies by working on the original array
   const mergeSortInPlace = (start: number, end: number): void => {
-    // Early termination for small subarrays
     if (end - start <= 1) return;
 
-    // Calculate midpoint efficiently
     const mid = start + Math.floor((end - start) / 2);
 
-    // Recursively sort left and right subarrays
     mergeSortInPlace(start, mid);
     mergeSortInPlace(mid, end);
 
-    // Merge sorted subarrays
     merge(start, mid, end);
   };
 
-  // In-place merge implementation to reduce memory overhead
   const merge = (start: number, mid: number, end: number): void => {
-    // Temporary array for merging
     const temp: T[] = [];
 
     let left = start,
       right = mid;
 
-    // Merge elements in sorted order
     while (left < mid && right < end) {
       if (arr[left] <= arr[right]) {
         temp.push(arr[left++]);
@@ -75,30 +57,23 @@ export function mergeSort<T extends number>(arr: T[]): T[] {
       }
     }
 
-    // Add remaining elements
     temp.push(...arr.slice(left, mid), ...arr.slice(right, end));
 
-    // Copy back to original array
     arr.splice(start, temp.length, ...temp);
   };
 
-  // Initiate sorting on entire array
   mergeSortInPlace(0, arr.length);
 
   return arr;
 }
 
-// Quick Sort implementasyonu - pivot tabanlı böl ve fethet algoritması
 export function quickSort<T extends number>(arr: T[]): T[] {
-  // Dizi 1 veya daha az eleman içeriyorsa zaten sıralıdır
   if (arr.length <= 1) return arr;
 
-  // Son elemanı pivot olarak seç
   const pivot = arr[arr.length - 1];
   const left: T[] = [];
   const right: T[] = [];
 
-  // Pivottan küçük ve büyük elemanları ayır
   for (let i = 0; i < arr.length - 1; i++) {
     if (arr[i] < pivot) {
       left.push(arr[i]);
@@ -107,96 +82,72 @@ export function quickSort<T extends number>(arr: T[]): T[] {
     }
   }
 
-  // Alt dizileri özyinelemeli olarak sırala ve birleştir
   return [...quickSort(left), pivot, ...quickSort(right)];
 }
 
-// Radix Sort - sadece pozitif tam sayılar için çalışır
 export function radixSort(arr: number[]): number[] {
-  // Create a copy of the array to avoid modifying the original
   const result = [...arr];
 
-  // Edge case: empty array
   if (result.length === 0) return result;
 
-  // Find the maximum element to determine the number of digits
   const max = Math.max(...result);
 
-  // Do counting sort for every digit position
-  // Start from least significant digit (LSD) to most significant digit (MSD)
   for (let exp = 1; Math.floor(max / exp) > 0; exp *= 10) {
-    // Call counting sort for the current digit
     countingSortByDigit(result, exp);
   }
 
   return result;
 }
 
-// Counting sort implementation that sorts based on a specific digit position
 export function countingSortByDigit(arr: number[], exp: number): void {
   const n = arr.length;
   const output = new Array(n).fill(0);
   const count = new Array(10).fill(0); // Digits are 0-9
 
-  // Count occurrences of each digit at the current position
   for (let i = 0; i < n; i++) {
     const digit = Math.floor(arr[i] / exp) % 10;
     count[digit]++;
   }
 
-  // Change count[i] so that it contains the position of this digit in output[]
   for (let i = 1; i < 10; i++) {
     count[i] += count[i - 1];
   }
 
-  // Build the output array in a stable way (traversing from end to start)
   for (let i = n - 1; i >= 0; i--) {
     const digit = Math.floor(arr[i] / exp) % 10;
     output[count[digit] - 1] = arr[i];
     count[digit]--;
   }
 
-  // Copy the output array to arr
   for (let i = 0; i < n; i++) {
     arr[i] = output[i];
   }
 }
 
-// Counting Sort implementation for demo purposes
-// Only works with non-negative integers
 export function countingSort(arr: number[]): number[] {
-  // Create a copy of the array to avoid modifying the original
   const result = [...arr];
 
-  // Edge case: empty array
   if (result.length === 0) return result;
 
-  // Find the maximum element to determine the count array size
   const max = Math.max(...result);
 
-  // Create counting array (index 0 to max)
   const count = new Array(max + 1).fill(0);
 
-  // Count frequency of each element
   for (let i = 0; i < result.length; i++) {
     count[result[i]]++;
   }
 
-  // Update counting array with cumulative count
   for (let i = 1; i < count.length; i++) {
     count[i] += count[i - 1];
   }
 
-  // Create the output array
   const output = new Array(result.length);
 
-  // Build the output array in a stable way (traversing from end to start)
   for (let i = result.length - 1; i >= 0; i--) {
     output[count[result[i]] - 1] = result[i];
     count[result[i]]--;
   }
 
-  // Copy the output array to result
   for (let i = 0; i < result.length; i++) {
     result[i] = output[i];
   }
@@ -204,9 +155,7 @@ export function countingSort(arr: number[]): number[] {
   return result;
 }
 
-// Heap Sort implementasyonu - binary heap veri yapısını kullanır
 export function heapSort<T extends number>(arr: T[]): T[] {
-  // Create a copy of the array to avoid modifying the original
   const result = [...arr];
   const n = result.length;
 
@@ -215,19 +164,15 @@ export function heapSort<T extends number>(arr: T[]): T[] {
     heapify(result, n, i);
   }
 
-  // Extract elements from the heap one by one
   for (let i = n - 1; i > 0; i--) {
-    // Move current root to the end
     [result[0], result[i]] = [result[i], result[0]];
 
-    // Call heapify on the reduced heap
     heapify(result, i, 0);
   }
 
   return result;
 }
 
-// Function to heapify a subtree rooted at index i
 export function heapify<T extends number>(
   arr: T[],
   n: number,
@@ -237,55 +182,42 @@ export function heapify<T extends number>(
   const left = 2 * i + 1; // Left child
   const right = 2 * i + 2; // Right child
 
-  // If left child is larger than root
   if (left < n && arr[left] > arr[largest]) {
     largest = left;
   }
 
-  // If right child is larger than the largest so far
   if (right < n && arr[right] > arr[largest]) {
     largest = right;
   }
 
-  // If largest is not the root
   if (largest !== i) {
-    // Swap and continue heapifying
     [arr[i], arr[largest]] = [arr[largest], arr[i]];
     heapify(arr, n, largest);
   }
 }
 
-// Insertion sort algoritması - küçük diziler için oldukça etkili
 export function insertionSort<T extends number>(arr: T[]): T[] {
-  // Create a copy of the array to avoid modifying the original
   const result = [...arr];
   const n = result.length;
 
-  // Start from the second element (index 1)
   for (let i = 1; i < n; i++) {
-    // Store the current element to be inserted
     const current = result[i];
 
-    // Find the position to insert the current element in the sorted subarray
     let j = i - 1;
     while (j >= 0 && result[j] > current) {
-      // Shift elements to the right
       result[j + 1] = result[j];
       j--;
     }
 
-    // Insert the current element at the correct position
     result[j + 1] = current;
   }
 
   return result;
 }
 
-// Priority queue implementasyonu - A* algoritması için gerekli
 export class PriorityQueue<T> {
   private items: Array<{ element: T; priority: number }> = [];
 
-  // Yeni eleman ekle - öncelik sırasına göre yerleştir
   enqueue(element: T, priority: number): void {
     const queueElement = { element, priority };
     let added = false;
@@ -303,48 +235,39 @@ export class PriorityQueue<T> {
     }
   }
 
-  // En yüksek öncelikli elemanı çıkar
   dequeue(): T | undefined {
     if (this.isEmpty()) return undefined;
     return this.items.shift()?.element;
   }
 
-  // Kuyruk boş mu kontrol et
   isEmpty(): boolean {
     return this.items.length === 0;
   }
 
-  // Kuyruk boyutunu döndür
   size(): number {
     return this.items.length;
   }
 
-  // Kuyruktaki tüm elemanları kontrol etmek için
   contains(element: T): boolean {
     return this.items.some((item) => item.element === element);
   }
 }
 
-// Binary heap implementasyonu - daha etkili priority queue için
 export class BinaryHeap<T> {
   private heap: Array<{ element: T; priority: number }> = [];
 
-  // Parent node indeksini hesapla
   private getParentIndex(index: number): number {
     return Math.floor((index - 1) / 2);
   }
 
-  // Left child indeksini hesapla
   private getLeftChildIndex(index: number): number {
     return 2 * index + 1;
   }
 
-  // Right child indeksini hesapla
   private getRightChildIndex(index: number): number {
     return 2 * index + 2;
   }
 
-  // İki elemanın yerini değiştir
   private swap(index1: number, index2: number): void {
     [this.heap[index1], this.heap[index2]] = [
       this.heap[index2],
@@ -352,7 +275,6 @@ export class BinaryHeap<T> {
     ];
   }
 
-  // Yukarı doğru heap property'yi koru
   private heapifyUp(index: number): void {
     while (index > 0) {
       const parentIndex = this.getParentIndex(index);
@@ -364,7 +286,6 @@ export class BinaryHeap<T> {
     }
   }
 
-  // Aşağı doğru heap property'yi koru
   private heapifyDown(index: number): void {
     while (this.getLeftChildIndex(index) < this.heap.length) {
       const leftChildIndex = this.getLeftChildIndex(index);
@@ -387,13 +308,11 @@ export class BinaryHeap<T> {
     }
   }
 
-  // Yeni eleman ekle
   insert(element: T, priority: number): void {
     this.heap.push({ element, priority });
     this.heapifyUp(this.heap.length - 1);
   }
 
-  // Minimum elemanı çıkar
   extractMin(): T | undefined {
     if (this.heap.length === 0) return undefined;
     if (this.heap.length === 1) return this.heap.pop()?.element;
@@ -404,13 +323,172 @@ export class BinaryHeap<T> {
     return min;
   }
 
-  // Heap boş mu
   isEmpty(): boolean {
     return this.heap.length === 0;
   }
 
-  // Heap boyutu
   size(): number {
     return this.heap.length;
   }
+}
+
+export function timSort(arr: number[]): number[] {
+  const result = [...arr];
+  const n = result.length;
+  const MIN_MERGE = 32;
+
+  const getMinRunLength = (n: number): number => {
+    let r = 0;
+    while (n >= MIN_MERGE) {
+      r |= n & 1;
+      n >>= 1;
+    }
+    return n + r;
+  };
+
+  const insertionSort = (arr: number[], left: number, right: number): void => {
+    for (let i = left + 1; i <= right; i++) {
+      const keyItem = arr[i];
+      let j = i - 1;
+      while (j >= left && arr[j] > keyItem) {
+        arr[j + 1] = arr[j];
+        j--;
+      }
+      arr[j + 1] = keyItem;
+    }
+  };
+
+  const merge = (
+    arr: number[],
+    left: number,
+    mid: number,
+    right: number
+  ): void => {
+    const leftArr = arr.slice(left, mid + 1);
+    const rightArr = arr.slice(mid + 1, right + 1);
+
+    let i = 0,
+      j = 0,
+      k = left;
+
+    while (i < leftArr.length && j < rightArr.length) {
+      if (leftArr[i] <= rightArr[j]) {
+        arr[k] = leftArr[i];
+        i++;
+      } else {
+        arr[k] = rightArr[j];
+        j++;
+      }
+      k++;
+    }
+
+    while (i < leftArr.length) {
+      arr[k] = leftArr[i];
+      i++;
+      k++;
+    }
+
+    while (j < rightArr.length) {
+      arr[k] = rightArr[j];
+      j++;
+      k++;
+    }
+  };
+
+  const findRuns = (
+    arr: number[]
+  ): { start: number; end: number; descending: boolean }[] => {
+    const runs: { start: number; end: number; descending: boolean }[] = [];
+    let i = 0;
+
+    while (i < n - 1) {
+      let runStart = i;
+      let runEnd = i;
+      let descending = false;
+
+      if (arr[i] > arr[i + 1]) {
+        descending = true;
+        while (runEnd < n - 1 && arr[runEnd] > arr[runEnd + 1]) {
+          runEnd++;
+        }
+      } else {
+        while (runEnd < n - 1 && arr[runEnd] <= arr[runEnd + 1]) {
+          runEnd++;
+        }
+      }
+
+      runs.push({ start: runStart, end: runEnd, descending });
+      i = runEnd + 1;
+    }
+
+    if (i === n - 1) {
+      runs.push({ start: i, end: i, descending: false });
+    }
+
+    return runs;
+  };
+
+  const minRun = getMinRunLength(n);
+
+  if (n < 64) {
+    insertionSort(result, 0, n - 1);
+    return result;
+  }
+
+  let runs = findRuns(result);
+
+  for (let i = 0; i < runs.length; i++) {
+    let { start, end, descending } = runs[i];
+
+    if (descending) {
+      let left = start,
+        right = end;
+      while (left < right) {
+        [result[left], result[right]] = [result[right], result[left]];
+        left++;
+        right--;
+      }
+    }
+
+    if (end - start + 1 < minRun) {
+      const newEnd = Math.min(start + minRun - 1, n - 1);
+      insertionSort(result, start, newEnd);
+      runs[i].end = newEnd;
+    }
+  }
+
+  let currentSize = minRun;
+  while (currentSize < n) {
+    for (let start = 0; start < n; start += 2 * currentSize) {
+      const mid = Math.min(start + currentSize - 1, n - 1);
+      const end = Math.min(start + 2 * currentSize - 1, n - 1);
+
+      if (mid < end) {
+        merge(result, start, mid, end);
+      }
+    }
+    currentSize *= 2;
+  }
+
+  return result;
+}
+
+export function shellSort(arr: number[]): number[] {
+  const result = [...arr];
+  const n = result.length;
+
+  for (let gap = Math.floor(n / 2); gap > 0; gap = Math.floor(gap / 2)) {
+    for (let i = gap; i < n; i++) {
+      const temp = result[i];
+      let j = i;
+
+      while (j >= gap && result[j - gap] > temp) {
+        result[j] = result[j - gap];
+        j -= gap;
+      }
+      result[j] = temp;
+    }
+  }
+
+  return result;
 }

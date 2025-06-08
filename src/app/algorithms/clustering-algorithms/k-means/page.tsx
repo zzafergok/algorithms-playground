@@ -1,23 +1,22 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { AlgorithmExplanation } from '@/components/common/explanation';
+
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Slider } from '@/components/ui/slider';
+import { Button } from '@/components/ui/button';
 import { CodeBlock } from '@/components/common/code-block';
+import { AlgorithmExplanation } from '@/components/common/explanation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
-import { Badge } from '@/components/ui/badge';
 
-// 2D noktayı temsil eden tip
 interface Point {
   x: number;
   y: number;
   cluster: number;
 }
 
-// K-means algoritması implementasyonu
 function kMeansAlgorithm(
   points: Point[],
   k: number,
@@ -29,11 +28,9 @@ function kMeansAlgorithm(
 
   const steps: any[] = [];
 
-  // Rastgele merkez noktaları seç
   const centroids: Point[] = [];
   const usedIndices = new Set<number>();
 
-  // Rastgele, tekrarlanmayan indekslerde merkezler seç
   while (centroids.length < k) {
     const randomIndex = Math.floor(Math.random() * points.length);
     if (!usedIndices.has(randomIndex)) {
@@ -46,42 +43,32 @@ function kMeansAlgorithm(
     }
   }
 
-  // Algoritma adımlarını kaydet
   steps.push({
     points: JSON.parse(JSON.stringify(points)),
     centroids: JSON.parse(JSON.stringify(centroids)),
     step: 'initialization',
   });
 
-  // Noktaların en yakın merkezlere atanması
   let iterations = 0;
   let isConverged = false;
 
   while (!isConverged && iterations < maxIterations) {
-    // Noktaları en yakın merkezlere ata
     assignPointsToClusters(points, centroids);
 
-    // Adımı kaydet
     steps.push({
       points: JSON.parse(JSON.stringify(points)),
       centroids: JSON.parse(JSON.stringify(centroids)),
       step: 'assignment',
     });
 
-    // Önceki merkezleri sakla
-    const oldCentroids = JSON.parse(JSON.stringify(centroids));
-
-    // Merkez noktalarını güncelle
     const hasUpdated = updateCentroids(points, centroids, k);
 
-    // Adımı kaydet
     steps.push({
       points: JSON.parse(JSON.stringify(points)),
       centroids: JSON.parse(JSON.stringify(centroids)),
       step: 'update',
     });
 
-    // Merkez noktalar değişmediyse yakınsama sağlanmıştır
     isConverged = !hasUpdated;
     iterations++;
   }
@@ -89,13 +76,11 @@ function kMeansAlgorithm(
   return { points, centroids, iterations, steps };
 }
 
-// Noktaları en yakın merkezlerine ata
 function assignPointsToClusters(points: Point[], centroids: Point[]): void {
   for (const point of points) {
     let minDistance = Infinity;
     let closestCluster = 0;
 
-    // Her nokta için en yakın merkezi bul
     for (let i = 0; i < centroids.length; i++) {
       const distance = euclideanDistance(point, centroids[i]);
       if (distance < minDistance) {
@@ -104,12 +89,10 @@ function assignPointsToClusters(points: Point[], centroids: Point[]): void {
       }
     }
 
-    // Noktayı en yakın kümeye ata
     point.cluster = closestCluster;
   }
 }
 
-// Merkez noktalarını güncelle
 function updateCentroids(
   points: Point[],
   centroids: Point[],
@@ -117,20 +100,16 @@ function updateCentroids(
 ): boolean {
   let hasUpdated = false;
 
-  // Her küme için yeni merkez hesapla
   for (let i = 0; i < k; i++) {
     const clusterPoints = points.filter((p) => p.cluster === i);
 
-    // Küme boşsa güncelleme yapma
     if (clusterPoints.length === 0) continue;
 
-    // Yeni merkezi hesapla (ortalama)
     const sumX = clusterPoints.reduce((sum, p) => sum + p.x, 0);
     const sumY = clusterPoints.reduce((sum, p) => sum + p.y, 0);
     const newX = sumX / clusterPoints.length;
     const newY = sumY / clusterPoints.length;
 
-    // Merkez değiştiyse güncelle
     if (centroids[i].x !== newX || centroids[i].y !== newY) {
       centroids[i].x = newX;
       centroids[i].y = newY;
@@ -141,12 +120,10 @@ function updateCentroids(
   return hasUpdated;
 }
 
-// İki nokta arasındaki Öklid mesafesi
 function euclideanDistance(p1: Point, p2: Point): number {
   return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
 }
 
-// Rastgele 2D nokta kümesi oluştur
 function generateRandomPoints(
   numPoints: number,
   maxX: number,
@@ -163,7 +140,6 @@ function generateRandomPoints(
   return points;
 }
 
-// Küme merkezleri etrafında dağılımlı noktalar oluştur
 function generateClusteredPoints(
   numClusters: number,
   pointsPerCluster: number,
@@ -174,7 +150,6 @@ function generateClusteredPoints(
   const points: Point[] = [];
   const clusterCenters: { x: number; y: number }[] = [];
 
-  // Küme merkezlerini belirle
   for (let i = 0; i < numClusters; i++) {
     clusterCenters.push({
       x: Math.random() * maxX,
@@ -182,10 +157,8 @@ function generateClusteredPoints(
     });
   }
 
-  // Her küme için noktalar oluştur
   for (let i = 0; i < numClusters; i++) {
     for (let j = 0; j < pointsPerCluster; j++) {
-      // Merkez etrafında normal dağılım
       const offsetX = (Math.random() - 0.5) * 2 * spread;
       const offsetY = (Math.random() - 0.5) * 2 * spread;
 
@@ -199,14 +172,12 @@ function generateClusteredPoints(
   return points;
 }
 
-// Kümeleri görselleştiren bileşen
 const ClusterVisualization: React.FC<{
   points: Point[];
   centroids: Point[];
   width: number;
   height: number;
 }> = ({ points, centroids, width, height }) => {
-  // Renk paleti - farklı kümeler için
   const colors = [
     '#FF6B6B',
     '#4ECDC4',
@@ -223,7 +194,6 @@ const ClusterVisualization: React.FC<{
   return (
     <div className="border rounded-lg overflow-hidden bg-white dark:bg-gray-800">
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
-        {/* Noktaları çiz */}
         {points.map((point, index) => (
           <circle
             key={`point-${index}`}
@@ -240,7 +210,6 @@ const ClusterVisualization: React.FC<{
           />
         ))}
 
-        {/* Merkez noktaları çiz */}
         {centroids.map((centroid, index) => (
           <g key={`centroid-${index}`}>
             <circle
@@ -268,7 +237,6 @@ const ClusterVisualization: React.FC<{
   );
 };
 
-// Algoritma adımlarını gösteren bileşen
 const KMeansStepsViewer: React.FC<{
   steps: any[];
   currentStep: number;
@@ -349,24 +317,19 @@ const KMeansStepsViewer: React.FC<{
 };
 
 export default function KMeansPage() {
-  // Yapılandırma parametreleri
-  const [k, setK] = useState<number>(3);
-  const [numPoints, setNumPoints] = useState<number>(50);
-  const [dataType, setDataType] = useState<'random' | 'clustered'>('clustered');
-
-  // Görselleştirme boyutları
   const width = 500;
   const height = 400;
 
-  // Algoritma sonuçları
+  const [k, setK] = useState<number>(3);
+  const [steps, setSteps] = useState<any[]>([]);
   const [points, setPoints] = useState<Point[]>([]);
+  const [numPoints, setNumPoints] = useState<number>(50);
   const [centroids, setCentroids] = useState<Point[]>([]);
   const [iterations, setIterations] = useState<number>(0);
-  const [steps, setSteps] = useState<any[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [dataType, setDataType] = useState<'random' | 'clustered'>('clustered');
 
-  // Pseudo kod
   const pseudocode = `function kMeans(points, k, maxIterations):
     // 1. Rastgele k adet merkez noktası seç
     centroids = randomly select k points from points
@@ -751,12 +714,10 @@ public class KMeans {
 }`,
   };
 
-  // Sayfa yüklendiğinde veri oluştur
   useEffect(() => {
     generateData();
   }, []);
 
-  // Veri tipine göre noktaları oluştur
   const generateData = () => {
     let newPoints: Point[] = [];
 
@@ -774,7 +735,6 @@ public class KMeans {
         50
       );
 
-      // Kalan noktaları ekle
       if (remainingPoints > 0) {
         const extraPoints = generateRandomPoints(
           remainingPoints,
@@ -792,22 +752,18 @@ public class KMeans {
     setIterations(0);
   };
 
-  // K değeri değişikliğini işle
   const handleKChange = (value: number[]) => {
     setK(value[0]);
   };
 
-  // Nokta sayısı değişikliğini işle
   const handleNumPointsChange = (value: number[]) => {
     setNumPoints(value[0]);
   };
 
-  // Veri tipi değişikliğini işle
   const handleDataTypeChange = (type: 'random' | 'clustered') => {
     setDataType(type);
   };
 
-  // Algoritma çalıştırma işlevi
   const handleRunAlgorithm = () => {
     try {
       setIsRunning(true);

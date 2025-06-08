@@ -1,14 +1,15 @@
 'use client';
 
 import React from 'react';
-import { selectionSort } from '@/lib/algorithms/sorting';
+
 import { CodeBlock } from '@/components/common/code-block';
 import { InteractiveDemo } from '@/components/common/interactive-demo';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
+import { selectionSort } from '@/lib/algorithms/sorting';
+
 export default function SelectionSortPage() {
-  // Algorithm implementations in different languages
   const implementations = {
     javascript: `/**
  * Selection Sort implementation for JavaScript arrays
@@ -137,7 +138,6 @@ public static int[] selectionSort(int[] arr) {
 }`,
   };
 
-  // Detailed selection sort explanation
   const selectionSortDescription = `
 Selection Sort, dizideki en küçük elemanı bulup başa yerleştiren bir sıralama algoritmasıdır. Bu algoritma, diziyi sıralı ve sırasız olmak üzere iki bölüme ayırır. Her adımda, sırasız bölümdeki en küçük elemanı bulur ve sıralı bölümün sonuna ekler.
 
@@ -168,7 +168,6 @@ Selection Sort, veri kümesinin büyüklüğünden bağımsız olarak her zaman 
 
       <div className="grid">
         <div className="space-y-6">
-          {/* Algorithm Description */}
           <Card>
             <CardHeader>
               <CardTitle>Selection Sort Açıklaması</CardTitle>
@@ -184,7 +183,6 @@ Selection Sort, veri kümesinin büyüklüğünden bağımsız olarak her zaman 
         </div>
       </div>
 
-      {/* Code Examples Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kod Örnekleri</h2>
         <p className="text-muted-foreground">
@@ -231,7 +229,6 @@ Selection Sort, veri kümesinin büyüklüğünden bağımsız olarak her zaman 
         </Tabs>
       </div>
 
-      {/* Interactive Demo Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kendi Verilerinizle Test Edin</h2>
         <p className="text-muted-foreground">
@@ -261,7 +258,6 @@ Selection Sort, veri kümesinin büyüklüğünden bağımsız olarak her zaman 
         />
       </div>
 
-      {/* Algorithmic Analysis Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Algoritma Analizi</h2>
 
@@ -377,7 +373,6 @@ Selection Sort, veri kümesinin büyüklüğünden bağımsız olarak her zaman 
         </Card>
       </div>
 
-      {/* Selection Sort vs Bubble Sort Comparison */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Selection Sort vs Bubble Sort</h2>
         <p className="text-muted-foreground">
@@ -444,7 +439,6 @@ Selection Sort, veri kümesinin büyüklüğünden bağımsız olarak her zaman 
         </p>
       </div>
 
-      {/* Related Algorithms Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">İlgili Algoritmalar</h2>
         <p className="text-muted-foreground">

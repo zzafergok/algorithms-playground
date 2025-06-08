@@ -1,23 +1,22 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { AlgorithmExplanation } from '@/components/common/explanation';
-import { CodeBlock } from '@/components/common/code-block';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+
+import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { CodeBlock } from '@/components/common/code-block';
+import { AlgorithmExplanation } from '@/components/common/explanation';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-// 2D noktayı temsil eden tip tanımlaması
 interface Point {
   x: number;
   y: number;
   cluster: number;
 }
 
-// Hiyerarşik kümeleme için küme düğümünü temsil eden tip tanımlaması
 interface ClusterNode {
   id: number;
   points: Point[];
@@ -25,19 +24,16 @@ interface ClusterNode {
   distance?: number;
 }
 
-// İki nokta arasındaki Öklid mesafesini hesaplayan yardımcı fonksiyon
 function euclideanDistance(p1: Point, p2: Point): number {
   return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
 }
 
-// İki küme arasındaki mesafeyi hesaplayan fonksiyon (en yakın komşu metodu)
 function calculateClusterDistance(
   clusterA: ClusterNode,
   clusterB: ClusterNode
 ): number {
   let minDistance = Infinity;
 
-  // Her iki kümedeki her nokta çifti için mesafeyi hesapla ve minimum değeri bul
   for (const pointA of clusterA.points) {
     for (const pointB of clusterB.points) {
       const distance = euclideanDistance(pointA, pointB);
@@ -48,7 +44,6 @@ function calculateClusterDistance(
   return minDistance;
 }
 
-// Hiyerarşik kümeleme algoritması (Aglomeratif - AGNES) implementasyonu
 function hierarchicalClustering(
   points: Point[],
   cutoffDistance: number = Infinity
@@ -57,32 +52,26 @@ function hierarchicalClustering(
   clusterAssignments: number[];
   steps: any[];
 } {
-  // Adımları kaydetmek için dizi
   const steps: any[] = [];
 
-  // Her nokta için başlangıçta ayrı küme oluştur
   let clusters: ClusterNode[] = points.map((point, index) => ({
     id: index,
     points: [{ ...point, cluster: index }],
   }));
 
-  // Başlangıç durumu kaydet
   steps.push({
     clusters: JSON.parse(JSON.stringify(clusters)),
     step: 'initialization',
     description: 'Her nokta kendi kümesini oluşturur',
   });
 
-  // Uzaklık eşiği altında en az 2 küme kalana kadar kümeleri birleştir
   let nextId = points.length;
   while (clusters.length > 1) {
-    // En yakın iki kümeyi bul
     let minDistance = Infinity;
     let closestPair: [number, number] = [-1, -1];
 
     for (let i = 0; i < clusters.length; i++) {
       for (let j = i + 1; j < clusters.length; j++) {
-        // İki küme arasındaki mesafeyi hesapla
         const distance = calculateClusterDistance(clusters[i], clusters[j]);
 
         if (distance < minDistance) {
@@ -92,12 +81,10 @@ function hierarchicalClustering(
       }
     }
 
-    // Mesafe eşik değerini aştıysa, birleştirmeyi durdur
     if (minDistance > cutoffDistance) {
       break;
     }
 
-    // En yakın kümeleri birleştir
     const [i, j] = closestPair;
     const mergedCluster: ClusterNode = {
       id: nextId++,
@@ -106,17 +93,14 @@ function hierarchicalClustering(
       distance: minDistance,
     };
 
-    // Birleştirilen kümeleri güncelle
     mergedCluster.points.forEach((p) => (p.cluster = mergedCluster.id));
 
-    // Yeni kümeyi ekle, eski kümeleri çıkar
     const newClusters = clusters.filter(
       (_, index) => index !== i && index !== j
     );
     newClusters.push(mergedCluster);
     clusters = newClusters;
 
-    // Adımı kaydet
     steps.push({
       clusters: JSON.parse(JSON.stringify(clusters)),
       mergedIndices: closestPair,
@@ -126,12 +110,10 @@ function hierarchicalClustering(
     });
   }
 
-  // Son kümeleme durumuna göre nokta atamalarını yap
   const clusterAssignments = new Array(points.length).fill(-1);
 
   for (const cluster of clusters) {
     for (const point of cluster.points) {
-      // Orijinal nokta dizisindeki indeksi bulmalıyız
       const originalIndex = points.findIndex(
         (p) => p.x === point.x && p.y === point.y
       );
@@ -141,12 +123,10 @@ function hierarchicalClustering(
     }
   }
 
-  // Dendrogram kökünü bul (tek kök yoksa yapay bir kök oluştur)
   let dendrogram: ClusterNode;
   if (clusters.length === 1) {
     dendrogram = clusters[0];
   } else {
-    // Birden fazla kök varsa, yapay bir kök oluştur
     dendrogram = {
       id: nextId,
       points: clusters.flatMap((c) => c.points),
@@ -157,7 +137,6 @@ function hierarchicalClustering(
   return { dendrogram, clusterAssignments, steps };
 }
 
-// Rastgele 2D nokta kümesi oluştur
 function generateRandomPoints(
   numPoints: number,
   maxX: number,
@@ -174,7 +153,6 @@ function generateRandomPoints(
   return points;
 }
 
-// Küme merkezleri etrafında dağılımlı noktalar oluştur
 function generateClusteredPoints(
   numClusters: number,
   pointsPerCluster: number,
@@ -185,7 +163,6 @@ function generateClusteredPoints(
   const points: Point[] = [];
   const clusterCenters: { x: number; y: number }[] = [];
 
-  // Küme merkezlerini belirle
   for (let i = 0; i < numClusters; i++) {
     clusterCenters.push({
       x: Math.random() * maxX,
@@ -193,10 +170,8 @@ function generateClusteredPoints(
     });
   }
 
-  // Her küme için noktalar oluştur
   for (let i = 0; i < numClusters; i++) {
     for (let j = 0; j < pointsPerCluster; j++) {
-      // Merkez etrafında normal dağılım
       const offsetX = (Math.random() - 0.5) * 2 * spread;
       const offsetY = (Math.random() - 0.5) * 2 * spread;
 
@@ -210,14 +185,12 @@ function generateClusteredPoints(
   return points;
 }
 
-// Kümeleri görselleştiren bileşen
 const ClusterVisualization: React.FC<{
   points: Point[];
   width: number;
   height: number;
   highlightCluster?: number;
 }> = ({ points, width, height, highlightCluster }) => {
-  // Renk paleti - farklı kümeler için
   const colors = [
     '#FF6B6B',
     '#4ECDC4',
@@ -236,13 +209,11 @@ const ClusterVisualization: React.FC<{
     '#786FA6',
   ];
 
-  // Nokta yarıçapı
   const pointRadius = 5;
 
   return (
     <div className="border rounded-lg overflow-hidden bg-white dark:bg-gray-800">
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
-        {/* Noktaları çiz */}
         {points.map((point, index) => {
           const isHighlighted =
             highlightCluster !== undefined &&
@@ -270,7 +241,6 @@ const ClusterVisualization: React.FC<{
   );
 };
 
-// Dendrogram görselleştirme bileşeni
 const DendrogramVisualization: React.FC<{
   dendrogram: ClusterNode;
   width: number;
@@ -279,16 +249,13 @@ const DendrogramVisualization: React.FC<{
 }> = ({ dendrogram, width, height, onSelectCluster }) => {
   const [hoveredCluster, setHoveredCluster] = useState<number | null>(null);
 
-  // Yatay ve dikey ölçekleme faktörleri
   const horizontalScale = width * 0.9;
   const verticalScale = height * 0.9;
   const margin = { top: 20, right: 20, bottom: 20, left: 20 };
 
-  // Dendrogram için düğümleri ve kenarları oluştur
   const nodes: any[] = [];
   const edges: any[] = [];
 
-  // Ağaç yapısını dolaşarak düğümleri ve kenarları belirle
   function traverseTree(
     node: ClusterNode,
     depth: number,
@@ -316,7 +283,6 @@ const DendrogramVisualization: React.FC<{
       traverseTree(left, depth + 1, x, childWidth);
       traverseTree(right, depth + 1, x + childWidth, childWidth);
 
-      // Bu düğümden çocuklarına kenarlar ekle
       const leftNode = nodes.find((n) => n.id === left.id);
       const rightNode = nodes.find((n) => n.id === right.id);
 
@@ -334,14 +300,12 @@ const DendrogramVisualization: React.FC<{
     }
   }
 
-  // Ağacın derinliğini bul
   function getTreeDepth(node: ClusterNode): number {
     if (!node.children) return 1;
     const [left, right] = node.children;
     return 1 + Math.max(getTreeDepth(left), getTreeDepth(right));
   }
 
-  // Dendrogramı oluştur
   traverseTree(
     dendrogram,
     0,
@@ -366,7 +330,6 @@ const DendrogramVisualization: React.FC<{
   return (
     <div className="border rounded-lg overflow-hidden bg-white dark:bg-gray-800">
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
-        {/* Kenarları çiz */}
         {edges.map((edge, index) => (
           <line
             key={`edge-${index}`}
@@ -379,7 +342,6 @@ const DendrogramVisualization: React.FC<{
           />
         ))}
 
-        {/* Düğümleri çiz */}
         {nodes.map((node) => (
           <g
             key={`node-${node.id}`}
@@ -415,7 +377,6 @@ const DendrogramVisualization: React.FC<{
   );
 };
 
-// Algoritma adımlarını görselleştiren bileşen
 const HierarchicalClusteringSteps: React.FC<{
   steps: any[];
   currentStep: number;
@@ -424,7 +385,6 @@ const HierarchicalClusteringSteps: React.FC<{
   height: number;
   onSelectCluster: (clusterId: number) => void;
 }> = ({ steps, currentStep, onChangeStep, width, height, onSelectCluster }) => {
-  // İleri ve geri adım tuşları için event handler'lar
   const handlePrevious = () => {
     onChangeStep(Math.max(0, currentStep - 1));
   };
@@ -440,7 +400,6 @@ const HierarchicalClusteringSteps: React.FC<{
   const step = steps[currentStep];
   const clusters = step.clusters || [];
 
-  // Her kümedeki noktaları birleştirerek tek bir nokta listesi oluştur
   const allPoints = clusters.flatMap((cluster: ClusterNode) =>
     cluster.points.map((p: Point) => ({ ...p, cluster: cluster.id }))
   );
@@ -496,7 +455,6 @@ const HierarchicalClusteringSteps: React.FC<{
   );
 };
 
-// Kod örnekleri
 const implementations = {
   typescript: `// Hiyerarşik kümeleme algoritması (Aglomeratif - AGNES)
 function hierarchicalClustering(
@@ -770,7 +728,6 @@ def plot_dendrogram(model, **kwargs):
     plt.show()`,
 };
 
-// Algoritmanın pseudocode tanımlaması
 const pseudocode = `function hierarchicalClustering(points, cutoffDistance):
     // 1. Her noktayı kendi başına bir küme olarak başlat
     clusters = []
@@ -810,37 +767,29 @@ const pseudocode = `function hierarchicalClustering(points, cutoffDistance):
         clusterAssignments: assignPointsToClusters(points, clusters)
     }`;
 
-// Ana uygulama bileşeni - Hiyerarşik kümeleme algoritmasını görselleştiren ve açıklayan sayfa
 export default function HierarchicalClusteringPage() {
-  // Görselleştirme boyutları için sabit değerler tanımlama
   const width = 500;
   const height = 400;
 
-  // Algoritma parametreleri için state tanımlamaları
+  const [steps, setSteps] = useState<any[]>([]);
+  const [points, setPoints] = useState<Point[]>([]);
   const [numPoints, setNumPoints] = useState<number>(30);
   const [numClusters, setNumClusters] = useState<number>(3);
-  const [dataType, setDataType] = useState<'random' | 'clustered'>('clustered');
-  const [cutoffDistance, setCutoffDistance] = useState<number>(Infinity);
-  const [cutoffValue, setCutoffValue] = useState<number>(100);
-
-  // Veri ve algoritma sonuçları için state tanımlamaları
-  const [points, setPoints] = useState<Point[]>([]);
-  const [steps, setSteps] = useState<any[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(0);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [cutoffValue, setCutoffValue] = useState<number>(100);
+  const [cutoffDistance, setCutoffDistance] = useState<number>(Infinity);
   const [dendrogram, setDendrogram] = useState<ClusterNode | null>(null);
   const [clusterAssignments, setClusterAssignments] = useState<number[]>([]);
   const [selectedCluster, setSelectedCluster] = useState<number | null>(null);
-  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [dataType, setDataType] = useState<'random' | 'clustered'>('clustered');
 
-  // Kullanıcının veri kümesi oluşturmasını sağlayan fonksiyon
   const generateData = useCallback(() => {
     let newPoints: Point[];
 
-    // Veri tipi seçimine göre nokta kümesi oluştur
     if (dataType === 'random') {
       newPoints = generateRandomPoints(numPoints, width, height);
     } else {
-      // Kümelenmiş veriler için her kümede eşit sayıda nokta oluştur
       const pointsPerCluster = Math.floor(numPoints / numClusters);
       newPoints = generateClusteredPoints(
         numClusters,
@@ -851,7 +800,6 @@ export default function HierarchicalClusteringPage() {
       );
     }
 
-    // Yeni veri kümesi oluşturulduğunda state'i sıfırla
     setPoints(newPoints);
     setSteps([]);
     setCurrentStep(0);
@@ -860,31 +808,23 @@ export default function HierarchicalClusteringPage() {
     setSelectedCluster(null);
   }, [dataType, numPoints, numClusters, width, height]);
 
-  // Component yüklendiğinde ilk veri kümesini oluştur
   useEffect(() => {
     generateData();
   }, [generateData]);
 
-  // Algoritmanın çalıştırılmasını sağlayan fonksiyon
   const runAlgorithm = useCallback(() => {
     if (points.length === 0 || isRunning) return;
 
     setIsRunning(true);
 
-    // Kullanıcı seçimine göre cutoff mesafesini ayarla
-    // 0-100 aralığındaki slider değerini gerçek mesafeye dönüştür
     const actualCutoff =
       cutoffValue === 100 ? Infinity : (cutoffValue / 100) * 200;
     setCutoffDistance(actualCutoff);
 
-    // Algoritma çalıştırma işlemini zamanlayıcı ile asenkron olarak yap
-    // Bu UI'ın donmasını engeller
     setTimeout(() => {
       try {
-        // Algoritma çalıştır ve sonuçları al
         const result = hierarchicalClustering(points, actualCutoff);
 
-        // Sonuçları state'e kaydet
         setDendrogram(result.dendrogram);
         setClusterAssignments(result.clusterAssignments);
         setSteps(result.steps);
@@ -897,21 +837,17 @@ export default function HierarchicalClusteringPage() {
     }, 100);
   }, [points, isRunning, cutoffValue]);
 
-  // Kullanıcının ilgilendiği kümeyi takip etmek için handler
   const handleSelectCluster = (clusterId: number) => {
     setSelectedCluster(clusterId === selectedCluster ? null : clusterId);
   };
 
-  // İlgili kümedeki noktaları recursive olarak filtrele
   const getPointsInCluster = useCallback(() => {
     if (!selectedCluster || !dendrogram) return [];
 
-    // Seçilen küme ID'sine sahip düğümü bul
     const findClusterNode = (node: ClusterNode): ClusterNode | null => {
       if (node.id === selectedCluster) return node;
       if (!node.children) return null;
 
-      // Çocuk düğümlerde aramaya devam et (sol ve sağ alt ağaç)
       const leftResult = findClusterNode(node.children[0]);
       if (leftResult) return leftResult;
 
@@ -922,15 +858,12 @@ export default function HierarchicalClusteringPage() {
     return clusterNode ? clusterNode.points : [];
   }, [selectedCluster, dendrogram]);
 
-  // Seçilen kümeye ait noktaları al
   const selectedPoints = getPointsInCluster();
 
-  // Kesme eşiği değeri değişikliğini işle
   const handleCutoffChange = (value: number[]) => {
     setCutoffValue(value[0]);
   };
 
-  // Algoritma adımları arasında geçiş yapmayı sağlayan handler
   const handleStepChange = (step: number) => {
     setCurrentStep(step);
   };
@@ -970,14 +903,12 @@ export default function HierarchicalClusteringPage() {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Sol panel - Parametreler ve Kontroller */}
         <Card>
           <CardHeader>
             <CardTitle>Algoritma Parametreleri</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
-              {/* Veri tipi seçimi */}
               <div className="space-y-2">
                 <Label>Veri Tipi</Label>
                 <div className="flex space-x-2">
@@ -998,7 +929,6 @@ export default function HierarchicalClusteringPage() {
                 </div>
               </div>
 
-              {/* Nokta sayısı ayarı */}
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <Label htmlFor="numPoints">Nokta Sayısı: {numPoints}</Label>
@@ -1014,7 +944,6 @@ export default function HierarchicalClusteringPage() {
                 />
               </div>
 
-              {/* Küme sayısı ayarı (sadece kümelenmiş veri için) */}
               {dataType === 'clustered' && (
                 <div className="space-y-2">
                   <div className="flex justify-between">
@@ -1034,7 +963,6 @@ export default function HierarchicalClusteringPage() {
                 </div>
               )}
 
-              {/* Kesme mesafesi ayarı */}
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <Label htmlFor="cutoffValue">
@@ -1053,7 +981,6 @@ export default function HierarchicalClusteringPage() {
                 />
               </div>
 
-              {/* Butonlar */}
               <div className="flex space-x-2">
                 <Button onClick={generateData} disabled={isRunning}>
                   Yeni Veri Oluştur
@@ -1069,7 +996,6 @@ export default function HierarchicalClusteringPage() {
           </CardContent>
         </Card>
 
-        {/* Sağ panel - Görselleştirme */}
         <Card>
           <CardHeader>
             <CardTitle>Veri Görselleştirmesi</CardTitle>
@@ -1098,7 +1024,6 @@ export default function HierarchicalClusteringPage() {
         </Card>
       </div>
 
-      {/* Dendrogram ve Adımlar - Algoritma çalıştırıldıktan sonra görünür */}
       {dendrogram && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Dendrogram */}
@@ -1119,7 +1044,6 @@ export default function HierarchicalClusteringPage() {
             </CardContent>
           </Card>
 
-          {/* Adım adım görselleştirme */}
           <div>
             <HierarchicalClusteringSteps
               steps={steps}
@@ -1133,7 +1057,6 @@ export default function HierarchicalClusteringPage() {
         </div>
       )}
 
-      {/* Kod örnekleri */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kod Örnekleri</h2>
         <p className="text-muted-foreground">

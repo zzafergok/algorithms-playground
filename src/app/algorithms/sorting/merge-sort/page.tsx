@@ -1,15 +1,16 @@
 'use client';
 
 import React from 'react';
-import { mergeSort } from '@/lib/algorithms/sorting';
+
 import { CodeBlock } from '@/components/common/code-block';
 import { InteractiveDemo } from '@/components/common/interactive-demo';
 import { AlgorithmExplanation } from '@/components/common/explanation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
+import { mergeSort } from '@/lib/algorithms/sorting';
+
 export default function MergeSortPage() {
-  // Algorithm implementations in different languages
   const implementations = {
     javascript: `/**
  * Merge Sort implementation for JavaScript arrays
@@ -218,7 +219,6 @@ private static int[] merge(int[] left, int[] right) {
 }`,
   };
 
-  // Detailed merge sort explanation
   const mergeSortDescription = `
 Merge Sort, "Böl ve Fethet" (Divide and Conquer) paradigmasını kullanan verimli ve kararlı bir sıralama algoritmasıdır. Diziyi önce küçük alt parçalara böler, ardından bu parçaları sıralayarak birleştirir.
 
@@ -246,7 +246,6 @@ Merge Sort, büyük veri setleri için ve kararlılığın önemli olduğu durum
 
       <div className="grid">
         <div className="space-y-6">
-          {/* Algorithm Description */}
           <Card>
             <CardHeader>
               <CardTitle>Merge Sort Açıklaması</CardTitle>
@@ -260,7 +259,6 @@ Merge Sort, büyük veri setleri için ve kararlılığın önemli olduğu durum
         </div>
       </div>
 
-      {/* Code Examples Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kod Örnekleri</h2>
         <p className="text-muted-foreground">
@@ -307,7 +305,6 @@ Merge Sort, büyük veri setleri için ve kararlılığın önemli olduğu durum
         </Tabs>
       </div>
 
-      {/* Interactive Demo Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kendi Verilerinizle Test Edin</h2>
         <p className="text-muted-foreground">
@@ -337,7 +334,6 @@ Merge Sort, büyük veri setleri için ve kararlılığın önemli olduğu durum
         />
       </div>
 
-      {/* Algorithmic Analysis Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Algoritma Analizi</h2>
 
@@ -457,7 +453,6 @@ Merge Sort, büyük veri setleri için ve kararlılığın önemli olduğu durum
         </Card>
       </div>
 
-      {/* Merge Sort Visualization Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Merge Sort Nasıl Çalışır?</h2>
         <p className="text-muted-foreground">
@@ -559,7 +554,6 @@ Merge Sort, büyük veri setleri için ve kararlılığın önemli olduğu durum
         </Card>
       </div>
 
-      {/* Merge Sort vs Other Algorithms Comparison */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Merge Sort ve Diğer Algoritmalar</h2>
         <p className="text-muted-foreground">
@@ -649,7 +643,6 @@ Merge Sort, büyük veri setleri için ve kararlılığın önemli olduğu durum
         </p>
       </div>
 
-      {/* Related Algorithms Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">İlgili Algoritmalar</h2>
         <p className="text-muted-foreground">
@@ -696,7 +689,6 @@ Merge Sort, büyük veri setleri için ve kararlılığın önemli olduğu durum
         </div>
       </div>
 
-      {/* Full Algorithm Explanation */}
       <AlgorithmExplanation
         title="Merge Sort"
         description="Böl ve Fethet stratejisini kullanan, kararlı ve tutarlı bir sıralama algoritması."

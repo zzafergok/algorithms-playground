@@ -2,23 +2,11 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
-
 import {
   X,
+  Copy,
   Code2,
+  Check,
   Filter,
   Layers,
   Target,
@@ -28,29 +16,37 @@ import {
   Settings2,
   BookMarked,
   ChevronDown,
-  Copy,
-  Check,
   ExternalLink,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Kategori tipleri
+import {
+  Dialog,
+  DialogTitle,
+  DialogHeader,
+  DialogContent,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 type Category = {
   id: string;
   name: string;
   icon: React.ReactNode;
 };
 
-// Zorluk tipleri
 type Difficulty = 'Kolay' | 'Orta' | 'Zor';
 
-// Programlama dili kod örneği tipi
 type LanguageCode = {
   language: string;
   code: string;
 };
 
-// Güncellenen kod örneği tipi - kod örnekleri eklendi
 type CodeExample = {
   id: string;
   title: string;
@@ -63,7 +59,6 @@ type CodeExample = {
   codeExamples: LanguageCode[]; // Yeni alan - kod örnekleri
 };
 
-// Kod kopyalama butonu componenti
 const CopyButton = ({ text }: { text: string }) => {
   const [copied, setCopied] = useState(false);
 
@@ -85,15 +80,9 @@ const CopyButton = ({ text }: { text: string }) => {
   );
 };
 
-// Kod modal componenti
 const CodeModal = ({ example }: { example: CodeExample }) => {
   const [selectedLanguage, setSelectedLanguage] = useState(
     example.codeExamples[0]?.language || ''
-  );
-
-  // Seçili dile ait kod örneğini bul
-  const currentCode = example.codeExamples.find(
-    (code) => code.language === selectedLanguage
   );
 
   return (
@@ -121,12 +110,10 @@ const CodeModal = ({ example }: { example: CodeExample }) => {
       </DialogHeader>
 
       <div className="space-y-4">
-        {/* Açıklama */}
         <div>
           <p className="text-muted-foreground">{example.description}</p>
         </div>
 
-        {/* Konseptler ve zorluk */}
         <div className="flex flex-wrap gap-2">
           <Badge variant={getDifficultyColor(example.difficulty)}>
             {example.difficulty}
@@ -138,7 +125,6 @@ const CodeModal = ({ example }: { example: CodeExample }) => {
           ))}
         </div>
 
-        {/* Dil sekmeli kod örnekleri */}
         {example.codeExamples.length > 0 && (
           <Tabs value={selectedLanguage} onValueChange={setSelectedLanguage}>
             <TabsList className="w-full">
@@ -174,7 +160,6 @@ const CodeModal = ({ example }: { example: CodeExample }) => {
   );
 };
 
-// Zorluk renk belirleme fonksiyonu
 const getDifficultyColor = (difficulty: Difficulty) => {
   switch (difficulty) {
     case 'Kolay':
@@ -189,20 +174,15 @@ const getDifficultyColor = (difficulty: Difficulty) => {
 };
 
 export default function CodeExamplesPage() {
-  // Arama terimi state'i
   const [searchTerm, setSearchTerm] = useState('');
-  // Seçili kategoriler state'i - Set kullanarak benzersiz değerler
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
     new Set()
   );
-  // Seçili zorluklar state'i - Set kullanarak benzersiz değerler
   const [selectedDifficulties, setSelectedDifficulties] = useState<
     Set<Difficulty>
   >(new Set());
-  // Filtre paneli açık/kapalı state'i
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  // Kategoriler listesi
   const categories: Category[] = [
     {
       id: 'sorting',
@@ -230,7 +210,6 @@ export default function CodeExamplesPage() {
     { id: 'math', name: 'Matematik', icon: <BarChart3 className="h-4 w-4" /> },
   ];
 
-  // Kod örnekleri verisi - kod örnekleri ile güncellenmiş
   const codeExamples: CodeExample[] = [
     {
       id: '1',
@@ -575,7 +554,6 @@ public class Fibonacci {
         },
       ],
     },
-    // Diğer örnekler için codeExamples boş array olarak bırakıldı
     ...Array.from({ length: 8 }, (_, index) => ({
       ...[
         {
@@ -667,7 +645,6 @@ public class Fibonacci {
     })),
   ];
 
-  // Kategori toggle fonksiyonu
   const toggleCategory = useCallback((categoryId: string) => {
     setSelectedCategories((prev) => {
       const newSet = new Set(prev);
@@ -680,7 +657,6 @@ public class Fibonacci {
     });
   }, []);
 
-  // Zorluk toggle fonksiyonu
   const toggleDifficulty = useCallback((difficulty: Difficulty) => {
     setSelectedDifficulties((prev) => {
       const newSet = new Set(prev);
@@ -693,17 +669,14 @@ public class Fibonacci {
     });
   }, []);
 
-  // Filtreleri temizle fonksiyonu
   const clearFilters = useCallback(() => {
     setSelectedCategories(new Set());
     setSelectedDifficulties(new Set());
     setSearchTerm('');
   }, []);
 
-  // Filtrelenmiş örnekler - useMemo ile optimize edildi
   const filteredExamples = useMemo(() => {
     return codeExamples.filter((example) => {
-      // Arama terimi kontrolü
       const matchesSearch =
         searchTerm === '' ||
         example.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -712,12 +685,10 @@ public class Fibonacci {
           concept.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
-      // Kategori kontrolü
       const matchesCategory =
         selectedCategories.size === 0 ||
         selectedCategories.has(example.category);
 
-      // Zorluk kontrolü
       const matchesDifficulty =
         selectedDifficulties.size === 0 ||
         selectedDifficulties.has(example.difficulty);
@@ -726,12 +697,10 @@ public class Fibonacci {
     });
   }, [searchTerm, selectedCategories, selectedDifficulties]);
 
-  // Aktif filtre sayısı
   const activeFilterCount = selectedCategories.size + selectedDifficulties.size;
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
-      {/* Sayfa başlığı */}
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold tracking-tight">Kod Örnekleri</h1>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -739,11 +708,8 @@ public class Fibonacci {
           açıklamalar
         </p>
       </div>
-      {/* Arama ve filtre kontrolleri */}
       <div className="space-y-4">
-        {/* Arama çubuğu ve filtre butonu */}
         <div className="flex flex-col sm:flex-row gap-4">
-          {/* Arama inputu */}
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -754,7 +720,6 @@ public class Fibonacci {
             />
           </div>
 
-          {/* Filtre butonu */}
           <Button
             variant={activeFilterCount > 0 ? 'default' : 'outline'}
             onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -773,7 +738,6 @@ public class Fibonacci {
           </Button>
         </div>
 
-        {/* Filtre paneli */}
         <AnimatePresence>
           {isFilterOpen && (
             <motion.div
@@ -785,7 +749,6 @@ public class Fibonacci {
             >
               <Card className="p-6">
                 <div className="space-y-6">
-                  {/* Kategori filtreleri */}
                   <div>
                     <h3 className="font-semibold mb-3">Kategoriler</h3>
                     <div className="flex flex-wrap gap-2">
@@ -808,7 +771,6 @@ public class Fibonacci {
                     </div>
                   </div>
 
-                  {/* Zorluk filtreleri */}
                   <div>
                     <h3 className="font-semibold mb-3">Zorluk Seviyesi</h3>
                     <div className="flex flex-wrap gap-2">
@@ -831,7 +793,6 @@ public class Fibonacci {
                     </div>
                   </div>
 
-                  {/* Filtreleri temizle butonu */}
                   {activeFilterCount > 0 && (
                     <div className="flex justify-end">
                       <Button
@@ -852,13 +813,11 @@ public class Fibonacci {
         </AnimatePresence>
       </div>
 
-      {/* Sonuç sayısı ve aktif filtreler */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <p className="text-muted-foreground">
           {filteredExamples.length} kod örneği bulundu
         </p>
 
-        {/* Aktif filtreleri göster */}
         {(selectedCategories.size > 0 || selectedDifficulties.size > 0) && (
           <div className="flex flex-wrap gap-2">
             {Array.from(selectedCategories).map((categoryId) => {
@@ -893,7 +852,6 @@ public class Fibonacci {
           </div>
         )}
       </div>
-      {/* Kod örnekleri grid - Dialog eklendi */}
       <AnimatePresence mode="popLayout">
         {filteredExamples.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -907,7 +865,6 @@ public class Fibonacci {
                 transition={{ duration: 0.3, delay: index * 0.05 }}
               >
                 <Dialog>
-                  {/* Kart tetikleyici olarak Dialog trigger */}
                   <DialogTrigger asChild>
                     <Card className="h-full flex flex-col cursor-pointer hover:shadow-lg transition-shadow">
                       <CardHeader>
@@ -926,7 +883,6 @@ public class Fibonacci {
                         </p>
                       </CardHeader>
                       <CardContent className="flex-1">
-                        {/* Diller */}
                         <div className="mb-4">
                           <p className="text-sm font-medium mb-2">Diller:</p>
                           <div className="flex flex-wrap gap-1">
@@ -942,7 +898,6 @@ public class Fibonacci {
                           </div>
                         </div>
 
-                        {/* Konseptler */}
                         <div className="mb-4">
                           <p className="text-sm font-medium mb-2">
                             Konseptler:
@@ -960,7 +915,6 @@ public class Fibonacci {
                           </div>
                         </div>
 
-                        {/* Kategori */}
                         <div className="mb-4">
                           <p className="text-sm font-medium mb-1">Kategori:</p>
                           <Badge variant="outline">
@@ -973,7 +927,6 @@ public class Fibonacci {
                       </CardContent>
                     </Card>
                   </DialogTrigger>
-                  {/* Modal içeriği */}
                   <CodeModal example={example} />
                 </Dialog>
               </motion.div>

@@ -1,14 +1,16 @@
 import Link from 'next/link';
+
 import { ArrowRight, Code, BookOpen, BarChart4 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+
 import {
   Card,
-  CardContent,
-  CardDescription,
+  CardTitle,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardContent,
+  CardDescription,
 } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
   const algorithmCategories = [
@@ -43,7 +45,6 @@ export default function Home() {
 
   return (
     <div className="space-y-12">
-      {/* Hero Section */}
       <section className="py-12 md:py-20">
         <div className="flex flex-col items-center text-center space-y-6">
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
@@ -72,7 +73,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="feature-section">
         <h2 className="text-3xl font-bold text-center mb-8">
           Nasıl Öğreneceksiniz?
@@ -113,7 +113,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Categories Section */}
       <section className="feature-section">
         <h2 className="text-3xl font-bold text-center mb-8">
           Algoritma Kategorileri

@@ -1,14 +1,13 @@
 'use client';
 
 import React from 'react';
-import { AlgorithmExplanation } from '@/components/common/explanation';
-import { MSTVisualizer } from '@/components/common/mst-visualizer';
+
 import { CodeBlock } from '@/components/common/code-block';
+import { MSTVisualizer } from '@/components/common/mst-visualizer';
+import { AlgorithmExplanation } from '@/components/common/explanation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-// Kruskal's algorithm page component
 export default function KruskalPage() {
-  // Algorithm explanation data for Kruskal's MST
   const pseudocode = `function kruskal(graph):
     mst = empty set
     edges = sort all edges by weight in ascending order
@@ -25,7 +24,6 @@ export default function KruskalPage() {
     
     return mst`;
 
-  // Code implementations in different languages
   const implementations = {
     typescript: `interface Edge {
   from: string;

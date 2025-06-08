@@ -1,16 +1,19 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
+
 import { Play, RotateCcw, Grid as GridIcon, Calculator } from 'lucide-react';
+
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+
 import {
-  floydWarshall,
   Graph,
   GraphNode,
   GraphEdge,
+  floydWarshall,
 } from '@/lib/algorithms/graph';
 import { cn } from '@/lib/utils';
 
@@ -21,30 +24,26 @@ interface MatrixVisualizerProps {
   algorithm?: 'floyd-warshall';
 }
 
-// Matrix visualizer component for all-pairs shortest path algorithms
 export function MatrixVisualizer({
   className,
   initialSize = 5,
   showControls = true,
   algorithm = 'floyd-warshall',
 }: MatrixVisualizerProps) {
-  // Core state management for matrix and algorithm
   const [matrixSize, setMatrixSize] = useState(initialSize);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [currentStep, setCurrentStep] = useState<number>(-1);
+  const [animationSpeed, setAnimationSpeed] = useState<number>(50);
+  const [distanceMatrix, setDistanceMatrix] = useState<number[][]>([]);
+  const [nextMatrix, setNextMatrix] = useState<(string | null)[][]>([]);
+  const [reconstructedPath, setReconstructedPath] = useState<number[]>([]);
   const [adjacencyMatrix, setAdjacencyMatrix] = useState<number[][]>(() =>
     createInitialMatrix(initialSize)
   );
-  const [distanceMatrix, setDistanceMatrix] = useState<number[][]>([]);
-  const [nextMatrix, setNextMatrix] = useState<(string | null)[][]>([]);
-  const [currentStep, setCurrentStep] = useState<number>(-1);
-  const [isRunning, setIsRunning] = useState<boolean>(false);
-  const [animationSpeed, setAnimationSpeed] = useState<number>(50);
-
-  // Algorithm results and path reconstruction
   const [selectedPath, setSelectedPath] = useState<{
     from: number;
     to: number;
   } | null>(null);
-  const [reconstructedPath, setReconstructedPath] = useState<number[]>([]);
   const [algorithmStats, setAlgorithmStats] = useState({
     iterations: 0,
     totalComparisons: 0,
@@ -52,18 +51,15 @@ export function MatrixVisualizer({
     executionTime: 0,
   });
 
-  // Create initial matrix with some random weights
   function createInitialMatrix(size: number): number[][] {
     const matrix = Array(size)
       .fill(null)
       .map(() => Array(size).fill(Infinity));
 
-    // Set diagonal to 0 (distance from node to itself)
     for (let i = 0; i < size; i++) {
       matrix[i][i] = 0;
     }
 
-    // Add some random edges with weights between 1-10
     for (let i = 0; i < size; i++) {
       for (let j = 0; j < size; j++) {
         if (i !== j && Math.random() < 0.4) {
@@ -75,7 +71,6 @@ export function MatrixVisualizer({
     return matrix;
   }
 
-  // Convert adjacency matrix to graph structure for algorithm
   const convertToGraph = useCallback((matrix: number[][]): Graph => {
     const nodes = new Map<string, GraphNode>();
     const edges: GraphEdge[] = [];
@@ -84,7 +79,6 @@ export function MatrixVisualizer({
       { nodeId: string; weight: number }[]
     >();
 
-    // Create nodes
     for (let i = 0; i < matrix.length; i++) {
       const nodeId = i.toString();
       nodes.set(nodeId, {
@@ -95,7 +89,6 @@ export function MatrixVisualizer({
       adjacencyList.set(nodeId, []);
     }
 
-    // Create edges from matrix
     for (let i = 0; i < matrix.length; i++) {
       for (let j = 0; j < matrix.length; j++) {
         if (i !== j && matrix[i][j] !== Infinity) {
@@ -116,7 +109,6 @@ export function MatrixVisualizer({
     return { nodes, edges, adjacencyList };
   }, []);
 
-  // Run Floyd-Warshall algorithm with step-by-step visualization
   const runFloydWarshall = useCallback(async () => {
     setIsRunning(true);
     setCurrentStep(-1);
@@ -128,7 +120,6 @@ export function MatrixVisualizer({
     const result = floydWarshall(graph);
     const endTime = performance.now();
 
-    // Convert result back to matrix format
     const newDistanceMatrix = Array(matrixSize)
       .fill(null)
       .map(() => Array(matrixSize).fill(Infinity));
@@ -149,7 +140,6 @@ export function MatrixVisualizer({
     setDistanceMatrix(newDistanceMatrix);
     setNextMatrix(newNextMatrix);
 
-    // Calculate algorithm statistics
     let pathsFound = 0;
     for (let i = 0; i < matrixSize; i++) {
       for (let j = 0; j < matrixSize; j++) {
@@ -166,7 +156,6 @@ export function MatrixVisualizer({
       executionTime: endTime - startTime,
     });
 
-    // Animate through each k iteration
     for (let k = 0; k < matrixSize; k++) {
       setCurrentStep(k);
       await new Promise((resolve) => setTimeout(resolve, 101 - animationSpeed));
@@ -176,7 +165,6 @@ export function MatrixVisualizer({
     setIsRunning(false);
   }, [adjacencyMatrix, matrixSize, animationSpeed, convertToGraph]);
 
-  // Reconstruct path between two nodes
   const reconstructPath = useCallback(
     (from: number, to: number): number[] => {
       if (
@@ -202,7 +190,6 @@ export function MatrixVisualizer({
     [distanceMatrix, nextMatrix]
   );
 
-  // Handle path selection for visualization
   const handlePathSelection = useCallback(
     (from: number, to: number) => {
       const newSelection = { from, to };
@@ -216,7 +203,6 @@ export function MatrixVisualizer({
     [distanceMatrix, reconstructPath]
   );
 
-  // Update matrix cell value
   const updateMatrixCell = useCallback(
     (row: number, col: number, value: string) => {
       const numValue = value === '' ? Infinity : parseFloat(value);
@@ -229,7 +215,6 @@ export function MatrixVisualizer({
     [adjacencyMatrix]
   );
 
-  // Reset matrix to initial state
   const resetMatrix = useCallback(() => {
     const newMatrix = createInitialMatrix(matrixSize);
     setAdjacencyMatrix(newMatrix);
@@ -246,7 +231,6 @@ export function MatrixVisualizer({
     });
   }, [matrixSize]);
 
-  // Generate random matrix
   const generateRandomMatrix = useCallback(() => {
     const newMatrix = createInitialMatrix(matrixSize);
     setAdjacencyMatrix(newMatrix);
@@ -257,7 +241,6 @@ export function MatrixVisualizer({
     setReconstructedPath([]);
   }, [matrixSize]);
 
-  // Resize matrix when size changes
   const resizeMatrix = useCallback((newSize: number) => {
     setMatrixSize(newSize);
     const newMatrix = createInitialMatrix(newSize);
@@ -269,7 +252,6 @@ export function MatrixVisualizer({
     setReconstructedPath([]);
   }, []);
 
-  // Get cell styling based on algorithm state and selection
   const getCellStyle = useCallback(
     (row: number, col: number, isDistanceMatrix: boolean = false) => {
       let baseClasses = 'w-16 h-10 text-center border border-gray-300 text-sm';
@@ -277,7 +259,6 @@ export function MatrixVisualizer({
       if (isDistanceMatrix) {
         baseClasses += ' bg-blue-50';
 
-        // Highlight path if selected
         if (selectedPath && reconstructedPath.length > 0) {
           const isInPath =
             reconstructedPath.includes(row) && reconstructedPath.includes(col);
@@ -288,7 +269,6 @@ export function MatrixVisualizer({
           }
         }
 
-        // Highlight current iteration
         if (currentStep >= 0 && currentStep < matrixSize) {
           if (row === currentStep || col === currentStep) {
             baseClasses += ' bg-purple-100';
@@ -297,7 +277,6 @@ export function MatrixVisualizer({
       } else {
         baseClasses += ' bg-white';
 
-        // Diagonal cells (self-loops)
         if (row === col) {
           baseClasses += ' bg-gray-100';
         }
@@ -308,7 +287,6 @@ export function MatrixVisualizer({
     [currentStep, matrixSize, selectedPath, reconstructedPath]
   );
 
-  // Format matrix value for display
   const formatValue = useCallback((value: number): string => {
     if (value === Infinity) return '∞';
     if (value === 0) return '0';
@@ -317,7 +295,6 @@ export function MatrixVisualizer({
 
   return (
     <div className={cn('space-y-6', className)}>
-      {/* Control Panel */}
       {showControls && (
         <div className="space-y-4 p-4 bg-muted rounded-lg">
           <div className="flex flex-wrap gap-4 items-center">
@@ -351,7 +328,6 @@ export function MatrixVisualizer({
             </Button>
           </div>
 
-          {/* Matrix Size and Animation Controls */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Matris Boyutu: {matrixSize}</Label>
@@ -377,7 +353,6 @@ export function MatrixVisualizer({
             </div>
           </div>
 
-          {/* Algorithm Statistics */}
           {algorithmStats.totalComparisons > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-background rounded border">
               <div className="text-center">
@@ -415,7 +390,6 @@ export function MatrixVisualizer({
             </div>
           )}
 
-          {/* Current Step Indicator */}
           {currentStep >= 0 && currentStep < matrixSize && (
             <div className="p-3 bg-purple-100 rounded border border-purple-300">
               <div className="text-sm font-medium text-purple-800">
@@ -428,7 +402,6 @@ export function MatrixVisualizer({
             </div>
           )}
 
-          {/* Path Selection */}
           {distanceMatrix.length > 0 && (
             <div className="space-y-2">
               <Label>Yol Görselleştirme (Kaynak → Hedef)</Label>
@@ -455,7 +428,6 @@ export function MatrixVisualizer({
                 )}
               </div>
 
-              {/* Selected Path Display */}
               {selectedPath && reconstructedPath.length > 0 && (
                 <div className="p-3 bg-green-50 rounded border border-green-300">
                   <div className="text-sm font-medium text-green-800">
@@ -478,9 +450,7 @@ export function MatrixVisualizer({
         </div>
       )}
 
-      {/* Matrix Visualization */}
       <div className="space-y-6">
-        {/* Adjacency Matrix Input */}
         <div className="space-y-3">
           <h3 className="text-lg font-semibold flex items-center gap-2">
             <Calculator className="w-5 h-5" />
@@ -494,7 +464,6 @@ export function MatrixVisualizer({
                   gridTemplateColumns: `repeat(${matrixSize + 1}, 1fr)`,
                 }}
               >
-                {/* Header row */}
                 <div className="w-10 h-10 flex items-center justify-center font-bold"></div>
                 {Array.from({ length: matrixSize }, (_, i) => (
                   <div
@@ -505,7 +474,6 @@ export function MatrixVisualizer({
                   </div>
                 ))}
 
-                {/* Matrix rows */}
                 {Array.from({ length: matrixSize }, (_, row) => (
                   <React.Fragment key={row}>
                     {/* Row header */}
@@ -513,7 +481,6 @@ export function MatrixVisualizer({
                       {row}
                     </div>
 
-                    {/* Matrix cells */}
                     {Array.from({ length: matrixSize }, (_, col) => (
                       <Input
                         key={`${row}-${col}`}
@@ -549,7 +516,6 @@ export function MatrixVisualizer({
           </div>
         </div>
 
-        {/* Distance Matrix Output */}
         {distanceMatrix.length > 0 && (
           <div className="space-y-3">
             <h3 className="text-lg font-semibold flex items-center gap-2">
@@ -564,7 +530,6 @@ export function MatrixVisualizer({
                     gridTemplateColumns: `repeat(${matrixSize + 1}, 1fr)`,
                   }}
                 >
-                  {/* Header row */}
                   <div className="w-10 h-10 flex items-center justify-center font-bold"></div>
                   {Array.from({ length: matrixSize }, (_, i) => (
                     <div
@@ -575,15 +540,12 @@ export function MatrixVisualizer({
                     </div>
                   ))}
 
-                  {/* Matrix rows */}
                   {Array.from({ length: matrixSize }, (_, row) => (
                     <React.Fragment key={row}>
-                      {/* Row header */}
                       <div className="w-10 h-10 flex items-center justify-center font-bold text-sm bg-blue-100 border">
                         {row}
                       </div>
 
-                      {/* Matrix cells */}
                       {Array.from({ length: matrixSize }, (_, col) => (
                         <div
                           key={`${row}-${col}`}
@@ -626,7 +588,6 @@ export function MatrixVisualizer({
         )}
       </div>
 
-      {/* Algorithm Explanation */}
       <div className="p-4 bg-muted rounded-lg">
         <h3 className="text-lg font-semibold mb-3">
           Floyd-Warshall Algoritması

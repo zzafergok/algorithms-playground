@@ -4,7 +4,6 @@ import { useMemo } from 'react';
 export const useNavigation = () => {
   const pathname = usePathname();
 
-  // Aktif link kontrolü için memoized function
   const isActiveLink = useMemo(() => {
     return (href: string): boolean => {
       if (href === '/') {

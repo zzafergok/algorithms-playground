@@ -29,7 +29,6 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
-// Komponentin props arayüzü
 interface UnderConstructionProps {
   title: string; // Sayfa başlığı
   description?: string; // İsteğe bağlı açıklama
@@ -77,13 +76,11 @@ export function UnderConstruction({
   returnPath,
   description,
 }: UnderConstructionProps) {
-  // Geri dönüş yolunu belirle, belirtilmemişse kategori sayfasına yönlendir
   const backPath =
     returnPath || (category ? `/algorithms/${category}` : '/algorithms');
 
   return (
     <div className="space-y-8 py-8">
-      {/* Header Section */}
       <motion.div
         className="text-center space-y-4"
         initial={{ opacity: 0, y: 20 }}
@@ -117,9 +114,7 @@ export function UnderConstruction({
         </div>
       </motion.div>
 
-      {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-        {/* Left Section: Explanation */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -189,7 +184,6 @@ export function UnderConstruction({
           </Card>
         </motion.div>
 
-        {/* Right Section: Suggestion Form */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -247,7 +241,6 @@ export function UnderConstruction({
         </motion.div>
       </div>
 
-      {/* Timeline Section */}
       <motion.div
         className="pt-8"
         initial={{ opacity: 0, y: 20 }}
@@ -262,7 +255,6 @@ export function UnderConstruction({
         </div>
 
         <div className="relative max-w-3xl mx-auto">
-          {/* Timeline line */}
           <div className="absolute left-0 md:left-1/2 top-0 h-full w-0.5 bg-border transform md:-translate-x-1/2" />
 
           {timelineSteps.map((step, index) => (
@@ -272,10 +264,8 @@ export function UnderConstruction({
                 index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
               }`}
             >
-              {/* Timeline bullet */}
               <div className="absolute left-0 md:left-1/2 w-5 h-5 rounded-full border-4 border-background bg-muted transform -translate-x-1/2 z-10" />
 
-              {/* Content */}
               <div
                 className={`pl-8 md:pl-0 ${index % 2 === 0 ? 'md:text-right md:pr-12' : 'md:text-left md:pl-12'} md:w-1/2`}
               >
@@ -296,7 +286,6 @@ export function UnderConstruction({
                   {step.description}
                 </p>
 
-                {/* Status badge */}
                 <div
                   className={`mt-2 flex ${index % 2 === 0 ? 'md:justify-end' : 'md:justify-start'}`}
                 >

@@ -1,17 +1,18 @@
 import Link from 'next/link';
+
 import { ArrowRight } from 'lucide-react';
+
 import {
   Card,
-  CardContent,
-  CardDescription,
+  CardTitle,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardContent,
+  CardDescription,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
-// Define the interface for our sorting algorithms
 interface SortingAlgorithm {
   name: string;
   slug: string;
@@ -26,7 +27,6 @@ interface SortingAlgorithm {
 }
 
 export default function SortingAlgorithmsPage() {
-  // Array containing all sorting algorithm information
   const sortingAlgorithms: SortingAlgorithm[] = [
     {
       name: 'Bubble Sort',
@@ -134,7 +134,6 @@ export default function SortingAlgorithmsPage() {
     },
   ];
 
-  // Helper function to map difficulty to badge color variant
   const getDifficultyBadgeVariant = (difficulty: string) => {
     switch (difficulty) {
       case 'Beginner':
@@ -148,7 +147,6 @@ export default function SortingAlgorithmsPage() {
     }
   };
 
-  // Grouping algorithms by difficulty for better organization
   const beginnerAlgorithms = sortingAlgorithms.filter(
     (algo) => algo.difficulty === 'Beginner'
   );
@@ -161,7 +159,6 @@ export default function SortingAlgorithmsPage() {
 
   return (
     <div className="space-y-12">
-      {/* Hero section with title and description */}
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold tracking-tight">
           Sıralama Algoritmaları
@@ -172,7 +169,6 @@ export default function SortingAlgorithmsPage() {
         </p>
       </div>
 
-      {/* Information section about sorting algorithms */}
       <section className="mt-12 p-6 bg-muted rounded-lg">
         <h2 className="text-2xl font-bold mb-4">
           Sıralama Algoritmaları Hakkında
@@ -223,7 +219,6 @@ export default function SortingAlgorithmsPage() {
         </div>
       </section>
 
-      {/* Comparison table for quick reference */}
       <section className="overflow-x-auto">
         <h2 className="text-2xl font-bold mb-4">Algoritma Karşılaştırması</h2>
         <table className="w-full border-collapse">
@@ -258,9 +253,7 @@ export default function SortingAlgorithmsPage() {
         </table>
       </section>
 
-      {/* Algorithms grouped by difficulty */}
       <div className="space-y-8">
-        {/* Beginner Algorithms */}
         <section>
           <h2 className="text-2xl font-bold mb-4">Temel Algoritmalar</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -318,7 +311,6 @@ export default function SortingAlgorithmsPage() {
           </div>
         </section>
 
-        {/* Intermediate Algorithms */}
         <section>
           <h2 className="text-2xl font-bold mb-4">Orta Seviye Algoritmalar</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -376,7 +368,6 @@ export default function SortingAlgorithmsPage() {
           </div>
         </section>
 
-        {/* Advanced Algorithms */}
         <section>
           <h2 className="text-2xl font-bold mb-4">İleri Seviye Algoritmalar</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -435,7 +426,6 @@ export default function SortingAlgorithmsPage() {
         </section>
       </div>
 
-      {/* When to use which algorithm section */}
       <section className="mt-12 p-6 bg-muted rounded-lg">
         <h2 className="text-2xl font-bold mb-4">
           Hangi Algoritmayı Ne Zaman Kullanmalı?

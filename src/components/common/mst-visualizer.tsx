@@ -1,25 +1,28 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
-import { Switch } from '@/components/ui/switch';
+
 import {
+  Plus,
   Play,
-  RotateCcw,
+  Minus,
   Shuffle,
   Network,
   TreePine,
-  Plus,
-  Minus,
+  RotateCcw,
 } from 'lucide-react';
+
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
+
 import {
+  prim,
   Graph,
+  kruskal,
   GraphNode,
   GraphEdge,
-  kruskal,
-  prim,
   resetGraphState,
 } from '@/lib/algorithms/graph';
 import { cn } from '@/lib/utils';
@@ -46,36 +49,29 @@ interface AlgorithmStep {
   edgesInMST: GraphEdge[];
 }
 
-// MST visualizer component for Minimum Spanning Tree algorithms
 export function MSTVisualizer({
   className,
   initialNodeCount = 6,
   showControls = true,
   algorithm = 'kruskal',
 }: MSTVisualizerProps) {
-  // Core state management
+  const [mstEdges, setMstEdges] = useState<GraphEdge[]>([]);
+  const [currentStep, setCurrentStep] = useState<number>(-1);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
   const [nodeCount, setNodeCount] = useState(initialNodeCount);
+  const [showWeights, setShowWeights] = useState<boolean>(true);
+  const [totalMSTWeight, setTotalMSTWeight] = useState<number>(0);
+  const [animationSpeed, setAnimationSpeed] = useState<number>(50);
+  const [showStepDetails, setShowStepDetails] = useState<boolean>(true);
+  const [selectedStartNode, setSelectedStartNode] = useState<string>('0');
+  const [algorithmSteps, setAlgorithmSteps] = useState<AlgorithmStep[]>([]);
   const [graph, setGraph] = useState<Graph>(() =>
     generateRandomGraph(initialNodeCount)
   );
   const [algorithm_type, setAlgorithmType] = useState<'kruskal' | 'prim'>(
     algorithm
   );
-  const [isRunning, setIsRunning] = useState<boolean>(false);
-  const [animationSpeed, setAnimationSpeed] = useState<number>(50);
 
-  // Algorithm execution state
-  const [currentStep, setCurrentStep] = useState<number>(-1);
-  const [algorithmSteps, setAlgorithmSteps] = useState<AlgorithmStep[]>([]);
-  const [mstEdges, setMstEdges] = useState<GraphEdge[]>([]);
-  const [totalMSTWeight, setTotalMSTWeight] = useState<number>(0);
-
-  // Visualization settings
-  const [showWeights, setShowWeights] = useState<boolean>(true);
-  const [showStepDetails, setShowStepDetails] = useState<boolean>(true);
-  const [selectedStartNode, setSelectedStartNode] = useState<string>('0');
-
-  // Algorithm statistics
   const [algorithmStats, setAlgorithmStats] = useState({
     totalEdges: 0,
     edgesConsidered: 0,
@@ -84,7 +80,6 @@ export function MSTVisualizer({
     executionTime: 0,
   });
 
-  // Generate a random connected graph
   function generateRandomGraph(numNodes: number): Graph {
     const nodes = new Map<string, VisualNode>();
     const edges: GraphEdge[] = [];
@@ -168,7 +163,6 @@ export function MSTVisualizer({
     return { nodes, edges, adjacencyList };
   }
 
-  // Run the selected MST algorithm
   const runMSTAlgorithm = useCallback(async () => {
     setIsRunning(true);
     setCurrentStep(-1);
@@ -182,11 +176,9 @@ export function MSTVisualizer({
     let steps: AlgorithmStep[] = [];
 
     if (algorithm_type === 'kruskal') {
-      // Run Kruskal's algorithm
       const kruskalResult = kruskal(graph);
       result = kruskalResult;
 
-      // Convert Kruskal steps to our step format
       let totalWeight = 0;
       const edgesInMST: GraphEdge[] = [];
 
@@ -205,11 +197,9 @@ export function MSTVisualizer({
         };
       });
     } else {
-      // Run Prim's algorithm
       const primResult = prim(graph, selectedStartNode);
       result = primResult;
 
-      // Convert Prim steps to our step format
       let totalWeight = 0;
       const edgesInMST: GraphEdge[] = [];
 
@@ -242,7 +232,6 @@ export function MSTVisualizer({
     setAlgorithmSteps(steps);
     setTotalMSTWeight(result.totalWeight);
 
-    // Calculate statistics
     const edgesConsidered = steps.length;
     const edgesRejected = steps.filter((s) => s.action === 'reject').length;
 
@@ -254,7 +243,6 @@ export function MSTVisualizer({
       executionTime: endTime - startTime,
     });
 
-    // Animate through steps
     for (let i = 0; i < steps.length; i++) {
       setCurrentStep(i);
       setMstEdges(steps[i].edgesInMST);
@@ -266,7 +254,6 @@ export function MSTVisualizer({
     setIsRunning(false);
   }, [graph, algorithm_type, selectedStartNode, animationSpeed]);
 
-  // Reset algorithm state
   const resetAlgorithm = useCallback(() => {
     setCurrentStep(-1);
     setAlgorithmSteps([]);
@@ -283,7 +270,6 @@ export function MSTVisualizer({
     });
   }, [graph]);
 
-  // Generate new random graph
   const generateNewGraph = useCallback(() => {
     const newGraph = generateRandomGraph(nodeCount);
     setGraph(newGraph);
@@ -291,7 +277,6 @@ export function MSTVisualizer({
     resetAlgorithm();
   }, [nodeCount, resetAlgorithm]);
 
-  // Add new node to graph
   const addNode = useCallback(() => {
     if (nodeCount >= 10) return; // Limit maximum nodes
 
@@ -300,7 +285,6 @@ export function MSTVisualizer({
     generateNewGraph();
   }, [nodeCount, generateNewGraph]);
 
-  // Remove node from graph
   const removeNode = useCallback(() => {
     if (nodeCount <= 3) return; // Minimum 3 nodes required
 
@@ -309,7 +293,6 @@ export function MSTVisualizer({
     generateNewGraph();
   }, [nodeCount, generateNewGraph]);
 
-  // Get edge styling based on current state
   const getEdgeStyle = useCallback(
     (edge: GraphEdge) => {
       const isMSTEdge = mstEdges.some(
@@ -347,20 +330,17 @@ export function MSTVisualizer({
     [mstEdges, currentStep, algorithmSteps]
   );
 
-  // Get node styling based on current state
   const getNodeStyle = useCallback(
     (nodeId: string) => {
       const baseClasses =
         'fill-white stroke-gray-400 stroke-2 cursor-pointer hover:fill-gray-100';
 
       if (algorithm_type === 'prim') {
-        // In Prim's algorithm, highlight visited nodes
         const isStartNode = nodeId === selectedStartNode;
         if (isStartNode) {
           return cn(baseClasses, 'fill-green-200 stroke-green-600');
         }
 
-        // Check if node is connected to current MST
         const isConnected = mstEdges.some(
           (edge) => edge.from === nodeId || edge.to === nodeId
         );
@@ -375,7 +355,6 @@ export function MSTVisualizer({
     [algorithm_type, selectedStartNode, mstEdges]
   );
 
-  // Calculate edge path for SVG
   const getEdgePath = useCallback(
     (edge: GraphEdge) => {
       const fromNode = graph.nodes.get(edge.from);
@@ -388,7 +367,6 @@ export function MSTVisualizer({
     [graph.nodes]
   );
 
-  // Calculate edge midpoint for weight labels
   const getEdgeMidpoint = useCallback(
     (edge: GraphEdge) => {
       const fromNode = graph.nodes.get(edge.from);
@@ -406,7 +384,6 @@ export function MSTVisualizer({
 
   return (
     <div className={cn('space-y-6', className)}>
-      {/* Control Panel */}
       {showControls && (
         <div className="space-y-4 p-4 bg-muted rounded-lg">
           <div className="flex flex-wrap gap-4 items-center">
@@ -440,7 +417,6 @@ export function MSTVisualizer({
             </Button>
           </div>
 
-          {/* Algorithm and Graph Controls */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label>Algoritma</Label>
@@ -500,7 +476,6 @@ export function MSTVisualizer({
             </div>
           </div>
 
-          {/* Prim's Algorithm Start Node Selection */}
           {algorithm_type === 'prim' && (
             <div className="space-y-2">
               <Label>Başlangıç Düğümü (Prim için)</Label>
@@ -519,7 +494,6 @@ export function MSTVisualizer({
             </div>
           )}
 
-          {/* Visualization Options */}
           <div className="flex flex-wrap gap-4 items-center">
             <div className="flex items-center space-x-2">
               <Switch
@@ -540,7 +514,6 @@ export function MSTVisualizer({
             </div>
           </div>
 
-          {/* Algorithm Statistics */}
           {algorithmStats.totalEdges > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-background rounded border">
               <div className="text-center">
@@ -578,7 +551,6 @@ export function MSTVisualizer({
             </div>
           )}
 
-          {/* Current Step Information */}
           {showStepDetails &&
             currentStep >= 0 &&
             currentStep < algorithmSteps.length && (
@@ -641,7 +613,6 @@ export function MSTVisualizer({
         </div>
       )}
 
-      {/* Graph Visualization */}
       <div className="flex justify-center">
         <div className="border-2 border-gray-300 rounded-lg bg-white overflow-hidden">
           <svg width="500" height="400" viewBox="0 0 500 400">
@@ -663,20 +634,17 @@ export function MSTVisualizer({
             </defs>
             <rect width="100%" height="100%" fill="url(#grid)" />
 
-            {/* Edges */}
             <g className="edges">
               {graph.edges.map((edge, index) => {
                 const midpoint = getEdgeMidpoint(edge);
                 return (
                   <g key={`edge-${index}`}>
-                    {/* Edge line */}
                     <path
                       d={getEdgePath(edge)}
                       className={getEdgeStyle(edge)}
                       fill="none"
                     />
 
-                    {/* Edge weight label */}
                     {showWeights && (
                       <g>
                         <circle
@@ -703,7 +671,6 @@ export function MSTVisualizer({
               })}
             </g>
 
-            {/* Nodes */}
             <g className="nodes">
               {Array.from(graph.nodes.entries()).map(([nodeId, node]) => (
                 <g key={nodeId}>
@@ -732,7 +699,6 @@ export function MSTVisualizer({
         </div>
       </div>
 
-      {/* Legend */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <h4 className="font-semibold">Kenar Renkleri</h4>
@@ -783,7 +749,6 @@ export function MSTVisualizer({
         </div>
       </div>
 
-      {/* Algorithm Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="p-4 bg-muted rounded-lg">
           <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
@@ -836,7 +801,6 @@ export function MSTVisualizer({
         </div>
       </div>
 
-      {/* Final MST Summary */}
       {mstEdges.length > 0 && currentStep >= algorithmSteps.length - 1 && (
         <div className="p-4 bg-green-50 rounded-lg border border-green-200">
           <h3 className="text-lg font-semibold text-green-800 mb-3">

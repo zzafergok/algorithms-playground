@@ -1,31 +1,25 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { AlgorithmExplanation } from '@/components/common/explanation';
-import { CodeBlock } from '@/components/common/code-block';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
+
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
+import { Button } from '@/components/ui/button';
+import { CodeBlock } from '@/components/common/code-block';
+import { AlgorithmExplanation } from '@/components/common/explanation';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-// N-Queens problemi çözümü - Geri izleme (backtracking) algoritması
 function solveNQueens(n: number): number[][] {
-  // Tüm çözümleri saklayan dizi
   const solutions: number[][] = [];
 
-  // Satranç tahtasını temsil eden dizi (her satırdaki vezirin sütun pozisyonu)
   const board: number[] = Array(n).fill(-1);
 
-  // Vezir yerleştirmenin güvenli olup olmadığını kontrol eden yardımcı fonksiyon
   function isSafe(row: number, col: number): boolean {
-    // Daha önceki satırlardaki vezirleri kontrol et
     for (let i = 0; i < row; i++) {
-      // Aynı sütunda başka bir vezir var mı?
       if (board[i] === col) {
         return false;
       }
 
-      // Aynı çaprazda başka bir vezir var mı?
       if (Math.abs(i - row) === Math.abs(board[i] - col)) {
         return false;
       }
@@ -34,56 +28,43 @@ function solveNQueens(n: number): number[][] {
     return true;
   }
 
-  // Geri izleme (backtracking) fonksiyonu
   function backtrack(row: number): void {
-    // Tüm satırlar dolduruldu, bir çözüm bulundu
     if (row === n) {
-      // Bulunan çözümü kaydet
       solutions.push([...board]);
       return;
     }
 
-    // Mevcut satır için tüm olası sütunları dene
     for (let col = 0; col < n; col++) {
-      // Eğer bu pozisyona vezir yerleştirmek güvenliyse
       if (isSafe(row, col)) {
-        // Veziri yerleştir
         board[row] = col;
 
-        // Sonraki satır için recursion
         backtrack(row + 1);
 
-        // Geri al (backtrack) - vazgeçme adımı
         board[row] = -1;
       }
     }
   }
 
-  // 0. satırdan itibaren geri izleme algoritmasını başlat
   backtrack(0);
 
   return solutions;
 }
 
-// Satranç tahtasını görselleştiren bileşen
 const ChessboardVisualization: React.FC<{
   size: number;
   solution: number[];
 }> = ({ size, solution }) => {
   return (
     <div className="inline-grid gap-0.5 p-1 bg-gray-700 dark:bg-gray-800 rounded-md">
-      {/* n x n satranç tahtası oluştur */}
       <div
         className="inline-grid"
         style={{ gridTemplateColumns: `repeat(${size}, 1fr)` }}
       >
-        {/* Tüm hücreleri oluştur */}
         {Array.from({ length: size * size }).map((_, index) => {
           const row = Math.floor(index / size);
           const col = index % size;
           const isQueenPlaced = solution[row] === col;
 
-          // Satranç tahtasındaki siyah/beyaz kare desenini oluştur
           const isBlackSquare = (row + col) % 2 === 1;
 
           return (
@@ -105,7 +86,6 @@ const ChessboardVisualization: React.FC<{
   );
 };
 
-// Tüm çözümleri gösteren bileşen
 const SolutionsViewer: React.FC<{
   solutions: number[][];
   currentIndex: number;
@@ -156,16 +136,11 @@ const SolutionsViewer: React.FC<{
 };
 
 export default function NQueensPage() {
-  // N değeri (satranç tahtası boyutu)
   const [boardSize, setBoardSize] = useState<number>(4);
-  // Bulunan çözümler
   const [solutions, setSolutions] = useState<number[][]>([]);
-  // Gösterilen çözüm indeksi
-  const [currentSolutionIndex, setCurrentSolutionIndex] = useState<number>(0);
-  // Algoritma çalışma durumu
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [currentSolutionIndex, setCurrentSolutionIndex] = useState<number>(0);
 
-  // Algoritma açıklaması için veriler
   const pseudocode = `function solveNQueens(n):
     // Bulunan tüm çözümleri saklar
     solutions = []
@@ -389,21 +364,17 @@ public class NQueens {
 }`,
   };
 
-  // Yeni board size değerinde çözümü hesapla
   useEffect(() => {
     handleSolve();
   }, [boardSize]);
 
-  // Tahtanın boyutunu değiştirme işlevi
   const handleBoardSizeChange = (value: number[]) => {
     setBoardSize(value[0]);
   };
 
-  // Çözümü bulma işlevi
   const handleSolve = () => {
     setIsRunning(true);
 
-    // Büyük boyutlar için performans için setTimeout kullan
     setTimeout(() => {
       try {
         const foundSolutions = solveNQueens(boardSize);

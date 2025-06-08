@@ -26,7 +26,6 @@ import { Button } from '@/components/ui/button';
 import { CodeBlock } from '@/components/common/code-block';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-// Step interface for contribution process
 interface ContributionStep {
   title: string;
   description: string;
@@ -36,10 +35,8 @@ interface ContributionStep {
 }
 
 export default function ContributingPage() {
-  // State to track active step
   const [activeStep, setActiveStep] = useState<number>(0);
 
-  // Contribution process steps
   const contributionSteps: ContributionStep[] = [
     {
       title: 'Fork the repository',
@@ -104,7 +101,6 @@ export default function ContributingPage() {
     },
   ];
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -130,7 +126,6 @@ export default function ContributingPage() {
 
   return (
     <div className="container py-12 max-w-4xl mx-auto">
-      {/* Header section */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold tracking-tight mb-4">
           Katkıda Bulunma
@@ -141,13 +136,10 @@ export default function ContributingPage() {
         </p>
       </div>
 
-      {/* Contribution process visual guide */}
       <div className="mb-16">
         <h2 className="text-2xl font-bold mb-6">Katkı Süreci</h2>
 
-        {/* Step indicators container with proper spacing */}
         <div className="relative mb-12">
-          {/* Step indicators */}
           <div className="flex justify-between relative">
             {contributionSteps.map((_, index) => (
               <Button
@@ -166,7 +158,6 @@ export default function ContributingPage() {
             ))}
           </div>
 
-          {/* Progress bar positioned below the buttons */}
           <div className="absolute -bottom-4 left-0 right-0 h-1 bg-muted">
             <div
               className="h-full bg-primary transition-all duration-300"
@@ -177,7 +168,6 @@ export default function ContributingPage() {
           </div>
         </div>
 
-        {/* Current step details */}
         <Card className="border border-border mt-8">
           <CardHeader>
             <div className="flex items-center gap-3">
@@ -201,7 +191,6 @@ export default function ContributingPage() {
             </CardContent>
           )}
 
-          {/* Navigation buttons */}
           <div className="p-4 flex justify-between">
             <Button
               variant="outline"
@@ -224,7 +213,6 @@ export default function ContributingPage() {
         </Card>
       </div>
 
-      {/* Contribution guidelines */}
       <div className="mb-16">
         <h2 className="text-2xl font-bold mb-6">Katkı Rehberleri</h2>
 
@@ -532,7 +520,6 @@ function sortArray<T extends number>(array: T[]): T[] {
         </Tabs>
       </div>
 
-      {/* Common contribution types */}
       <motion.div
         className="grid grid-cols-1 md:grid-cols-2 gap-6"
         variants={containerVariants}
@@ -591,7 +578,6 @@ function sortArray<T extends number>(array: T[]): T[] {
         ))}
       </motion.div>
 
-      {/* Help section */}
       <div className="mt-12 text-center">
         <div className="inline-flex items-center gap-2 bg-primary/10 text-primary p-2 rounded-full mb-4">
           <HelpCircle className="h-5 w-5" />

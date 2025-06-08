@@ -1,13 +1,19 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
+
+import { useState } from 'react';
+
 import { ChevronRight, Menu } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useNavigation } from '@/hooks/useNavigation';
+
 import { navigationConfig } from '@/config/navigation';
+
 import { NavItem } from '@/types/navigation';
+
 import { cn } from '@/lib/utils';
 
 interface SidebarProps {
@@ -19,12 +25,10 @@ export const Sidebar = ({ className }: SidebarProps) => {
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const { isActiveLink } = useNavigation();
 
-  // Toggle sidebar collapse state
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
 
-  // Toggle expanded state for navigation items
   const toggleExpanded = (href: string) => {
     setExpandedItems((prev) =>
       prev.includes(href)
@@ -33,7 +37,6 @@ export const Sidebar = ({ className }: SidebarProps) => {
     );
   };
 
-  // Recursive sidebar item renderer
   const renderSidebarItem = (item: NavItem, level: number = 0) => {
     const hasChildren = item.children && item.children.length > 0;
     const isExpanded = expandedItems.includes(item.href);
@@ -75,7 +78,6 @@ export const Sidebar = ({ className }: SidebarProps) => {
           )}
         </div>
 
-        {/* Render children if expanded and not collapsed */}
         {hasChildren && isExpanded && !isCollapsed && (
           <div className="space-y-1">
             {item.children!.map((child) => renderSidebarItem(child, level + 1))}
@@ -93,7 +95,6 @@ export const Sidebar = ({ className }: SidebarProps) => {
         className
       )}
     >
-      {/* Sidebar header */}
       <div className="flex items-center justify-between p-4 border-b border-border">
         {!isCollapsed && (
           <Link href="/" className="font-semibold text-lg">
@@ -110,14 +111,12 @@ export const Sidebar = ({ className }: SidebarProps) => {
         </Button>
       </div>
 
-      {/* Sidebar navigation content */}
       <ScrollArea className="flex-1 px-3 py-4">
         <nav className="space-y-2">
           {navigationConfig.mainNavItems.map((item) => renderSidebarItem(item))}
         </nav>
       </ScrollArea>
 
-      {/* Sidebar footer */}
       {!isCollapsed && (
         <div className="p-4 border-t border-border">
           <p className="text-xs text-muted-foreground">© 2024 AlgoPit</p>

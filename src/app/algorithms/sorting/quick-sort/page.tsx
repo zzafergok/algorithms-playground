@@ -1,15 +1,16 @@
 'use client';
 
 import React from 'react';
-import { quickSort } from '@/lib/algorithms/sorting';
+
 import { CodeBlock } from '@/components/common/code-block';
 import { InteractiveDemo } from '@/components/common/interactive-demo';
+import { AlgorithmExplanation } from '@/components/common/explanation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlgorithmExplanation } from '@/components/common/explanation';
+
+import { quickSort } from '@/lib/algorithms/sorting';
 
 export default function QuickSortPage() {
-  // Algorithm implementations in different languages
   const implementations = {
     javascript: `/**
  * Quick Sort implementation for JavaScript arrays
@@ -233,7 +234,6 @@ private static int partition(int[] arr, int low, int high) {
 }`,
   };
 
-  // Detailed quick sort explanation
   const quickSortDescription = `
 Quick Sort, "Böl ve Fethet" (Divide and Conquer) paradigmasını kullanan hızlı ve verimli bir sıralama algoritmasıdır. Tony Hoare tarafından 1960 yılında geliştirilmiştir ve adını hızlı çalışmasından almıştır.
 
@@ -264,7 +264,6 @@ Quick Sort, özellikle büyük veri setleri için ve hızın önemli olduğu dur
 
       <div className="grid">
         <div className="space-y-6">
-          {/* Algorithm Description */}
           <Card>
             <CardHeader>
               <CardTitle>Quick Sort Açıklaması</CardTitle>
@@ -278,7 +277,6 @@ Quick Sort, özellikle büyük veri setleri için ve hızın önemli olduğu dur
         </div>
       </div>
 
-      {/* Code Examples Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kod Örnekleri</h2>
         <p className="text-muted-foreground">
@@ -325,7 +323,6 @@ Quick Sort, özellikle büyük veri setleri için ve hızın önemli olduğu dur
         </Tabs>
       </div>
 
-      {/* Interactive Demo Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Kendi Verilerinizle Test Edin</h2>
         <p className="text-muted-foreground">
@@ -355,7 +352,6 @@ Quick Sort, özellikle büyük veri setleri için ve hızın önemli olduğu dur
         />
       </div>
 
-      {/* Algorithmic Analysis Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Algoritma Analizi</h2>
 
@@ -468,7 +464,6 @@ Quick Sort, özellikle büyük veri setleri için ve hızın önemli olduğu dur
         </Card>
       </div>
 
-      {/* Quick Sort Visualization Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Quick Sort Nasıl Çalışır?</h2>
         <p className="text-muted-foreground">
@@ -606,7 +601,6 @@ Quick Sort, özellikle büyük veri setleri için ve hızın önemli olduğu dur
         </Card>
       </div>
 
-      {/* Pivot Selection Strategies Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Pivot Seçim Stratejileri</h2>
         <p className="text-muted-foreground">
@@ -688,7 +682,6 @@ Quick Sort, özellikle büyük veri setleri için ve hızın önemli olduğu dur
         </div>
       </div>
 
-      {/* Quick Sort vs Other Algorithms Comparison */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Quick Sort ve Diğer Algoritmalar</h2>
         <p className="text-muted-foreground">
@@ -781,7 +774,6 @@ Quick Sort, özellikle büyük veri setleri için ve hızın önemli olduğu dur
         </p>
       </div>
 
-      {/* Related Algorithms Section */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">İlgili Algoritmalar</h2>
         <p className="text-muted-foreground">
@@ -830,7 +822,6 @@ Quick Sort, özellikle büyük veri setleri için ve hızın önemli olduğu dur
         </div>
       </div>
 
-      {/* Full Algorithm Explanation */}
       <AlgorithmExplanation
         title="Quick Sort"
         description="Böl ve Fethet stratejisini kullanan hızlı ve verimli bir sıralama algoritması."

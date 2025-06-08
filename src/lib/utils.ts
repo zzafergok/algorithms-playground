@@ -1,12 +1,10 @@
 import { twMerge } from 'tailwind-merge';
 import { type ClassValue, clsx } from 'clsx';
 
-// Tailwind sınıflarını birleştiren yardımcı fonksiyon
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Rastgele dizi oluşturmak için yardımcı fonksiyon
 export function generateRandomArray(
   length: number = 20,
   min: number = 5,
@@ -18,7 +16,6 @@ export function generateRandomArray(
   );
 }
 
-// Algoritma hızını ölçen yardımcı fonksiyon
 export function measureAlgorithmTime<T>(
   algorithm: (input: any) => T,
   input: any
@@ -29,7 +26,6 @@ export function measureAlgorithmTime<T>(
   return { result, time: end - start };
 }
 
-// Kod bloğunu vurgulayan yardımcı fonksiyon
 export function highlightCode(code: string, highlightLine: number): string[] {
   return code.split('\n').map((line, index) => {
     const lineNumber = index + 1;
@@ -39,7 +35,6 @@ export function highlightCode(code: string, highlightLine: number): string[] {
   });
 }
 
-// Algoritma karmaşıklık seviyesini veren fonksiyon
 export function getComplexityName(complexity: string): {
   name: string;
   description: string;

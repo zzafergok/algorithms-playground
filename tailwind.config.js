@@ -6,7 +6,6 @@ module.exports = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    // Eğer başka klasörleriniz varsa onları da ekleyin
     './components/**/*.{js,ts,jsx,tsx,mdx}', // Eğer src dışında components varsa
     './app/**/*.{js,ts,jsx,tsx,mdx}', // Eğer src dışında app varsa
   ],

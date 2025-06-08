@@ -1,10 +1,9 @@
-import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/context/theme-provider';
+
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import '@/styles/globals.css';
 
-const inter = Inter({ subsets: ['latin'] });
+import '@/styles/globals.css';
 
 export const metadata = {
   title: 'Algoritmalar İnteraktif Öğrenme Platformu',
@@ -20,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="tr" suppressHydrationWarning>
       <body
-        className={`${inter.className} min-h-screen flex flex-col bg-background text-foreground`}
+        className={`min-h-screen flex flex-col bg-background text-foreground`}
       >
         <ThemeProvider
           attribute="class"

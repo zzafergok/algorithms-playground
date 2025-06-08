@@ -1,31 +1,34 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
+
+import { useState, useEffect } from 'react';
+
 import { Menu, X } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
+
 import { NavigationItem } from './Navigation/NavigationItem';
+
 import { navigationConfig } from '@/config/navigation';
+
 import { cn } from '@/lib/utils';
 
 export const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // Scroll effect handler with cleanup
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check initial scroll position
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Mobile menu close handler
   const handleMobileMenuToggle = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
@@ -43,7 +46,6 @@ export const Navbar = () => {
       )}
     >
       <div className="container flex h-16 items-center justify-between">
-        {/* Brand logo section */}
         <div className="flex items-center gap-2">
           <Link
             href="/"
@@ -54,18 +56,15 @@ export const Navbar = () => {
           </Link>
         </div>
 
-        {/* Desktop navigation */}
         <nav className="hidden md:flex items-center md:gap-6 lg:gap-8">
           {navigationConfig.mainNavItems.map((item) => (
             <NavigationItem key={item.href} item={item} />
           ))}
         </nav>
 
-        {/* Right side actions */}
         <div className="flex items-center gap-2">
           <ThemeToggle />
 
-          {/* Mobile menu toggle button */}
           <Button
             variant="ghost"
             size="icon"
@@ -78,7 +77,6 @@ export const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {isMobileMenuOpen && (
         <div className="container md:hidden py-4 bg-background border-t border-border/40 max-h-[80vh] overflow-y-auto">
           <nav className="flex flex-col gap-2">

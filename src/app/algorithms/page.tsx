@@ -1,17 +1,18 @@
 import Link from 'next/link';
+
 import { ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+
 import {
   Card,
-  CardContent,
-  CardDescription,
+  CardTitle,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardContent,
+  CardDescription,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
-// Kategori tipini tanımla
 interface Category {
   title: string;
   slug: string;
@@ -20,7 +21,6 @@ interface Category {
   icon?: React.ReactNode;
 }
 
-// Algoritma tipini tanımla
 interface Algorithm {
   name: string;
   slug: string;
@@ -29,7 +29,6 @@ interface Algorithm {
 }
 
 export default function AlgorithmsPage() {
-  // Tüm algoritma kategorilerini tanımla
   const algorithmCategories: Category[] = [
     {
       title: 'Sıralama Algoritmaları',
@@ -409,7 +408,6 @@ export default function AlgorithmsPage() {
     },
   ];
 
-  // Zorluk seviyesi için kullanılacak badge renklerini tanımla
   const difficultyBadgeVariant = (difficulty?: string) => {
     switch (difficulty) {
       case 'Kolay':
@@ -435,7 +433,6 @@ export default function AlgorithmsPage() {
         </p>
       </div>
 
-      {/* Algoritma Seçimi İpuçları Bölümü */}
       <div className="mt-12 p-6 bg-muted rounded-lg">
         <h2 className="text-2xl font-bold mb-4">Algoritma Seçimi Rehberi</h2>
         <div className="prose dark:prose-invert max-w-none">
@@ -478,7 +475,6 @@ export default function AlgorithmsPage() {
         </div>
       </div>
 
-      {/* Algoritma Kategorileri Özeti */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {algorithmCategories.map((category) => (
           <Card
@@ -520,14 +516,12 @@ export default function AlgorithmsPage() {
         ))}
       </div>
 
-      {/* Tüm Algoritmalar Listesi */}
       <div className="mt-16">
         <h2 className="text-3xl font-bold mb-8 text-center">
           Tüm Algoritmalar
         </h2>
 
         <div className="bg-muted/30 rounded-lg p-6">
-          {/* Tüm kategorileri yeni sekmelerde göster */}
           <div className="space-y-10">
             {algorithmCategories.map((category) => (
               <div key={category.slug} className="space-y-4">

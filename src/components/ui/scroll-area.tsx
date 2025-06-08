@@ -1,10 +1,11 @@
 'use client';
 
 import * as React from 'react';
+
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
+
 import { cn } from '@/lib/utils';
 
-// ScrollArea ana container componenti
 const ScrollArea = React.forwardRef<
   React.ElementRef<typeof ScrollAreaPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root>
@@ -14,19 +15,15 @@ const ScrollArea = React.forwardRef<
     className={cn('relative overflow-hidden', className)}
     {...props}
   >
-    {/* ScrollArea viewport - içeriğin gösterildiği alan */}
     <ScrollAreaPrimitive.Viewport className="h-full w-full rounded-[inherit]">
       {children}
     </ScrollAreaPrimitive.Viewport>
-    {/* Scroll bar componenti */}
     <ScrollBar />
-    {/* Köşe componenti - dikey ve yatay scrollbar'ın kesiştiği yer */}
     <ScrollAreaPrimitive.Corner />
   </ScrollAreaPrimitive.Root>
 ));
 ScrollArea.displayName = ScrollAreaPrimitive.Root.displayName;
 
-// ScrollBar componenti - scroll çubuklarının stil ve davranışlarını yönetir
 const ScrollBar = React.forwardRef<
   React.ElementRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>,
   React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>
@@ -44,7 +41,6 @@ const ScrollBar = React.forwardRef<
     )}
     {...props}
   >
-    {/* Scroll thumb - hareket eden parça */}
     <ScrollAreaPrimitive.ScrollAreaThumb className="relative flex-1 rounded-full bg-border" />
   </ScrollAreaPrimitive.ScrollAreaScrollbar>
 ));

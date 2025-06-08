@@ -1,10 +1,11 @@
 'use client';
 
 import * as React from 'react';
+
 import * as SeparatorPrimitive from '@radix-ui/react-separator';
+
 import { cn } from '@/lib/utils';
 
-// Enhanced separator component with comprehensive styling options
 const Separator = React.forwardRef<
   React.ElementRef<typeof SeparatorPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root> & {
@@ -23,13 +24,11 @@ const Separator = React.forwardRef<
     },
     ref
   ) => {
-    // Base styling for separator with orientation support
     const baseClasses = cn(
       'shrink-0 bg-border',
       orientation === 'horizontal' ? 'h-[1px] w-full' : 'h-full w-[1px]'
     );
 
-    // Variant-specific styling for different visual appearances
     const variantClasses = {
       default: 'bg-border',
       dashed: 'border-dashed border-t border-border bg-transparent',
@@ -38,7 +37,6 @@ const Separator = React.forwardRef<
       gradient: 'bg-gradient-to-r from-transparent via-border to-transparent',
     };
 
-    // Spacing configuration for consistent layout
     const spacingClasses = {
       sm: orientation === 'horizontal' ? 'my-2' : 'mx-2',
       md: orientation === 'horizontal' ? 'my-4' : 'mx-4',
@@ -46,7 +44,6 @@ const Separator = React.forwardRef<
       xl: orientation === 'horizontal' ? 'my-8' : 'mx-8',
     };
 
-    // Thickness adjustment for thick variant
     const thicknessClasses =
       variant === 'thick'
         ? orientation === 'horizontal'

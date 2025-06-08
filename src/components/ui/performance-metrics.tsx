@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
+
 import { Clock, MemoryStick, Layers, Cpu } from 'lucide-react';
+
 import { Card, CardContent, CardHeader, CardTitle } from './card';
 
 export interface PerformanceMetricsProps {

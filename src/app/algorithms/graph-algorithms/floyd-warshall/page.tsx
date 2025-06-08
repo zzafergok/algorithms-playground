@@ -1,14 +1,13 @@
 'use client';
 
 import React from 'react';
+
+import { CodeBlock } from '@/components/common/code-block';
 import { AlgorithmExplanation } from '@/components/common/explanation';
 import { MatrixVisualizer } from '@/components/common/matrix-visualizer';
-import { CodeBlock } from '@/components/common/code-block';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-// Floyd-Warshall algorithm page component
 export default function FloydWarshallPage() {
-  // Algorithm explanation data for Floyd-Warshall
   const pseudocode = `function floydWarshall(graph):
     n = number of vertices
     dist = adjacency matrix (distance[i][j] = weight of edge from i to j)
@@ -36,7 +35,6 @@ export default function FloydWarshallPage() {
     
     return dist, next`;
 
-  // Code implementations in different languages
   const implementations = {
     typescript: `interface Graph {
   nodes: Map<string, GraphNode>;

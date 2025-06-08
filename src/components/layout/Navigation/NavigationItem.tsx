@@ -1,21 +1,27 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
+
+import { useState } from 'react';
+
 import { ChevronDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+
+import { useNavigation } from '@/hooks/useNavigation';
+
 import {
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuSub,
+  DropdownMenuItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+
 import { NavItem } from '@/types/navigation';
-import { useNavigation } from '@/hooks/useNavigation';
+
 import { cn } from '@/lib/utils';
 
 interface NavigationItemProps {
@@ -32,7 +38,6 @@ export const NavigationItem = ({
   const { isActiveLink } = useNavigation();
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Dropdown item render helper function
   const renderDropdownItems = (items: NavItem[]) => {
     return items.map((childItem) => {
       if (childItem.children && childItem.children.length > 0) {
@@ -69,7 +74,6 @@ export const NavigationItem = ({
     });
   };
 
-  // Mobile navigation item rendering
   if (isMobile) {
     if (item.children && item.children.length > 0) {
       return (
@@ -131,7 +135,6 @@ export const NavigationItem = ({
     );
   }
 
-  // Desktop navigation item rendering
   if (item.children && item.children.length > 0) {
     return (
       <DropdownMenu>

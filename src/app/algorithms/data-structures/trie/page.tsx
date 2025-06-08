@@ -33,7 +33,6 @@ interface TrieSearchDemoResult {
   statistics: TrieStatistics | null;
 }
 
-// Prefix arama demo fonksiyonu
 interface PrefixSearchDemoInput {
   toString(): string;
 }
@@ -378,7 +377,6 @@ console.log('Trie statistics:', trie.getStatistics());`;
       return 'Lütfen bir prefix girin';
     }
 
-    // Örnek kelimeler ile trie oluştur
     const sampleWords: string[] = [
       'cat',
       'cats',
@@ -439,10 +437,8 @@ console.log('Trie statistics:', trie.getStatistics());`;
 
   return (
     <div className="space-y-8">
-      {/* Algoritma açıklaması ve teorik bilgiler */}
       <AlgorithmExplanation {...algorithmData} />
 
-      {/* İnteraktif Trie görselleştirici */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">İnteraktif Trie Görselleştirme</h2>
         <p className="text-muted-foreground">
@@ -466,7 +462,6 @@ console.log('Trie statistics:', trie.getStatistics());`;
         />
       </div>
 
-      {/* İnteraktif demolar */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <InteractiveDemo
           title="Trie Oluşturma Demo"
@@ -485,7 +480,6 @@ console.log('Trie statistics:', trie.getStatistics());`;
         />
       </div>
 
-      {/* Kod implementasyonu */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">JavaScript Implementasyonu</h2>
         <p className="text-muted-foreground">
@@ -500,7 +494,6 @@ console.log('Trie statistics:', trie.getStatistics());`;
         />
       </div>
 
-      {/* Performans karşılaştırması */}
       <div className="bg-muted p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4">
           Trie vs Hash Table Performans Karşılaştırması
@@ -553,7 +546,6 @@ console.log('Trie statistics:', trie.getStatistics());`;
         </div>
       </div>
 
-      {/* Optimizasyon teknikleri */}
       <div className="bg-blue-50 dark:bg-blue-950/20 p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4 text-blue-800 dark:text-blue-200">
           Trie Optimizasyon Teknikleri
@@ -607,7 +599,6 @@ console.log('Trie statistics:', trie.getStatistics());`;
         </div>
       </div>
 
-      {/* Gerçek dünya uygulamaları */}
       <div className="bg-green-50 dark:bg-green-950/20 p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4 text-green-800 dark:text-green-200">
           Gerçek Dünya Uygulamaları ve Örnekler
@@ -658,7 +649,6 @@ console.log('Trie statistics:', trie.getStatistics());`;
         </div>
       </div>
 
-      {/* Alternatif implementasyonlar */}
       <div className="bg-purple-50 dark:bg-purple-950/20 p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4 text-purple-800 dark:text-purple-200">
           Trie Variations ve Alternatif Implementasyonlar

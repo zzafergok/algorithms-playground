@@ -59,9 +59,7 @@ interface SegmentTreeWithArray extends SegmentTreeInterface {
   getArray?(): number[];
 }
 
-// Segment Tree veri yapısı için ana sayfa komponenti
 export default function SegmentTreeDataStructurePage() {
-  // Segment Tree veri yapısı için açıklama verileri
   const algorithmData = {
     title: 'Segment Tree (Aralık Ağacı) Veri Yapısı',
     description:
@@ -136,7 +134,6 @@ class SegmentTree:
     ],
   };
 
-  // Segment Tree için JavaScript implementasyonu
   const segmentTreeImplementation = `// Segment Tree JavaScript implementasyonu
 class SegmentTreeNode {
   constructor(start, end, sum = 0, min = Infinity, max = -Infinity) {
@@ -522,17 +519,14 @@ console.log('Tree is valid:', segTree.validateTree());`;
         new (require('@/lib/algorithms/data-structures').SegmentTree)(array);
       const oldValue: number = array[index];
 
-      // Güncelleme öncesi değerler
       const beforeUpdate: TreeStats = {
         sum: segTree.querySum(0, array.length - 1),
         min: segTree.queryMin(0, array.length - 1),
         max: segTree.queryMax(0, array.length - 1),
       };
 
-      // Güncelleme yap
       segTree.updatePoint(index, newValue);
 
-      // Güncelleme sonrası değerler
       const afterUpdate: TreeStats = {
         sum: segTree.querySum(0, array.length - 1),
         min: segTree.queryMin(0, array.length - 1),
@@ -557,10 +551,8 @@ console.log('Tree is valid:', segTree.validateTree());`;
 
   return (
     <div className="space-y-8">
-      {/* Algoritma açıklaması ve teorik bilgiler */}
       <AlgorithmExplanation {...algorithmData} />
 
-      {/* İnteraktif Segment Tree görselleştirici */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">
           İnteraktif Segment Tree Görselleştirme
@@ -577,7 +569,6 @@ console.log('Tree is valid:', segTree.validateTree());`;
         />
       </div>
 
-      {/* İnteraktif demolar */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <InteractiveDemo
           title="Aralık Sorgusu Demo"
@@ -596,7 +587,6 @@ console.log('Tree is valid:', segTree.validateTree());`;
         />
       </div>
 
-      {/* Kod implementasyonu */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">JavaScript Implementasyonu</h2>
         <p className="text-muted-foreground">
@@ -612,7 +602,6 @@ console.log('Tree is valid:', segTree.validateTree());`;
         />
       </div>
 
-      {/* Karmaşıklık analizi */}
       <div className="bg-muted p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4">
           Zaman ve Alan Karmaşıklığı Analizi
@@ -663,7 +652,6 @@ console.log('Tree is valid:', segTree.validateTree());`;
         </div>
       </div>
 
-      {/* Lazy propagation açıklaması */}
       <div className="bg-blue-50 dark:bg-blue-950/20 p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4 text-blue-800 dark:text-blue-200">
           Lazy Propagation Optimizasyonu
@@ -701,7 +689,6 @@ console.log('Tree is valid:', segTree.validateTree());`;
         </div>
       </div>
 
-      {/* Variant'lar ve uzantılar */}
       <div className="bg-green-50 dark:bg-green-950/20 p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4 text-green-800 dark:text-green-200">
           Segment Tree Variants ve Uzantılar
@@ -737,7 +724,6 @@ console.log('Tree is valid:', segTree.validateTree());`;
         </div>
       </div>
 
-      {/* Gerçek dünya uygulamaları */}
       <div className="bg-purple-50 dark:bg-purple-950/20 p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4 text-purple-800 dark:text-purple-200">
           Gerçek Dünya Uygulamaları
@@ -784,7 +770,6 @@ console.log('Tree is valid:', segTree.validateTree());`;
         </div>
       </div>
 
-      {/* Pratik uygulama ipuçları */}
       <div className="bg-yellow-50 dark:bg-yellow-950/20 p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4 text-yellow-800 dark:text-yellow-200">
           Implementation ve Optimizasyon İpuçları
@@ -835,7 +820,6 @@ console.log('Tree is valid:', segTree.validateTree());`;
         </div>
       </div>
 
-      {/* Advanced Segment Tree Features */}
       <div className="bg-indigo-50 dark:bg-indigo-950/20 p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4 text-indigo-800 dark:text-indigo-200">
           İleri Seviye Segment Tree Özellikleri
@@ -927,7 +911,6 @@ class SegmentTree2D {
         </div>
       </div>
 
-      {/* Competitive Programming Tips */}
       <div className="bg-red-50 dark:bg-red-950/20 p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4 text-red-800 dark:text-red-200">
           Competitive Programming İpuçları
@@ -960,7 +943,6 @@ class SegmentTree2D {
         </div>
       </div>
 
-      {/* Performance Benchmarks */}
       <div className="bg-gray-50 dark:bg-gray-950/20 p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">
           Performans Karşılaştırması ve Benchmarks
@@ -1035,7 +1017,6 @@ class SegmentTree2D {
         </div>
       </div>
 
-      {/* Common Pitfalls and Solutions */}
       <div className="bg-orange-50 dark:bg-orange-950/20 p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4 text-orange-800 dark:text-orange-200">
           Yaygın Hatalar ve Çözümleri

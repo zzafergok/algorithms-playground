@@ -1,21 +1,24 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
+
 import {
   Plus,
   Minus,
-  RotateCcw,
   Search,
-  TreePine,
-  FolderTree,
   Trash2,
+  TreePine,
+  RotateCcw,
+  FolderTree,
 } from 'lucide-react';
-import { Trie, SegmentTreeNode } from '@/lib/algorithms/data-structures';
+
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+
 import { cn } from '@/lib/utils';
+import { Trie, SegmentTreeNode } from '@/lib/algorithms/data-structures';
 
 interface TreeVisualizerProps {
   className?: string;
@@ -53,19 +56,16 @@ interface SegmentTreeVisualizationNode {
   isLeaf: boolean;
 }
 
-// Tree visualizer component for Trie and Segment Tree data structures
 export function TreeVisualizer({
   className,
   treeType = 'trie',
   showControls = true,
   initialData,
 }: TreeVisualizerProps) {
-  // Core state management for both tree types
   const [currentTreeType, setCurrentTreeType] = useState<'trie' | 'segment'>(
     treeType
   );
 
-  // Trie-specific state
   const [trie, setTrie] = useState<Trie>(() => {
     const newTrie = new Trie();
     if (currentTreeType === 'trie' && initialData) {
@@ -78,7 +78,6 @@ export function TreeVisualizer({
   const [newWord, setNewWord] = useState<string>('');
   const [searchResults, setSearchResults] = useState<string[]>([]);
 
-  // Segment Tree specific state
   const [segmentArray, setSegmentArray] = useState<number[]>(() =>
     currentTreeType === 'segment' && initialData
       ? (initialData as number[])
@@ -93,12 +92,10 @@ export function TreeVisualizer({
     max: number;
   } | null>(null);
 
-  // Visualization settings
   const [showLabels, setShowLabels] = useState<boolean>(true);
   const [showValues, setShowValues] = useState<boolean>(true);
   const [compactView, setCompactView] = useState<boolean>(false);
 
-  // Initialize trees when type changes
   React.useEffect(() => {
     if (currentTreeType === 'trie') {
       const newTrie = new Trie();
@@ -116,12 +113,10 @@ export function TreeVisualizer({
       setTrie(newTrie);
       setTrieWords(defaultWords);
     } else {
-      // Initialize segment tree will be done in the segment tree section
       buildSegmentTree();
     }
   }, [currentTreeType]);
 
-  // Build segment tree from current array
   const buildSegmentTree = useCallback(() => {
     if (segmentArray.length === 0) return;
 
@@ -130,15 +125,11 @@ export function TreeVisualizer({
     setSegmentTree(newTree);
   }, [segmentArray]);
 
-  // Convert Trie to visualization format
   const convertTrieToVisualization =
     useCallback((): TrieVisualizationNode[] => {
-      const nodes: TrieVisualizationNode[] = [];
       const nodeWidth = 60;
-      const nodeHeight = 40;
       const levelHeight = 80;
 
-      // Create root node
       const root: TrieVisualizationNode = {
         char: 'ROOT',
         isEndOfWord: false,
@@ -148,7 +139,6 @@ export function TreeVisualizer({
         y: 0,
       };
 
-      // BFS traversal to build visualization tree
       const queue: {
         trieNode: any;
         visNode: TrieVisualizationNode;
@@ -199,7 +189,6 @@ export function TreeVisualizer({
         }
       }
 
-      // Calculate positions for each level
       levelNodes.forEach((levelNodeList, level) => {
         const totalWidth = levelNodeList.length * nodeWidth * 2;
         const startX = -totalWidth / 2;
@@ -210,7 +199,6 @@ export function TreeVisualizer({
         });
       });
 
-      // Set parent coordinates for line drawing
       const setParentCoordinates = (
         node: TrieVisualizationNode,
         parentX?: number,
@@ -231,7 +219,6 @@ export function TreeVisualizer({
       return [root];
     }, [trie]);
 
-  // Convert Segment Tree to visualization format
   const convertSegmentTreeToVisualization =
     useCallback((): SegmentTreeVisualizationNode[] => {
       if (!segmentTree) return [];
@@ -362,7 +349,6 @@ export function TreeVisualizer({
       return [root];
     }, [segmentTree]);
 
-  // Trie operations
   const addWordToTrie = useCallback(() => {
     if (newWord.trim() && !trieWords.includes(newWord.trim().toLowerCase())) {
       const word = newWord.trim().toLowerCase();
@@ -429,21 +415,18 @@ export function TreeVisualizer({
     }
   }, [segmentTree, queryStart, queryEnd, segmentArray.length]);
 
-  // Build segment tree when array changes
   React.useEffect(() => {
     if (currentTreeType === 'segment') {
       buildSegmentTree();
     }
   }, [segmentArray, currentTreeType, buildSegmentTree]);
 
-  // Auto-search as user types
   React.useEffect(() => {
     if (currentTreeType === 'trie') {
       searchInTrie();
     }
   }, [searchTerm, currentTreeType, searchInTrie]);
 
-  // Get visualization data based on tree type
   const visualizationData = useMemo(() => {
     if (currentTreeType === 'trie') {
       return convertTrieToVisualization();
@@ -456,7 +439,6 @@ export function TreeVisualizer({
     convertSegmentTreeToVisualization,
   ]);
 
-  // Calculate SVG dimensions
   const svgDimensions = useMemo(() => {
     let minX = 0,
       maxX = 0,
@@ -486,13 +468,11 @@ export function TreeVisualizer({
     return { width, height, viewBoxX, viewBoxY };
   }, [visualizationData]);
 
-  // Render tree nodes recursively
   const renderTreeNodes = useCallback(
     (nodes: any[]): JSX.Element[] => {
       const elements: JSX.Element[] = [];
 
       nodes.forEach((node, index) => {
-        // Draw connection line to parent
         if (node.parentX !== undefined && node.parentY !== undefined) {
           elements.push(
             <line
@@ -507,7 +487,6 @@ export function TreeVisualizer({
           );
         }
 
-        // Draw node based on tree type
         if (currentTreeType === 'trie') {
           const trieNode = node as TrieVisualizationNode;
           elements.push(
@@ -589,7 +568,6 @@ export function TreeVisualizer({
           );
         }
 
-        // Recursively render children
         if (node.children && node.children.length > 0) {
           elements.push(...renderTreeNodes(node.children));
         }
@@ -602,10 +580,8 @@ export function TreeVisualizer({
 
   return (
     <div className={cn('space-y-6', className)}>
-      {/* Control Panel */}
       {showControls && (
         <div className="space-y-4 p-4 bg-muted rounded-lg">
-          {/* Tree Type Selection */}
           <div className="flex flex-wrap gap-4 items-center">
             <div className="space-y-2">
               <Label>Ağaç Türü</Label>
@@ -621,7 +597,6 @@ export function TreeVisualizer({
               </select>
             </div>
 
-            {/* Visualization Options */}
             <div className="flex flex-wrap gap-4 items-center">
               <div className="flex items-center space-x-2">
                 <Switch
@@ -643,7 +618,6 @@ export function TreeVisualizer({
             </div>
           </div>
 
-          {/* Trie Controls */}
           {currentTreeType === 'trie' && (
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -663,7 +637,6 @@ export function TreeVisualizer({
                   </div>
                 </div>
 
-                {/* Search */}
                 <div className="space-y-2">
                   <Label>Kelime Ara / Prefix</Label>
                   <div className="flex gap-2">
@@ -679,7 +652,6 @@ export function TreeVisualizer({
                 </div>
               </div>
 
-              {/* Current Words */}
               <div className="space-y-2">
                 <Label>Mevcut Kelimeler ({trie.getWordCount()})</Label>
                 <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
@@ -702,7 +674,6 @@ export function TreeVisualizer({
                 </div>
               </div>
 
-              {/* Search Results */}
               {searchResults.length > 0 && (
                 <div className="space-y-2">
                   <Label>Arama Sonuçları</Label>
@@ -719,7 +690,6 @@ export function TreeVisualizer({
                 </div>
               )}
 
-              {/* Trie Statistics */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-3 bg-background rounded border">
                 <div className="text-center">
                   <div className="text-xl font-bold text-primary">
@@ -749,10 +719,8 @@ export function TreeVisualizer({
             </div>
           )}
 
-          {/* Segment Tree Controls */}
           {currentTreeType === 'segment' && (
             <div className="space-y-4">
-              {/* Array Input */}
               <div className="space-y-2">
                 <Label>Dizi Elemanları</Label>
                 <div className="flex flex-wrap gap-2">
@@ -787,7 +755,6 @@ export function TreeVisualizer({
                 </div>
               </div>
 
-              {/* Query Controls */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label>Sorgu Başlangıç İndeksi</Label>
@@ -821,7 +788,6 @@ export function TreeVisualizer({
                 </div>
               </div>
 
-              {/* Rebuild Tree Button */}
               <Button
                 onClick={buildSegmentTree}
                 variant="outline"
@@ -831,7 +797,6 @@ export function TreeVisualizer({
                 Ağacı Yeniden Oluştur
               </Button>
 
-              {/* Query Results */}
               {queryResult && (
                 <div className="p-4 bg-green-50 rounded border border-green-200">
                   <h4 className="font-semibold text-green-800 mb-2">
@@ -866,7 +831,6 @@ export function TreeVisualizer({
                 </div>
               )}
 
-              {/* Segment Tree Statistics */}
               {segmentTree && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-3 bg-background rounded border">
                   <div className="text-center">
@@ -900,7 +864,6 @@ export function TreeVisualizer({
         </div>
       )}
 
-      {/* Tree Visualization */}
       <div className="flex justify-center">
         <div className="border-2 border-gray-300 rounded-lg bg-white overflow-auto">
           <svg
@@ -908,7 +871,6 @@ export function TreeVisualizer({
             height={svgDimensions.height}
             viewBox={`${svgDimensions.viewBoxX} ${svgDimensions.viewBoxY} ${svgDimensions.width} ${svgDimensions.height}`}
           >
-            {/* Grid background */}
             <defs>
               <pattern
                 id="tree-grid"
@@ -932,7 +894,6 @@ export function TreeVisualizer({
               fill="url(#tree-grid)"
             />
 
-            {/* Render tree nodes and connections */}
             <g className="tree-visualization">
               {renderTreeNodes(visualizationData)}
             </g>
@@ -940,7 +901,6 @@ export function TreeVisualizer({
         </div>
       </div>
 
-      {/* Legend */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {currentTreeType === 'trie' && (
           <div className="space-y-2">
@@ -1000,7 +960,6 @@ export function TreeVisualizer({
         </div>
       </div>
 
-      {/* Algorithm Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="p-4 bg-muted rounded-lg">
           <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">

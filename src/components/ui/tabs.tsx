@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils';
 
 const Tabs = TabsPrimitive.Root;
 
-// Create a responsive wrapper for TabsList
 const TabsListWrapper = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>

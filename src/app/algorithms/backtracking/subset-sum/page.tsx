@@ -1,33 +1,27 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { AlgorithmExplanation } from '@/components/common/explanation';
+
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { CodeBlock } from '@/components/common/code-block';
+import { AlgorithmExplanation } from '@/components/common/explanation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
 
-// Subset Sum problemi - Geri izleme çözümü
 function findSubsetSum(
   arr: number[],
   targetSum: number
 ): { subsets: number[][]; steps: any[] } {
-  // Bulunan alt kümeleri saklayacak dizi
   const result: number[][] = [];
-  // Algoritma adımlarını takip etmek için dizi
   const steps: any[] = [];
-  // Mevcut alt kümeyi oluşturmak için kullanılan dizi
   const currentSubset: number[] = [];
 
-  // Diziyi büyükten küçüğe sırala (daha etkili budama için)
   const sortedArr = [...arr].sort((a, b) => a - b);
 
-  // Geri izleme fonksiyonu
   function backtrack(start: number, currentSum: number) {
-    // Mevcut adımı kaydet
     steps.push({
       subset: [...currentSubset],
       index: start,
@@ -35,74 +29,42 @@ function findSubsetSum(
       remaining: targetSum - currentSum,
     });
 
-    // Hedef toplam bulundu, çözümü kaydet
     if (currentSum === targetSum) {
       result.push([...currentSubset]);
       return;
     }
 
-    // Toplam hedefi aştı, bu dalı buda
     if (currentSum > targetSum) {
       return;
     }
 
-    // Tüm olası elemanları dene
     for (let i = start; i < sortedArr.length; i++) {
-      // Aynı değere sahip ardışık elemanları atla (tekrarları önle)
       if (i > start && sortedArr[i] === sortedArr[i - 1]) {
         continue;
       }
 
-      // Elemanı alt kümeye ekle
       currentSubset.push(sortedArr[i]);
 
-      // Sonraki eleman için rekürsif çağrı
       backtrack(i + 1, currentSum + sortedArr[i]);
 
-      // Geri al (backtrack)
       currentSubset.pop();
     }
   }
 
-  // 0. indeksten ve 0 toplamdan başlayarak geri izleme algortimasını başlat
   backtrack(0, 0);
 
   return { subsets: result, steps };
 }
 
-// Subset Sum için dinamik programlama çözümü (karşılaştırma için)
-function dpSubsetSum(arr: number[], target: number): boolean {
-  // DP tablosu: dp[i] = i toplamını oluşturmak mümkün mü?
-  const dp = Array(target + 1).fill(false);
-  dp[0] = true; // 0 toplamını oluşturmak her zaman mümkündür (boş alt küme)
-
-  // Her eleman için
-  for (const num of arr) {
-    // Sağdan sola giderek doldurma (aynı elemanı tekrar kullanmamak için)
-    for (let j = target; j >= num; j--) {
-      // Eğer j-num toplamı mümkünse, j toplamı da mümkündür
-      dp[j] = dp[j] || dp[j - num];
-    }
-  }
-
-  return dp[target];
-}
-
-// Subset Sum'un tüm çözümlerini bulan dinamik programlama versiyonu
 function dpSubsetSumAll(arr: number[], target: number): number[][] {
-  // DP tablosu: dp[i] = i toplamını oluşturan tüm alt kümeler
   const dp: number[][][] = Array(target + 1)
     .fill(null)
     .map(() => []);
   dp[0] = [[]]; // 0 toplamını oluşturan boş alt küme
 
-  // Her eleman için
   for (const num of arr) {
-    // Sağdan sola giderek doldurma
     for (let j = target; j >= num; j--) {
-      // j-num toplamını oluşturan alt kümeler varsa
       if (dp[j - num].length > 0) {
-        // Bu alt kümelere num ekleyerek j toplamını oluşturan yeni alt kümeler elde et
         for (const subset of dp[j - num]) {
           dp[j].push([...subset, num]);
         }
@@ -113,20 +75,17 @@ function dpSubsetSumAll(arr: number[], target: number): number[][] {
   return dp[target];
 }
 
-// Alt kümeyi görselleştiren bileşen
 const SubsetVisualizer: React.FC<{
   originalArray: number[];
   subset: number[];
   targetSum: number;
 }> = ({ originalArray, subset, targetSum }) => {
-  // Alt kümedeki sayıların toplamını hesapla
   const sum = subset.reduce((acc, val) => acc + val, 0);
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
         {originalArray.map((num, index) => {
-          // Bu sayı alt kümede mevcut mu kontrol et
           const isInSubset = subset.includes(num);
 
           return (
@@ -155,7 +114,6 @@ const SubsetVisualizer: React.FC<{
   );
 };
 
-// Algoritma adımlarını ve çözümleri gösteren bileşen
 const SubsetSumViewer: React.FC<{
   array: number[];
   targetSum: number;
@@ -230,24 +188,20 @@ const SubsetSumViewer: React.FC<{
 };
 
 export default function SubsetSumPage() {
-  // Kullanıcı girişleri için state değişkenleri
-  const [originalArray, setOriginalArray] = useState<number[]>([
-    3, 34, 4, 12, 5, 2,
-  ]);
-  const [arrayInput, setArrayInput] = useState<string>('3, 34, 4, 12, 5, 2');
   const [targetSum, setTargetSum] = useState<number>(9);
-  const [targetSumInput, setTargetSumInput] = useState<string>('9');
-
-  // Algoritma sonuçları için state değişkenleri
   const [solutions, setSolutions] = useState<number[][]>([]);
-  const [currentSolutionIndex, setCurrentSolutionIndex] = useState<number>(0);
-  const [algorithmSteps, setAlgorithmSteps] = useState<any[]>([]);
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [algorithmSteps, setAlgorithmSteps] = useState<any[]>([]);
+  const [targetSumInput, setTargetSumInput] = useState<string>('9');
+  const [arrayInput, setArrayInput] = useState<string>('3, 34, 4, 12, 5, 2');
+  const [currentSolutionIndex, setCurrentSolutionIndex] = useState<number>(0);
   const [algorithm, setAlgorithm] = useState<'backtracking' | 'dp'>(
     'backtracking'
   );
+  const [originalArray, setOriginalArray] = useState<number[]>([
+    3, 34, 4, 12, 5, 2,
+  ]);
 
-  // Algoritma açıklaması için veriler
   const pseudocode = `function findSubsetSum(arr, targetSum):
     result = []  // Bulunan alt kümeleri saklar
     currentSubset = []  // Mevcut alt küme
@@ -466,29 +420,24 @@ public class SubsetSum {
 }`,
   };
 
-  // Sayfa yüklendiğinde varsayılan değerlerle algoritmayı çalıştır
   useEffect(() => {
     handleRunAlgorithm();
   }, []);
 
-  // Dizi giriş değişikliklerini ele alma
   const handleArrayInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setArrayInput(e.target.value);
   };
 
-  // Hedef toplam giriş değişikliklerini ele alma
   const handleTargetSumInputChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setTargetSumInput(e.target.value);
   };
 
-  // Algoritma çalıştırma işlevi
   const handleRunAlgorithm = () => {
     try {
       setIsRunning(true);
 
-      // Girdiyi sayı dizisine dönüştür
       const parsedArray = arrayInput
         .split(',')
         .map((item) => parseInt(item.trim(), 10))
@@ -498,21 +447,17 @@ public class SubsetSum {
         throw new Error('Lütfen geçerli bir sayı dizisi girin.');
       }
 
-      // Hedef toplamı dönüştür
       const parsedTargetSum = parseInt(targetSumInput.trim(), 10);
       if (isNaN(parsedTargetSum)) {
         throw new Error('Lütfen geçerli bir hedef toplam girin.');
       }
 
-      // State'i güncelle
       setOriginalArray(parsedArray);
       setTargetSum(parsedTargetSum);
 
-      // Algoritma çalıştırma
       setTimeout(() => {
         try {
           if (algorithm === 'backtracking') {
-            // Backtracking algoritması
             const { subsets, steps } = findSubsetSum(
               parsedArray,
               parsedTargetSum
@@ -520,7 +465,6 @@ public class SubsetSum {
             setSolutions(subsets);
             setAlgorithmSteps(steps);
           } else {
-            // DP algoritması
             const dpSolutions = dpSubsetSumAll(parsedArray, parsedTargetSum);
             setSolutions(dpSolutions);
             setAlgorithmSteps([]);

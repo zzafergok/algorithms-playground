@@ -1,35 +1,32 @@
-// Hakkında sayfası - Platform tanıtımı ve site misyonu
 'use client';
 
 import Link from 'next/link';
+
 import React from 'react';
+
+import { motion } from 'framer-motion';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { motion } from 'framer-motion';
 import {
-  BookOpen,
-  Code2,
-  Coffee,
-  Globe,
-  Heart,
-  Mail,
   Cpu,
-  BarChart3,
-  Layers,
-  GitBranch,
-  Target,
-  Sparkles,
-  Users,
-  FileText,
-  GraduationCap,
   Zap,
-  BrainCircuit,
+  Mail,
+  Code2,
+  Users,
+  Layers,
+  Target,
   Rocket,
+  BookOpen,
+  Sparkles,
+  FileText,
+  GitBranch,
+  BrainCircuit,
+  GraduationCap,
 } from 'lucide-react';
 
 export default function AboutPage() {
-  // Platform misyonu ve vizyonu ile ilgili içerik
   const platformFeatures = [
     {
       icon: <Code2 className="h-6 w-6" />,
@@ -57,7 +54,6 @@ export default function AboutPage() {
     },
   ];
 
-  // Platform istatistikleri
   const platformStats = [
     { value: '50+', label: 'Algoritma' },
     { value: '15+', label: 'Kategori' },
@@ -65,7 +61,6 @@ export default function AboutPage() {
     { value: '24/7', label: 'Erişilebilir' },
   ];
 
-  // Öğrenme yolu adımları
   const learningPath = [
     {
       step: 1,
@@ -93,7 +88,6 @@ export default function AboutPage() {
     },
   ];
 
-  // Platform geliştirme hedefleri
   const futureGoals = [
     'Daha fazla algoritma ve veri yapısı eklemek',
     'Video içerikler ve interaktif dersler hazırlamak',
@@ -102,7 +96,6 @@ export default function AboutPage() {
     'Yerelleştirme ve çoklu dil desteği',
   ];
 
-  // Platform çalışma prensibi
   const howItWorks = [
     {
       icon: <BrainCircuit className="h-6 w-6" />,
@@ -132,7 +125,6 @@ export default function AboutPage() {
 
   return (
     <div className="space-y-16 max-w-5xl mx-auto py-8">
-      {/* Platform tanıtım hero bölümü */}
       <section className="text-center space-y-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -155,7 +147,6 @@ export default function AboutPage() {
           kapsamlı bir eğitim platformu.
         </motion.p>
 
-        {/* Platform istatistikleri */}
         <motion.div
           className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto pt-8"
           initial={{ opacity: 0, y: 20 }}
@@ -175,7 +166,6 @@ export default function AboutPage() {
         </motion.div>
       </section>
 
-      {/* Platform misyonu bölümü */}
       <section className="space-y-6">
         <h2 className="text-3xl font-bold tracking-tight text-center">
           Misyonumuz
@@ -191,7 +181,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Platform çalışma prensibi bölümü */}
       <section className="space-y-6">
         <h2 className="text-3xl font-bold tracking-tight text-center">
           Nasıl Çalışır?
@@ -222,7 +211,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Platform özellikleri grid */}
       <section className="space-y-6">
         <h2 className="text-3xl font-bold tracking-tight text-center">
           Platform Özellikleri
@@ -253,13 +241,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Öğrenme yolu bölümü */}
       <section className="space-y-6">
         <h2 className="text-3xl font-bold tracking-tight text-center">
           Öğrenme Yolu
         </h2>
         <div className="relative">
-          {/* Bağlantı çizgisi */}
           <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-border transform -translate-x-1/2" />
 
           <div className="space-y-8">
@@ -276,12 +262,10 @@ export default function AboutPage() {
                     index % 2 ? 'md:flex-row-reverse' : ''
                   }`}
                 >
-                  {/* Adım numarası */}
                   <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold">
                     {item.step}
                   </div>
 
-                  {/* İçerik */}
                   <div
                     className={`flex-1 ml-12 md:ml-0 ${index % 2 ? 'md:text-right' : 'md:text-left'}`}
                   >
@@ -310,7 +294,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Teknoloji yığını bölümü */}
       <section className="space-y-6">
         <h2 className="text-3xl font-bold tracking-tight text-center">
           Kullanılan Teknolojiler
@@ -335,7 +318,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Katkıda bulunma bölümü */}
       <section className="space-y-6 bg-muted/30 rounded-lg p-8">
         <h2 className="text-3xl font-bold tracking-tight text-center">
           Katkıda Bulunun
@@ -376,7 +358,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Gelecek hedefler bölümü */}
       <section className="space-y-6">
         <h2 className="text-3xl font-bold tracking-tight text-center">
           Gelecek Hedeflerimiz
@@ -399,7 +380,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* İletişim bölümü */}
       <section className="space-y-6 text-center">
         <h2 className="text-3xl font-bold tracking-tight">İletişim</h2>
         <p className="text-lg max-w-2xl mx-auto">
@@ -419,7 +399,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Motivasyon sözü bölümü */}
       <section className="relative p-8 bg-muted/30 rounded-lg overflow-hidden text-center">
         <div className="absolute -top-10 -left-10 text-[150px] opacity-5 font-serif">
           "

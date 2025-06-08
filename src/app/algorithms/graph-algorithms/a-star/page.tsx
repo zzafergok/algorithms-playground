@@ -6,9 +6,7 @@ import { CodeBlock } from '@/components/common/code-block';
 import { GridVisualizer } from '@/components/common/grid-visualizer';
 import { AlgorithmExplanation } from '@/components/common/explanation';
 
-// A* algoritması için ana sayfa komponenti
 export default function AStarAlgorithmPage() {
-  // A* algoritması için açıklama verileri
   const algorithmData = {
     title: 'A* (A-Star) Algoritması',
     description:
@@ -69,7 +67,6 @@ export default function AStarAlgorithmPage() {
     ],
   };
 
-  // A* algoritması için JavaScript implementasyonu
   const astarImplementation = `// A* algoritması JavaScript implementasyonu
 class AStarPathfinder {
   constructor(grid, heuristicFunction = 'manhattan') {
@@ -241,10 +238,8 @@ class PriorityQueue {
 
   return (
     <div className="space-y-8">
-      {/* Algoritma açıklaması ve teorik bilgiler */}
       <AlgorithmExplanation {...algorithmData} />
 
-      {/* İnteraktif grid visualizer */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">
           İnteraktif A* Algoritması Simülasyonu
@@ -262,7 +257,6 @@ class PriorityQueue {
         />
       </div>
 
-      {/* Kod implementasyonu */}
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">JavaScript Implementasyonu</h2>
         <p className="text-muted-foreground">
@@ -278,7 +272,6 @@ class PriorityQueue {
         />
       </div>
 
-      {/* Algoritma karşılaştırması */}
       <div className="bg-muted p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4">
           A* vs Diğer Yol Bulma Algoritmaları
@@ -316,7 +309,6 @@ class PriorityQueue {
         </div>
       </div>
 
-      {/* Performans ipuçları */}
       <div className="bg-blue-50 dark:bg-blue-950/20 p-6 rounded-lg">
         <h3 className="text-xl font-bold mb-4 text-blue-800 dark:text-blue-200">
           A* Algoritması Optimizasyon İpuçları
