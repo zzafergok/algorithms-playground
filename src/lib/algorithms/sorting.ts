@@ -19,6 +19,7 @@ export function bubbleSort(arr: number[]): number[] {
   return result;
 }
 
+// Selection sort algoritması - her iterasyonda minimum elemanı bulup yerleştirir
 export function selectionSort<T extends number>(arr: T[]): T[] {
   const n = arr.length;
   for (let i = 0; i < n - 1; i++) {
@@ -87,7 +88,7 @@ export function mergeSort<T extends number>(arr: T[]): T[] {
   return arr;
 }
 
-// Quick Sort
+// Quick Sort implementasyonu - pivot tabanlı böl ve fethet algoritması
 export function quickSort<T extends number>(arr: T[]): T[] {
   // Dizi 1 veya daha az eleman içeriyorsa zaten sıralıdır
   if (arr.length <= 1) return arr;
@@ -110,7 +111,7 @@ export function quickSort<T extends number>(arr: T[]): T[] {
   return [...quickSort(left), pivot, ...quickSort(right)];
 }
 
-// Works with non-negative integers
+// Radix Sort - sadece pozitif tam sayılar için çalışır
 export function radixSort(arr: number[]): number[] {
   // Create a copy of the array to avoid modifying the original
   const result = [...arr];
@@ -203,7 +204,7 @@ export function countingSort(arr: number[]): number[] {
   return result;
 }
 
-// Heap Sort implementation for demo purposes
+// Heap Sort implementasyonu - binary heap veri yapısını kullanır
 export function heapSort<T extends number>(arr: T[]): T[] {
   // Create a copy of the array to avoid modifying the original
   const result = [...arr];
@@ -254,7 +255,7 @@ export function heapify<T extends number>(
   }
 }
 
-// Insertion sort algorithm implementation
+// Insertion sort algoritması - küçük diziler için oldukça etkili
 export function insertionSort<T extends number>(arr: T[]): T[] {
   // Create a copy of the array to avoid modifying the original
   const result = [...arr];
@@ -278,4 +279,138 @@ export function insertionSort<T extends number>(arr: T[]): T[] {
   }
 
   return result;
+}
+
+// Priority queue implementasyonu - A* algoritması için gerekli
+export class PriorityQueue<T> {
+  private items: Array<{ element: T; priority: number }> = [];
+
+  // Yeni eleman ekle - öncelik sırasına göre yerleştir
+  enqueue(element: T, priority: number): void {
+    const queueElement = { element, priority };
+    let added = false;
+
+    for (let i = 0; i < this.items.length; i++) {
+      if (queueElement.priority < this.items[i].priority) {
+        this.items.splice(i, 0, queueElement);
+        added = true;
+        break;
+      }
+    }
+
+    if (!added) {
+      this.items.push(queueElement);
+    }
+  }
+
+  // En yüksek öncelikli elemanı çıkar
+  dequeue(): T | undefined {
+    if (this.isEmpty()) return undefined;
+    return this.items.shift()?.element;
+  }
+
+  // Kuyruk boş mu kontrol et
+  isEmpty(): boolean {
+    return this.items.length === 0;
+  }
+
+  // Kuyruk boyutunu döndür
+  size(): number {
+    return this.items.length;
+  }
+
+  // Kuyruktaki tüm elemanları kontrol etmek için
+  contains(element: T): boolean {
+    return this.items.some((item) => item.element === element);
+  }
+}
+
+// Binary heap implementasyonu - daha etkili priority queue için
+export class BinaryHeap<T> {
+  private heap: Array<{ element: T; priority: number }> = [];
+
+  // Parent node indeksini hesapla
+  private getParentIndex(index: number): number {
+    return Math.floor((index - 1) / 2);
+  }
+
+  // Left child indeksini hesapla
+  private getLeftChildIndex(index: number): number {
+    return 2 * index + 1;
+  }
+
+  // Right child indeksini hesapla
+  private getRightChildIndex(index: number): number {
+    return 2 * index + 2;
+  }
+
+  // İki elemanın yerini değiştir
+  private swap(index1: number, index2: number): void {
+    [this.heap[index1], this.heap[index2]] = [
+      this.heap[index2],
+      this.heap[index1],
+    ];
+  }
+
+  // Yukarı doğru heap property'yi koru
+  private heapifyUp(index: number): void {
+    while (index > 0) {
+      const parentIndex = this.getParentIndex(index);
+      if (this.heap[index].priority >= this.heap[parentIndex].priority) {
+        break;
+      }
+      this.swap(index, parentIndex);
+      index = parentIndex;
+    }
+  }
+
+  // Aşağı doğru heap property'yi koru
+  private heapifyDown(index: number): void {
+    while (this.getLeftChildIndex(index) < this.heap.length) {
+      const leftChildIndex = this.getLeftChildIndex(index);
+      const rightChildIndex = this.getRightChildIndex(index);
+
+      let smallestIndex = leftChildIndex;
+      if (
+        rightChildIndex < this.heap.length &&
+        this.heap[rightChildIndex].priority < this.heap[leftChildIndex].priority
+      ) {
+        smallestIndex = rightChildIndex;
+      }
+
+      if (this.heap[index].priority <= this.heap[smallestIndex].priority) {
+        break;
+      }
+
+      this.swap(index, smallestIndex);
+      index = smallestIndex;
+    }
+  }
+
+  // Yeni eleman ekle
+  insert(element: T, priority: number): void {
+    this.heap.push({ element, priority });
+    this.heapifyUp(this.heap.length - 1);
+  }
+
+  // Minimum elemanı çıkar
+  extractMin(): T | undefined {
+    if (this.heap.length === 0) return undefined;
+    if (this.heap.length === 1) return this.heap.pop()?.element;
+
+    const min = this.heap[0].element;
+    this.heap[0] = this.heap.pop()!;
+    this.heapifyDown(0);
+    return min;
+  }
+
+  // Heap boş mu
+  isEmpty(): boolean {
+    return this.heap.length === 0;
+  }
+
+  // Heap boyutu
+  size(): number {
+    return this.heap.length;
+  }
 }
