@@ -1,8 +1,7 @@
-// app/layout.tsx
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/context/theme-provider';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
+import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
 import '@/styles/globals.css';
 
 const inter = Inter({ subsets: ['latin'] });

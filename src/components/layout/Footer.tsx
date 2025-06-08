@@ -2,75 +2,36 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Github, Twitter, Mail, ArrowUp } from 'lucide-react';
+import { Github, Mail, ArrowUp, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/seperator';
+import { FooterSection } from './FooterSection';
+import { navigationConfig } from '@/config/navigation';
 import { cn } from '@/lib/utils';
 
-// Footer column section type
-interface FooterSection {
-  title: string;
-  links: {
-    label: string;
-    href: string;
-    external?: boolean;
-  }[];
-}
-
-// Footer sections configuration
-const footerSections: FooterSection[] = [
-  {
-    title: 'Bağlantılar',
-    links: [
-      { label: 'Ana Sayfa', href: '/' },
-      { label: 'Algoritmalar', href: '/algorithms' },
-      { label: 'Hakkında', href: '/about' },
-    ],
-  },
-  {
-    title: 'Algoritma Kategorileri',
-    links: [
-      { label: 'Sıralama Algoritmaları', href: '/algorithms/sorting' },
-      { label: 'Arama Algoritmaları', href: '/algorithms/searching' },
-      { label: 'Graf Algoritmaları', href: '/algorithms/graph-algorithms' },
-      { label: 'Veri Yapıları', href: '/algorithms/data-structures' },
-      { label: 'Dinamik Programlama', href: '/algorithms/dynamic-programming' },
-    ],
-  },
-  {
-    title: 'Kaynaklar',
-    links: [
-      {
-        label: 'GitHub',
-        href: 'https://github.com/zzafergok/algorithms-playground',
-        external: true,
-      },
-      { label: 'Belgelendirme', href: '/resources/documentation' },
-      { label: 'Katkıda Bulunma', href: '/resources/contributing' },
-    ],
-  },
-];
-
-export default function Footer() {
-  // Get current year for copyright notice
-  const currentYear = new Date().getFullYear();
-  // State for scroll-to-top button visibility
+export const Footer = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const currentYear = new Date().getFullYear();
 
-  // Handle scroll event for scroll-to-top button
+  // Scroll to top button visibility management with performance optimization
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
     const handleScroll = () => {
-      const scrollThreshold = 50;
-      setShowScrollTop(window.scrollY > scrollThreshold);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setShowScrollTop(window.scrollY > 400);
+      }, 10);
     };
 
-    // Add scroll event listener
-    window.addEventListener('scroll', handleScroll);
-
-    // Clean up event listener on component unmount
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
-  // Scroll to top function
+  // Optimized smooth scroll to top implementation
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -79,104 +40,140 @@ export default function Footer() {
   };
 
   return (
-    <footer className="w-full bg-background border-t border-border/40">
-      {/* Main footer content */}
-      <div className="container py-12 md:py-16">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {/* About section */}
-          <div className="flex flex-col gap-4">
-            <h3 className="text-lg font-semibold">AlgoPit</h3>
-            <p className="text-sm text-muted-foreground">
-              Algoritmaları interaktif bir şekilde öğrenin ve uygulayın. Görsel
-              öğrenme ile algoritma kavramlarını kolayca anlayın.
-            </p>
-            {/* Social links */}
-            <div className="flex gap-4 mt-2">
-              <a
-                href="https://github.com/zzafergok/algorithms-playground"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
-                aria-label="GitHub"
-              >
-                <Github size={20} />
-              </a>
+    <>
+      <footer className="w-full bg-gradient-to-t from-muted/20 to-background border-t border-border/40">
+        {/* Main footer content container with responsive grid */}
+        <div className="container py-12 md:py-16 lg:py-20">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 xl:gap-12">
+            {/* Brand section with enhanced social links */}
+            <div className="lg:col-span-1 space-y-6">
+              <div className="space-y-4">
+                <Link
+                  href="/"
+                  className="inline-block group"
+                  aria-label="AlgoPit ana sayfasına git"
+                >
+                  <h3 className="text-xl font-bold text-primary group-hover:text-primary/80 transition-colors">
+                    AlgoPit
+                  </h3>
+                </Link>
 
-              <a
-                href="mailto:gok.zaferr@gmail.com"
-                className="text-muted-foreground hover:text-primary transition-colors"
-                aria-label="E-posta"
-              >
-                <Mail size={20} />
-              </a>
-            </div>
-          </div>
+                <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
+                  Algoritmaları interaktif bir şekilde öğrenin ve uygulayın.
+                  Görsel öğrenme ile algoritma kavramlarını kolayca anlayın.
+                </p>
+              </div>
 
-          {/* Footer sections */}
-          {footerSections.map((section) => (
-            <div key={section.title} className="flex flex-col gap-4">
-              <h3 className="text-lg font-semibold">{section.title}</h3>
-              <div className="flex flex-col gap-2 text-sm">
-                {section.links.map((link) =>
-                  link.external ? (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  ) : (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  )
-                )}
+              {/* Enhanced social media links */}
+              <div className="space-y-3">
+                <h4 className="text-sm font-medium text-foreground">
+                  Bizi Takip Edin
+                </h4>
+                <div className="flex gap-3">
+                  <Link
+                    href="https://github.com/zzafergok/algorithms-playground"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(
+                      'flex items-center justify-center w-10 h-10 rounded-lg',
+                      'bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground',
+                      'transition-all duration-200 hover:scale-110'
+                    )}
+                    aria-label="GitHub repository'yi ziyaret et"
+                  >
+                    <Github size={18} />
+                  </Link>
+                  <Link
+                    href="mailto:gok.zaferr@gmail.com"
+                    className={cn(
+                      'flex items-center justify-center w-10 h-10 rounded-lg',
+                      'bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground',
+                      'transition-all duration-200 hover:scale-110'
+                    )}
+                    aria-label="E-posta ile iletişime geç"
+                  >
+                    <Mail size={18} />
+                  </Link>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Copyright section */}
-      {/* <div className="border-t border-border/40">
-        <div className="container py-6 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
-          <p>
-            &copy; {currentYear} AlgoPit. Tüm hakları saklıdır.
-          </p>
-          <p className="mt-2 md:mt-0">
-            <Link href="/privacy" className="hover:text-foreground">
-              Gizlilik Politikası
-            </Link>
-            {' • '}
-            <Link href="/terms" className="hover:text-foreground">
-              Kullanım Koşulları
-            </Link>
-          </p>
+            {/* Navigation sections with responsive layout */}
+            <div className="lg:col-span-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-12">
+                {navigationConfig.footerSections.map((section) => (
+                  <FooterSection key={section.title} section={section} />
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-      </div> */}
 
-      {/* Scroll to top button */}
+        <Separator className="opacity-50" />
+
+        {/* Enhanced footer bottom section */}
+        <div className="container py-6 lg:py-8">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            {/* Copyright information */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm text-muted-foreground">
+              <p className="flex items-center gap-1">
+                &copy; {currentYear} AlgoPit. Tüm hakları saklıdır.
+              </p>
+              <span className="hidden sm:inline text-muted-foreground/50">
+                •
+              </span>
+              <p className="flex items-center gap-1">
+                <Heart size={14} className="text-red-500" />
+                <span>ile Türkiye'de geliştirildi</span>
+              </p>
+            </div>
+
+            {/* Legal links with improved spacing */}
+            {/* <div className="flex flex-wrap items-center gap-1 text-sm">
+              <Link
+                href="/privacy"
+                className="px-3 py-1 text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-muted/50"
+              >
+                Gizlilik Politikası
+              </Link>
+              <span className="text-muted-foreground/50">•</span>
+              <Link
+                href="/terms"
+                className="px-3 py-1 text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-muted/50"
+              >
+                Kullanım Koşulları
+              </Link>
+              <span className="text-muted-foreground/50">•</span>
+              <Link
+                href="/cookies"
+                className="px-3 py-1 text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-muted/50"
+              >
+                Çerez Politikası
+              </Link>
+            </div> */}
+          </div>
+        </div>
+      </footer>
+
+      {/* Enhanced scroll to top button with better positioning */}
       {showScrollTop && (
         <Button
           variant="outline"
           size="icon"
           className={cn(
-            'fixed bottom-6 right-6 z-50 rounded-full shadow-md',
-            'transition-all duration-300 transform'
+            'fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full shadow-lg',
+            'bg-background/80 backdrop-blur-sm border-border/50',
+            'transition-all duration-300 ease-out',
+            'hover:scale-110 hover:shadow-xl hover:bg-background',
+            'focus:ring-2 focus:ring-primary focus:ring-offset-2',
+            'active:scale-95'
           )}
           onClick={scrollToTop}
-          aria-label="Sayfanın başına dön"
+          aria-label="Sayfanın başına geri dön"
         >
-          <ArrowUp size={20} />
+          <ArrowUp size={20} className="text-foreground" />
         </Button>
       )}
-    </footer>
+    </>
   );
-}
+};
